@@ -91,13 +91,6 @@ label
   flex-direction: column;
 }
 
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  margin-right: 40px;
-}
-
 
 
 .next-button {

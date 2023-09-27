@@ -96,65 +96,26 @@ const handleRelationEmail = (event) => {
                      <label >Re-type Password</label>
                    <input className="input-field" type="password" value={retypepassword} onChange={handleRetypePasswordChange} ></input>
                    </div>
-                   </div>
-                    
-                   <button className="next-button">Next</button>
+                   </div> 
 
-                   
+                <div className="name-fields">
+                    <div className="login-label">
+                     <p>Already youro member? Login </p>
+	            </div>
+                     <button className="next-button">Next</button>
+                </div>
+                
+               
+                {/* <div className="bottom-fields">
+                   <p>Already youro member? <span>Login</span></p>      
+		</div>
+                
+		 <div className="button-container">
+                   <button className="next-button">Next</button>
+                </div> */}
         </div>
         </div>
     )
 }
 
 export default SignupforFamilyMember;
-
-
-
-//  <div className="bottom-container">
-//                     <p>Already youro member? <span>Login</span></p>
-//                     </div>
-//                    <button className="next-button">Next</button>
-
-// <div className="name-fields">
-//                <div className="firstname-container">
-//                  <label >First Name</label>
-//                  <input id="input-field1" type="text" value={firstname} onChange={handleFirstNameChange} ></input>
-// 	         </div>
-//                  <div className="lastname-container">
-//                  <label >Last Name</label>
-//                  <input id="input-field1" type="text" value={lastname} onChange={handleLastNameChange} ></input>
-//                  </div>
-//                  </div>
-
-//                 <div className="name-fields">
-//                   <div className="email-container">
-//                  <label >Email (Family Member)</label>
-//                  <input id="input-field2" type="text" value={firstname} onChange={handleFirstNameChange} ></input>
-// 	         </div>
-//                  <div className="firstname-container">
-//                  <label >Do you have medical Insurance ?</label>
-//                  <input id="input-field3" type="text" value={lastname} onChange={handleLastNameChange} ></input>
-//                  </div>
-//                  </div>
-
-//                  <div className="name-fields">
-//                <div className="firstname-container">
-//                  <label >First Name</label>
-//                  <input id="input-field1" type="text" value={firstname} onChange={handleFirstNameChange} ></input>
-// 	         </div>
-//                  <div className="lastname-container">
-//                  <label >Last Name</label>
-//                  <input id="input-field1" type="text" value={lastname} onChange={handleLastNameChange} ></input>
-//                  </div>
-//                  </div>
-
-//                  <div className="name-fields">
-//                <div className="firstname-container">
-//                  <label >First Name</label>
-//                  <input id="input-field1" type="text" value={firstname} onChange={handleFirstNameChange} ></input>
-// 	         </div>
-//                  <div className="lastname-container">
-//                  <label >Last Name</label>
-//                  <input id="input-field1" type="text" value={lastname} onChange={handleLastNameChange} ></input>
-//                  </div>
-//                  </div>
