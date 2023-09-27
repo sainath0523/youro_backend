@@ -1,0 +1,98 @@
+@import "../App.css";
+
+body
+{ 
+   background-color: var(--primary-color);
+}
+
+.Signupfamilymember-container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  font-size: medium;
+}
+
+.Form-Container {
+  position: relative;
+  width: 60%; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  margin-left: 200px;
+}
+
+.name-fields {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.label-input {
+  width: 48%; 
+  margin-bottom: 10px;
+}
+
+.input-field {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* 
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}*/
+
+.next-button {
+  /* align-self: flex-end;
+   margin-right: 40px; */
+  position: absolute; 
+  bottom: 50px; 
+  right: 50px; 
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer; 
+  /* margin-right: 200px; */
+
+  /* position: relative;
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 10px 20px;
+  margin: 50px 10px 0px 120px;
+  border: none;
+  border-radius: 15px;
+  border-width: 5;
+  width: 60%; */
+}
+
+.next-button:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  padding: 10px 20px;
+  /* margin: 50px 10px 0px 120px; */
+  border-radius: 15px;
+  border-width: 5;
+  /* width: 60%; */
+} 
+
+.bottom-container 
+{
+  display: flex;
+  align-items: flex-end;
+}
+
+span
+{
+  color: var(--secondary-color);
+}

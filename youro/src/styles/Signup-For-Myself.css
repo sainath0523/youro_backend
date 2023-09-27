@@ -1,0 +1,140 @@
+@import "../App.css";
+
+body
+{ 
+   background-color: var(--primary-color);
+}
+
+ .Signupmyself-container h1 {
+  color: var(--secondary-color);
+  font-size: 2.5rem;
+  padding: 10px;
+}
+
+.Signupmyself-container h4 {
+  font-size: 1rem;
+}
+
+.Signupmyself-container 
+{
+   display: flex;
+   justify-content: start;
+   align-items: center; 
+   flex-direction: column;
+   
+}
+
+#input-field1 {
+  width: 95%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  outline: none; /* Remove default input outline */
+}
+
+#input-field3 {
+  width: 80%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  outline: none; /* Remove default input outline */
+}
+
+#input-field2 {
+  width: 36rem;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  outline: none; /* Remove default input outline */
+}
+
+.lastname-container
+{
+  margin-left: 45px;
+}
+/* #input-field2 {
+  width: 70%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  /* margin-bottom: 10px; */
+ 
+label 
+{
+   float: left;
+   padding: 10px 0px 10px 0px
+ }
+
+.name-fields 
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.form-container
+{ 
+  margin-left: 100px;
+  position: relative;
+}
+
+.email-fields {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-right: 40px;
+}
+
+
+
+.next-button {
+  position: relative;
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 10px 20px;
+  margin: 50px 10px 0px 120px;
+  border: none;
+  border-radius: 15px;
+  border-width: 5;
+  width: 20%;
+}
+
+.next-button:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  padding: 10px 20px;
+  margin: 50px 10px 0px 120px;
+  border-radius: 15px;
+  border-width: 5;
+  width: 20%;
+}
+/* .Signupmyself-container  .fields {
+  width: 100%; 
+  /* text-align: right;
+  margin: 15px; 
+  border: 1px solid black; */
+
+@media (max-width: 768px) {
+  .form-container {
+    flex-direction: column;
+  }
+
+  .name-fields {
+    flex-direction: column;
+    margin-right: 2px; /* Add spacing between the input fields on larger screens */
+  }
+}

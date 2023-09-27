@@ -1,5 +1,161 @@
 @import "../App.css";
 
-h1 {
-    color: var(--primary-color);
+/* h1 {
+    text-align: center;
+    color: var(--secondary-color);
 }
+
+h2 
+{
+   text-align: center;
+   color: black;
+ }
+
+h3 
+{
+   text-align: center;
+   color: black;
+   font-weight: 70;
+ }
+
+body
+{ 
+   background-color: var(--primary-color);
+ }
+
+.options-button
+{
+   align-content: center;
+   padding: 10;
+   color: var(--secondary-color);
+  justify-content: center;
+  align-items: center;
+   
+} */
+
+/* Apply styles to elements within the .option-select class */
+
+body
+{ 
+   background-color: var(--primary-color);
+}
+
+.option-select {
+ display: flex;
+  justify-content: start;
+  align-items: center; /* Add this line to center vertically */
+  flex-direction: column;
+  height: 100vh; 
+  gap: 3px;
+}
+
+.option-select h1 {
+  color: var(--secondary-color);
+  font-size: 2.5rem;
+}
+
+.option-select h2 {
+  color: black;
+  font-size: 2rem;
+}
+
+.option-select p {
+  font-weight: 300;
+  font-size: 1rem;
+  margin: 2px 10px 5px 20px;
+  padding: 10px 2px 50px 2px;
+}
+
+.option-select .options-button-1 {
+  padding: 30px;
+  color: black;
+  font-size: large;
+  background-color: var(--primary-color);
+  border: 0.5px solid black;
+  border-width: 5;
+  border-radius: 15px;
+  /* margin: 25px 25px 5px 25px; */
+  width: 25%;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); 
+  margin: 10px;
+}
+
+.option-select .options-button-2 {
+  padding: 30px;
+  color: black;
+  font-size: large;
+  background-color: var(--primary-color);
+  border: 0.5px solid black;
+  border-width: 5;
+  border-radius: 15px;
+  width: 25%;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  margin: 10px;
+  
+}
+
+.option-select .options-button-1:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: none;
+}
+
+.option-select .options-button-2:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: none;
+}
+
+@media (max-width: 768px) {
+
+  .option-select h1 {
+    font-size: 2rem; 
+  }
+
+  .option-select h2 {
+    font-size: 1.8rem; 
+  }
+ 
+  .option-select p {
+    font-size: 0.8rem; 
+  }
+    
+  .option-select .options-button-1 {
+    width: 80%;
+    font-size: medium;
+  }
+  
+   .option-select .options-button-2 {
+    width: 80%;
+    font-size: medium;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .option-select h1 {
+    font-size: 1.5rem; 
+  }
+
+  .option-select h2 {
+    font-size: 1.4rem; 
+  }
+
+  .option-select p {
+    font-size: 0.8rem; 
+  }
+
+   .option-select .options-button-1 {
+    width: 80%;
+    font-size: medium;
+  }
+  
+   .option-select .options-button-2 {
+    width: 80%;
+    font-size: medium;
+  }
+}
+
+
