@@ -10,7 +10,7 @@ function App() {
   return ( 
      <Router>
      <div className="App">
-       <DoctorSignup/>
+       <SignupforFamilyMember/>
     </div>
      <Routes>
         <Route path='/Login' element={<Signupoptions/>}></Route>
