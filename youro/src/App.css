@@ -1,6 +1,41 @@
 :root {
   --primary-color :  #E9E4D7;
   --secondary-color: #9CB189;
-  --neon-color: #E5FF7E
+  --neon-color: #E5FF7E;
+  --error-color: #ff0033;
 }
 
+.color-secondary {
+    color: var(--secondary-color);
+}
+
+.input-border:focus {
+  outline: 1px solid var(--secondary-color) !important;
+}
+
+.error-border {
+  outline: 1px solid var(--error-color) !important;
+}
+
+.error-text {
+  color: var(--error-color);
+  font-size: 0.65rem;
+}
+
+.btn-filled {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  border-width: 5;
+  text-align: center;
+  transition: all .2s ease-in;
+  cursor: pointer;
+  padding: 15px 0px;
+}
+
+.btn-filled:hover {
+  background-color: white;
+  color: #404040 !important;
+  border: 1px solid #404040 !important;
+}

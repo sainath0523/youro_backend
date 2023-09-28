@@ -1,108 +1,128 @@
 import React,{useState} from "react";
-import "../styles/Signup-For-FamilyMember.css"
+import "../styles/Signup-For-FamilyMember.css";
+import { useForm } from "react-hook-form";
 
 const SignupforFamilyMember= () =>
 {
-
-  const [firstname, setfirstname] = useState('');
-  const [lastname, setlastname] = useState('');
-  const [email, setEmail] = useState('');
-  const [createpassword, setpassword] = useState('');
-  const [retypepassword, setretypepassword] = useState('');
-  const [medicalinsurance, setmedicalinsurance] = useState('');
-  const [relationtofamilymember, setrelationtofamilymember] = useState('');
-  const [relationemail, setrelationemail] = useState('');  
-  // Function to handle input changes and update the state
-  const handleFirstNameChange = (event) => {
-    setfirstname(event.target.value);
-  };
-  
-   const handleLastNameChange = (event) => {
-    setlastname(event.target.value);
-  };
-
-   const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-
- const handlePasswordChange = (event) => {
-    setpassword(event.target.value);
-  };
-
- const handleRetypePasswordChange = (event) => {
-    setretypepassword(event.target.value);
-  };
-
-const handleMedicalInsurance = (event) => {
-   setmedicalinsurance(event.target.value);
-  };
-
-const handleRelationtoFamilyMember =(event) => {
-   setrelationtofamilymember(event.target.value);
-}
-
-const handleRelationEmail = (event) => {
-   setrelationemail(event.target.value);
-}
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
    
    return (
            <div class="Signupfamilymember-container">
+            
              <h1>youro</h1>
-             <h4>Membership/Sign-up gives you direct access to our team of<br/> urological providers with same or next day appointments.  </h4>
+             <p className="h3">Membership/Sign-up gives you direct access to our team of<br/> urological providers with same or next day appointments.  </p>
                <div className="Form-Container">
                      <div className="name-fields">
                           <div className="label-input">
                                <label>Family Member First Name</label>
-                               <input className="input-field" type="text" value={firstname} onChange={handleFirstNameChange} />
+                               <input className="input-field input-border" type="text" {...register("firstName", {
+                                  required: true,
+                                  maxLength: 32,
+                                })} />
+                                {errors?.firstName?.type === "required" && <p className="error-text">This field is required</p>}
+                                {errors?.firstName?.type === "maxLength" && <p className="error-text">First name cannot exceed 32 characters</p>}
                           </div>
 
     		     <div className="label-input">
                          <label>Family Member Last Name</label>
-                        <input className="input-field" type="text" value={lastname} onChange={handleLastNameChange} />
+                        <input className="input-field input-border" type="text" {...register("lastName", {
+                                  required: true,
+                                  maxLength: 32,
+                                })}/>
+                                {errors?.lastName?.type === "required" && <p className="error-text">This field is required</p>}
+                                {errors?.lastName?.type === "maxLength" && <p className="error-text">Last Name cannot exceed 32 characters</p>}
                      </div>
                 </div>
 
                     <div className="name-fields">
                        <div className="label-input">
                         <label>Email (Family Member)</label>
-                        <input className="input-field" type="text" value={email} onChange={handleEmailChange}/>
+                        <input className="input-field input-border" type="text" {...register("email", {
+                                  required: true,
+                                  maxLength: 32,
+                                  pattern: /([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@[0-9A-Za-z]([0-9A-Za-z-]{0,61}[0-9A-Za-z])?(\.[0-9A-Za-z]([0-9A-Za-z-]{0,61}[0-9A-Za-z])?)+/
+                                })} />
+                                {errors?.email?.type === "required" && <p className="error-text">This field is required</p>}
+                                {errors?.email?.type === "maxLength" && <p className="error-text">Email cannot exceed 32 characters</p>}
+                                {errors?.email?.type === "pattern" && <p className="error-text">Please enter valid email</p>}
                     </div>
 
                    <div className="label-input">
                         <label>Do you have medical Insurance?</label>
-                        <input className="input-field" type="text" value={medicalinsurance} onChange={handleMedicalInsurance}/>
+                        <select style={{width: '85%'}} className="input-field input-border" id="hasInsurance" {...register("hasInsurance", {
+                                  required: true,
+                                })}>
+                          <option value="">Select</option>
+                          <option value="yes">yes</option>
+                          <option value="no">no</option>
+                        </select>
+                        {errors?.hasInsurance && <p className="error-text">This field is required</p>}
                    </div>
                    </div>
 
                   <div className="name-fields">
-                    <div className="label-input">
-                       <label>How your related to family Member</label>
-                        <input className="input-field" type="text" value={relationtofamilymember} onChange={handleRelationtoFamilyMember}/>
-                    </div>
+                  <div className="label-input">
+                        <label>How are you related to family Member?</label>
+                        <select style={{width: '85%'}} className="input-field input-border" id="relation" {...register("relation", {
+                                  required: true,
+                                })}>
+                          <option value="">Select</option>
+                          <option value="son">Son</option>
+                          <option value="daughter">Daughter</option>
+                          <option value="Neice">Neice</option>
+                        </select>
+                        {errors?.relation && <p className="error-text">This field is required</p>}
+                   </div>
 
                      <div className="label-input">
                        <label>Email (email of the member who is registering on behalf of family member)</label>
-                        <input className="input-field" type="text" value={relationemail} onChange={handleRelationEmail}/>
+                        <input className="input-field input-border" type="text" {...register("relatedEmail", {
+                          required: true,
+                          maxLength: 32,
+                          pattern: /([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@[0-9A-Za-z]([0-9A-Za-z-]{0,61}[0-9A-Za-z])?(\.[0-9A-Za-z]([0-9A-Za-z-]{0,61}[0-9A-Za-z])?)+/
+                        })}/>
+                        {errors?.relatedEmail?.type === "required" && <p className="error-text">This field is required</p>}
+                        {errors?.relatedEmail?.type === "maxLength" && <p className="error-text">Email cannot exceed 32 characters</p>}
+                        {errors?.relatedEmail?.type === "pattern" && <p className="error-text">Please enter valid email</p>}
                     </div> 
                   </div>
                   
                    <div className="name-fields">
                     <div className="label-input">
                      <label >Create Password</label>
-                       <input className="input-field" type="text" value={createpassword} onChange={handlePasswordChange} ></input>
+                       <input className="input-field input-border" type="password" {...register("password", {
+                                  required: true,
+                                  maxLength: 32,
+                                  minLength: 8
+                                })} ></input>
+                        {errors?.password?.type === "required" && <p className="error-text">This field is required</p>}
+                        {errors?.password?.type === "maxLength" && <p className="error-text">Password cannot exceed 32 characters</p>}
+                        {errors?.password?.type === "minLength" && <p className="error-text">Password length must be more than 8 characters</p>}
 	            </div>
                     <div className="label-input">
                      <label >Re-type Password</label>
-                   <input className="input-field" type="password" value={retypepassword} onChange={handleRetypePasswordChange} ></input>
+                   <input className="input-field input-border" type="password" {...register("confirmPassword", {
+                                  validate: val => watch('password') === val
+                                })}  ></input>
+                    {errors?.confirmPassword && <p className="error-text">Passwords must match</p>}
                    </div>
                    </div> 
 
                 <div className="name-fields">
-                    <div className="login-label">
+                    <div className="login-label" style={{width: "48%"}}>
                      <p>Already youro member? Login </p>
 	            </div>
-                     <button className="next-button">Next</button>
+                    <div className="login-label" style={{width: "48%"}}>
+                        <div style={{width: "85%", position: "relative"}}>
+                        <div className="next-button btn-filled" onClick={handleSubmit((data) => console.log(data))}>Next</div>
+                        </div>
+                        
+                    </div>
                 </div>
                 
                
