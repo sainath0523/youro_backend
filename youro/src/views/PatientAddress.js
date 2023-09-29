@@ -9,7 +9,6 @@ const Patientaddress= (props) =>
   // console.log(typeof(props));
   const receivedProps = props;
   const navigate = useNavigate();
-  const allfields = [];
   const {
     register,
     handleSubmit,
@@ -18,11 +17,10 @@ const Patientaddress= (props) =>
   } = useForm();
   
 
-  const onsubmit = (data) =>
+  const onsubmit = (values) =>
   {
-    allfields.push(props.data)
-    allfields.push(data);
-    console.log("All data:",allfields);
+    const data = Object.assign(values, props.data)
+    console.log("All data:",data);
    }
 
    
