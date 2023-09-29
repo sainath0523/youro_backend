@@ -48,10 +48,11 @@ const Login= () =>
                                 })} ></input>
                         {errors?.password?.type === "required" && <p className="error-text">This field is required</p>}
                         {errors?.password?.type === "maxLength" && <p className="error-text">Password cannot exceed 32 characters</p>}
+                        {errors?.password?.type === "minLength" && <p className="error-text">Password is min 8 characters</p>}
                 </div>
                 <div>
                 <p className="color-secondary" style={{textDecoration: 'underline', cursor: 'pointer'}}>Forgot password?</p>
-                <div className="btn-filled" style={{marginTop: '40px'}} onClick={handleSubmit(onSubmit)}>Next</div>
+                <div className="btn-filled" style={{marginTop: '40px'}} onClick={handleSubmit(onSubmit)}>Login</div>
                 </div>
 
              </div>

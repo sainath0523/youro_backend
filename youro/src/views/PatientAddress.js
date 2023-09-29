@@ -32,8 +32,8 @@ const Patientaddress= (props) =>
                <div className="Form-address-Container">
                      <div className="address-fields">
                           <div className="label-address">
-                               <label>Address</label>
-                               <input placeholder="Address Line 1" className="input-field input-border" type="text" {...register("Address", {
+                               {/* <label>Address</label> */}
+                               <input placeholder="Address" className="input-field input-border" type="text" {...register("Address", {
                                   required: true,
                                   maxLength: 50,
                                 })} />
