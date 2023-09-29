@@ -3,19 +3,23 @@ package com.youro.web.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "login_table")
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoginTable {
 
-    @Id
-    @Column(name="user_name",length = 30)
+
+    @Column(name="user_name",unique = true,length = 30)
     public String userName;
+    @Id
     @Column(unique = true, length = 30)
     public String email;
     @Column(name="password",length = 30)
@@ -25,7 +29,7 @@ public class LoginTable {
     @Column(name="first_name",length = 30)
     public String firstName;
     @Column(name="second_name",length = 30)
-    public String secondName;
+    public String lastName;
     @Column(name="address_1",length = 50)
     public String address1;
     @Column(name="address_2",length = 50)
