@@ -91,7 +91,7 @@ const SignupforFamilyMember= () =>
                    </div>
 
                      <div className="label-input">
-                       <label>Email (email of the member who is registering on behalf of family member)</label>
+                       <label>Email (email of the member who is registering on behalf of family member)</label><br/>
                         <input className="input-field input-border" type="text" {...register("relatedEmail", {
                           required: true,
                           maxLength: 32,
@@ -124,14 +124,12 @@ const SignupforFamilyMember= () =>
                    </div>
                    </div> 
 
-                <div className="name-fields">
-                    <div className="login-label" style={{width: "48%"}}>
-                     <p>Already youro member? Login </p>
+                   <div className="required-fields" style={{justifyContent: 'flex-start'}}>
+                    <div className="myself-label" style={{width: "48%"}}>
+                     <p>Already youro member? <span onClick={() => navigate('/login')} className="color-secondary" style={{cursor: 'pointer'}}><u>Login</u></span> </p>
 	            </div>
-                    <div className="login-label" style={{width: "48%"}}>
-                        <div style={{width: "85%", position: "relative"}}>
+                    <div className="myself-label" style={{width: "45%", position: "relative"}}>
                         <div className="next-button btn-filled" onClick={handleSubmit((onsubmit))}>Next</div>
-                        </div>
                         
                     </div>
                 </div>

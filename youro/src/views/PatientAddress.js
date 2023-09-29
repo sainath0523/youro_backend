@@ -8,6 +8,7 @@ const Patientaddress= (props) =>
 
   // console.log(typeof(props));
   const receivedProps = props;
+  const navigate = useNavigate();
   const allfields = [];
   allfields.push(props);
   const {
@@ -69,6 +70,7 @@ const Patientaddress= (props) =>
                                 {errors?.pincode?.type === "maxLength" && <p className="error-text">Email cannot exceed 32 characters</p>}
                     </div>
 
+                    <p></p>
                   <div className="label-address">
                        <label>Date of Birth</label>
                         <input placeholder="MM/DD/YYY" className="input-field input-border" type="text" {...register("dob", {
@@ -80,6 +82,7 @@ const Patientaddress= (props) =>
                         
                    </div>
 
+                      <p></p>
                      <div className="address-fields">
                        <div className="label-address">
                        <label>Legal Sex</label>
@@ -90,17 +93,12 @@ const Patientaddress= (props) =>
 			<div>
 			<input {...register("sex",{required:true})} type="radio" value="female" />female
 			</div>
-                        {errors?.sex?.type ==="required" && <p className="error-text">please select your sex:</p>}
+                        {errors?.sex?.type ==="required" && <p className="error-text">This field is required</p>}
                       </div>
 		      </div>
                     
 
-                    <div className="button-label" style={{width: "48%"}}>
-                        <div style={{width: "85%", position: "relative"}}>
-                        <div className="next-button btn-filled" onClick={handleSubmit((onsubmit))}>Next</div>
-                        </div>
-                        
-                    </div>
+              
                 
                 {/* <div className="bottom-fields">
                    <p>Already youro member? <span>Login</span></p>      
@@ -110,6 +108,18 @@ const Patientaddress= (props) =>
                    <button className="next-button">Next</button>
                 </div> */}
         </div>
+        
+        </div>
+        <div style={{width: "50%", margin: "0px auto 10px auto", paddingTop: "0px"}}>
+        <div className="required-fields" style={{justifyContent: 'flex-between'}}>
+                    <div className="myself-label" style={{width: "48%", marginTop: '0px'}}>
+                     <p>Already youro member? <span onClick={() => navigate('/login')} className="color-secondary" style={{cursor: 'pointer'}}><u>Login</u></span> </p>
+	            </div>
+                    <div className="myself-label" style={{width: "45%", position: "relative"}}>
+                        <div className="next-button btn-filled" onClick={handleSubmit((onsubmit))}>Next</div>
+                        
+                    </div>
+                </div>
         </div>
        </div>
     )

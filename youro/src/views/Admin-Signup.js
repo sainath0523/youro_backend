@@ -15,7 +15,7 @@ const AdminSignup= () =>
     formState: { errors },
   } = useForm();
    
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const onsubmit = (data) =>
   // {
   //   console.log(data);
@@ -92,14 +92,12 @@ const AdminSignup= () =>
                    </div>
                    </div> 
 
-                <div className="admin-fields">
-                    <div className="admin-label" style={{width: "48%"}}>
-                     <p>Already youro member? Login </p>
+                   <div className="required-fields" style={{justifyContent: 'flex-start'}}>
+                    <div className="myself-label" style={{width: "48%"}}>
+                     <p>Already youro member? <span onClick={() => navigate('/login')} className="color-secondary" style={{cursor: 'pointer'}}><u>Login</u></span> </p>
 	            </div>
-                    <div className="admin-label" style={{width: "68%"}}>
-                        <div style={{width: "85%", position: "relative"}}>
+                    <div className="myself-label" style={{width: "45%", position: "relative"}}>
                         <div className="next-button btn-filled" onClick={handleSubmit((onsubmit))}>Next</div>
-                        </div>
                         
                     </div>
                 </div>

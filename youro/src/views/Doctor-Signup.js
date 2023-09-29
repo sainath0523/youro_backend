@@ -6,6 +6,7 @@ import "../styles/DoctorSignup.css"
 const DoctorSignup= () =>
 {
 
+  const navigate = useNavigate();
 
   const {
     register,
@@ -178,14 +179,12 @@ const DoctorSignup= () =>
                    </div>
                    </div> 
 
-                <div className="doctor-fields">
-                    <div className="doctor-label" style={{width: "48%"}}>
-                     <p>Already youro member? Login </p>
+                   <div className="required-fields" style={{justifyContent: 'space-between'}}>
+                    <div className="myself-label" style={{width: "48%"}}>
+                     <p>Already youro member? <span onClick={() => navigate('/login')} className="color-secondary" style={{cursor: 'pointer'}}><u>Login</u></span> </p>
 	            </div>
-                    <div className="doctor-label" style={{width: "48%"}}>
-                        <div style={{width: "85%", position: "relative"}}>
+                    <div className="myself-label" style={{width: "45%", position: "relative"}}>
                         <div className="next-button btn-filled" onClick={handleSubmit((onsubmit))}>Next</div>
-                        </div>
                         
                     </div>
                 </div>
