@@ -5,68 +5,66 @@ body
    background-color: var(--primary-color);
 }
 
- .SignupMyself-container h1 {
+
+.Admin-container 
+{
+   display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction:column;
+  height: 100vh;
+  font-size: small;
+}
+.Admin-container h1
+{
   color: var(--secondary-color);
   font-size: 2.5rem;
   padding: 10px;
 }
 
-.SignupMyself-container h4 {
+.Admin-container h4
+{
   font-size: 1rem;
 }
 
-.SignupMyself-container 
+.Form-admin-Container 
 {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  flex-direction:column;
-  height: 100vh;
-  font-size: small; 
-}
-
-.Form-myself-Container {
-  width: 50%; 
+   width: 50%; 
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px;
   margin-left: 200px;
-  /* border: 1px solid black; */
 }
-.required-fields 
+
+.admin-fields 
 {
-  display: flex;
+   display: flex;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 10px;
 }
 
-.required-fields .myself-label 
+.admin-fields .admin-label
 {
-    margin-top: 30px;
+   margin-top: 30px;
 }
-.myself-input
+
+.admin-input
 {
-  width: 48%; 
+  width: 40%; 
   margin-bottom: 10px;
 }
 
-.input-field {
+.input-field-admin {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
 }
 
-.input-field1 {
-  width: 190%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
- .SignupMyself-container .next-button {
+.Admin-container .next-button {
   position: absolute;
   /* left: 28.5rem; */
   right: 0px;

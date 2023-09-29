@@ -1,9 +1,12 @@
 import React,{useState} from "react";
 import "../styles/Signup-For-FamilyMember.css";
 import { useForm } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
 
 const SignupforFamilyMember= () =>
 {
+
+
   const {
     register,
     handleSubmit,
@@ -11,6 +14,14 @@ const SignupforFamilyMember= () =>
     formState: { errors },
   } = useForm();
    
+  const navigate = useNavigate();
+  const onsubmit = (data) =>
+  {
+    console.log(data);
+    navigate("/patientaddress",{state:data})
+   }
+
+
    return (
            <div class="Signupfamilymember-container">
             
@@ -119,7 +130,7 @@ const SignupforFamilyMember= () =>
 	            </div>
                     <div className="login-label" style={{width: "48%"}}>
                         <div style={{width: "85%", position: "relative"}}>
-                        <div className="next-button btn-filled" onClick={handleSubmit((data) => console.log(data))}>Next</div>
+                        <div className="next-button btn-filled" onClick={handleSubmit((onsubmit))}>Next</div>
                         </div>
                         
                     </div>

@@ -5,36 +5,40 @@ body
    background-color: var(--primary-color);
 }
 
- .Signupfamilymember-container h1 {
+ .PatientAddress-container h1 {
   color: var(--secondary-color);
   font-size: 2.5rem;
   padding: 10px;
 }
 
-.Signupfamilymember-container {
+.PatientAddress-container h3 {
+  color: var(--secondary-color);
+  font-size: 2.5rem;
+}
+
+.PatientAddress-container {
   display: flex;
   justify-content: start;
   align-items: center;
-  flex-direction:column;
+  flex-direction: column;
   height: 100vh;
   font-size: small;
 }
 
-.Form-Container {
-  width: 60%; 
+.Form-address-Container{
+  width: 50%; 
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  margin-left: 200px;
-  /* border: 1px solid black; */
+  justify-content: flex-start;
+  margin-left: 450px;
 }
 
-.name-fields {
+.address-fields {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   width: 100%;
+  flex-direction: column;
   margin-bottom: 10px;
 }
 
@@ -43,12 +47,15 @@ body
   justify-content: space-between; /* To place elements at start and end */
 
 
-.label-input {
+.label-address {
   width: 48%; 
   margin-bottom: 10px;
 }
-
-.name-fields .login-label 
+.label-address p 
+{
+  padding-top: 22px;
+ }
+.address-fields .button-label 
 {
   margin-top: 30px;
 }
@@ -73,13 +80,17 @@ span
   color: var(--secondary-color);
 }
 
-
- .Signupfamilymember-container .next-button {
+.label-legal-sex
+{
+  display: flex;
+  flex-direction: column;
+}
+ .PatientAddress-container .next-button {
   position: absolute;
   /* left: 28.5rem; */
   right: 0px;
   bottom: 0rem;
-  margin-top: 120px; 
+   
   /* Initially, the button will be translated by -50% in both X and Y directions to center it */
   /* width: 20%;
   padding: 10px 20px;

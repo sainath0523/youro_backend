@@ -5,27 +5,31 @@ body
    background-color: var(--primary-color);
 }
 
- .SignupMyself-container h1 {
-  color: var(--secondary-color);
-  font-size: 2.5rem;
-  padding: 10px;
-}
-
-.SignupMyself-container h4 {
-  font-size: 1rem;
-}
-
-.SignupMyself-container 
+.DoctorSignup-container 
 {
+  
   display: flex;
   justify-content: start;
   align-items: center;
   flex-direction:column;
   height: 100vh;
-  font-size: small; 
+  font-size: small;
 }
 
-.Form-myself-Container {
+.DoctorSignup-container  h1
+{
+   color: var(--secondary-color);
+  font-size: 2.5rem;
+  padding: 10px;
+}
+
+.DoctorSignup-container  h4
+{
+  font-size: 1rem;
+}
+
+.Form-Doctorsignup 
+{
   width: 50%; 
   position: relative;
   display: flex;
@@ -33,9 +37,9 @@ body
   align-items: center;
   padding: 10px;
   margin-left: 200px;
-  /* border: 1px solid black; */
 }
-.required-fields 
+
+.doctor-fields
 {
   display: flex;
   justify-content: space-between;
@@ -43,30 +47,27 @@ body
   margin-bottom: 10px;
 }
 
-.required-fields .myself-label 
+.doctor-fields .doctor-label
 {
-    margin-top: 30px;
+  margin-top: 30px;
 }
-.myself-input
+
+.doctor-input
 {
-  width: 48%; 
+  width: 40%; 
   margin-bottom: 10px;
 }
 
-.input-field {
+.input-field-doctor
+{
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
 }
 
-.input-field1 {
-  width: 190%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
- .SignupMyself-container .next-button {
+
+.DoctorSignup-container .next-button {
   position: absolute;
   /* left: 28.5rem; */
   right: 0px;
