@@ -3,6 +3,7 @@ import "../styles/Signup-For-Myself.css"
 import React,{useState} from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
+import Patientaddress from "./PatientAddress";
 
 const SignupforMyself= () =>
 {
@@ -14,19 +15,25 @@ const SignupforMyself= () =>
     watch,
     formState: { errors },
   } = useForm();
-   
+
+  const [step, setStep] = useState(0) 
   const navigate = useNavigate();
+  const [data, setData] = useState({});
   const onsubmit = (data) =>
   {
     console.log(data);
-    navigate("/patientaddress",{state:data})
+    // navigate("/patientaddress",{state:data})
+    setStep(1)
+    setData(data)
    }
 
 
    return (
-           <div class="SignupMyself-container">
+           <div>
+             {!step ? <>
+            <div class="SignupMyself-container">
              <h1>youro</h1>
-             <p className="h3">Membership/Sign-up gives you direct access to our team of<br/> urological providers with same or next day appointments.  </p>
+              <p className="h3">Membership/Sign-up gives you direct access to our team of<br/> urological providers with same or next day appointments.  </p>
                <div className="Form-myself-Container">
                      <div className="required-fields">
                           <div className="myself-input">
@@ -105,6 +112,10 @@ const SignupforMyself= () =>
                 </div> */}
         </div>
         </div>
+             </> 
+             : <Patientaddress data={data}/>}
+             
+             </div>
     )
 }
 

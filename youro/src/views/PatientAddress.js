@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import "../styles/PatientAdress.css";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,6 @@ const Patientaddress= (props) =>
   const receivedProps = props;
   const navigate = useNavigate();
   const allfields = [];
-  allfields.push(props);
   const {
     register,
     handleSubmit,
@@ -21,6 +20,7 @@ const Patientaddress= (props) =>
 
   const onsubmit = (data) =>
   {
+    allfields.push(props.data)
     allfields.push(data);
     console.log("All data:",allfields);
    }
