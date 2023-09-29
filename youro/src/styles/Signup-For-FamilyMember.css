@@ -68,11 +68,6 @@ body
   margin-right: 60px;
  } */
 
-span
-{
-  color: var(--secondary-color);
-}
-
 
  .Signupfamilymember-container .next-button {
   position: absolute;

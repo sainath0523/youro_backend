@@ -4,6 +4,7 @@ import React,{useState} from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import Patientaddress from "./PatientAddress";
+import PrivacyPolicy from "./PrivacyPolicies";
 
 const SignupforMyself= () =>
 {
@@ -27,10 +28,15 @@ const SignupforMyself= () =>
     setData(data)
    }
 
+   const step2Data = (values) => {
+    setStep(2)
+    setData(values)
+   }
+
 
    return (
            <div>
-             {!step ? <>
+             {step === 0 && <>
             <div class="SignupMyself-container">
              <h1>youro</h1>
               <p className="h3">Membership/Sign-up gives you direct access to our team of<br/> urological providers with same or next day appointments.  </p>
@@ -113,7 +119,10 @@ const SignupforMyself= () =>
         </div>
         </div>
              </> 
-             : <Patientaddress data={data}/>}
+             }
+
+             {step === 1 && <Patientaddress data={data} step2Data={step2Data}/>}
+             {step === 2 && <PrivacyPolicy data={data} />}
              
              </div>
     )

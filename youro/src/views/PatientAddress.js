@@ -21,6 +21,7 @@ const Patientaddress= (props) =>
   {
     const data = Object.assign(values, props.data)
     console.log("All data:",data);
+    props.step2Data(data)
    }
 
    
