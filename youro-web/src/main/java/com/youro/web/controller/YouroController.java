@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/youro/api/v1")
-@CrossOrigin
 public class YouroController {
 
     @Autowired
@@ -37,13 +36,6 @@ public class YouroController {
     public List<LoginTable> getAllUsers()
     {
         return loginTableService.get();
-    }
-    
-//    @GetMapping("/getUser/{id}")
-    @RequestMapping(value = "/getUser/{uId}", method = RequestMethod.GET)
-    public Optional<LoginTable> getAllUsers(@PathVariable String uId)
-    {
-        return loginTableService.getById(uId);
     }
 
 }

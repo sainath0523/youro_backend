@@ -61,7 +61,6 @@ public class LoginTableService {
                     .relation(requestBody.relation)
                     .relationEmail(requestBody.relatedEmail)
                     .password(requestBody.password).build();
-
             loginTableRepository.save(userDetails);
         }
         else
@@ -82,8 +81,6 @@ public class LoginTableService {
     {
         return loginTableRepository.findById(userId);
     }
-
-
 
 
 }
