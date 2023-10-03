@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -33,9 +34,16 @@ public class YouroController {
     }
 
     @GetMapping("/getDetails")
-    public List<LoginTable> login()
+    public List<LoginTable> getAllUsers()
     {
         return loginTableService.get();
+    }
+    
+//    @GetMapping("/getUser/{id}")
+    @RequestMapping(value = "/getUser/{uId}", method = RequestMethod.GET)
+    public Optional<LoginTable> getAllUsers(@PathVariable String uId)
+    {
+        return loginTableService.getById(uId);
     }
 
 }

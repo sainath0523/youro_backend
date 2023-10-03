@@ -28,7 +28,7 @@ public class LoginTable {
     public UserType userType;
     @Column(name="first_name",length = 30)
     public String firstName;
-    @Column(name="second_name",length = 30)
+    @Column(name="last_name",length = 30)
     public String lastName;
     @Column(name="address_1",length = 50)
     public String address1;

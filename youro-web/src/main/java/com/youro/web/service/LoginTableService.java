@@ -48,14 +48,14 @@ public class LoginTableService {
             Optional<LoginTable> userRelated = loginTableRepository.findById(requestBody.relatedEmail);
             if(userRelated.isEmpty())
             {
-                throw new CustomException("No Account found with " + requestBody + " email ID");
+                throw new CustomException("No Account found with " + requestBody.email + " email ID");
             }
         }
         if(user.isEmpty())
         {
             LoginTable userDetails = LoginTable.builder().firstName(requestBody.firstName)
                     .lastName(requestBody.lastName)
-                    .userType(UserType.valueOf(requestBody.userType))
+//                    .userType(UserType.valueOf(requestBody.userType))
                     .email(requestBody.email)
                     .hasInsurance(requestBody.hasInsurance)
                     .relation(requestBody.relation)
@@ -76,6 +76,11 @@ public class LoginTableService {
     public List<LoginTable> get()
     {
         return loginTableRepository.findAll();
+    }
+    
+    public Optional<LoginTable> getById(String userId)
+    {
+        return loginTableRepository.findById(userId);
     }
 
 
