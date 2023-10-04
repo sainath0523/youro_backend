@@ -1,23 +1,51 @@
 package com.youro.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
+@Entity
+@Table(name = "appointment")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Appointments {
 
 
-    public String id;
-    public String patientId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int apptId;
 
-    public String doctorId;
-    public Date date;
+    @ManyToOne
+    @JoinColumn(name = "patientId")
+    private LoginTable patientId;
 
-    public Date startTime;
+    @ManyToOne
+    @JoinColumn(name = "doctorId")
+    private LoginTable doctorId;
 
-    public Date endTime;
+    @Temporal(TemporalType.DATE)
+    public Date apptDate;
+
+    @Temporal(TemporalType.TIME)
+    public Date apptStartTime;
+
+    @Temporal(TemporalType.TIME)
+    public Date apptEndTime;
+
 
     public String link;
 
-    public String followupId;
+    @ManyToOne
+    @JoinColumn(name = "followupId", referencedColumnName = "apptId")
+    public Appointments followupId;
 
     public AppointmentStatus status;
 }

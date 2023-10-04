@@ -16,9 +16,9 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoginTable {
 
-
     @Id
-    public String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public int userId;
 
     @Column(unique = true, length = 30)
     public String email;
@@ -39,11 +39,11 @@ public class LoginTable {
 
     public Gender gender;
 
-    @Column(name="address_1",length = 50)
+    @Column(name="address",length = 50)
     public String address1;
 
-    @Column(name="address_2",length = 50)
-    public String address2;
+/*    @Column(name="address_2",length = 50)
+    public String address2;*/
 
     @Column(length = 30)
     public String city;
@@ -54,7 +54,7 @@ public class LoginTable {
     @Column(name="zip_code",length = 30)
     public String zipCode;
 
-    @Column(name="date_of_birth",length = 30)
+    @Column(name="date_of_birth")
     @Temporal(TemporalType.DATE)
     public Date dateOfBirth;
 
@@ -65,8 +65,8 @@ public class LoginTable {
     public String phone2;
 
     public Boolean hasInsurance;
-    @Column(length = 20)
 
+    @Column(length = 20)
     public String relation;
 
     @Column(name="relation_email",length = 30)

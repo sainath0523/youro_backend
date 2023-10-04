@@ -7,30 +7,25 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
-
 @Entity
-@Table(name = "notes")
+@Table(name = "questionnaires")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Notes {
+public class Questionnaires {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int notesId;
+    public int qId;
+
+    public String ans;
+    public String question;
+
+    public QuestionType qType;
 
     @ManyToOne
-    @JoinColumn(name = "patientId")
-    private LoginTable patientId;
-
-    @ManyToOne
-    @JoinColumn(name = "doctorId")
-    private LoginTable doctorId;
-
-    @Temporal(TemporalType.TIME)
-    public Date lastUpdated;
+    @JoinColumn(name = "diagnosisId")
+    private Diagnosis diagnosis;
 }
