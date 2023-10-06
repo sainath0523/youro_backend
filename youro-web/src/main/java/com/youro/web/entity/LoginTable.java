@@ -40,7 +40,7 @@ public class LoginTable {
     public Gender gender;
 
     @Column(name="address",length = 50)
-    public String address1;
+    public String address;
 
 /*    @Column(name="address_2",length = 50)
     public String address2;*/
@@ -87,3 +87,4 @@ public class LoginTable {
 
 
 }
+
