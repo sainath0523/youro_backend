@@ -1,5 +1,6 @@
 package com.youro.web.service;
 
+import com.youro.web.conversion.LoginTableConversion;
 import com.youro.web.controller.request.LoginRequest;
 import com.youro.web.controller.request.RegistrationRequest;
 import com.youro.web.controller.response.BasicResponse;
@@ -24,12 +25,15 @@ public class LoginTableService {
     SymptomScoreRepository symptomScoreRepo;
 
     @Autowired
+    LoginTableConversion loginTableConversion;
+
+    @Autowired
     AppointmentsRepository appointmentsRepository;
 
     public BasicResponse login(LoginRequest requestBody) throws CustomException
     {
         BasicResponse resp = new BasicResponse();
-        Optional<LoginTable> user = loginTableRepository.findById(requestBody.username);
+        Optional<LoginTable> user = loginTableRepository.findByEmail(requestBody.username);
         if(user.isPresent())
         {
             if(!user.get().password.equals(requestBody.password))
@@ -41,18 +45,35 @@ public class LoginTableService {
         {
             throw new CustomException("User not Available");
         }
-
         resp.message = "Login Success";
+        return resp;
+    }
+
+    public BasicResponse passwordReset(LoginRequest requestBody) throws CustomException
+    {
+        BasicResponse resp = new BasicResponse();
+        Optional<LoginTable> user = loginTableRepository.findById(requestBody.username);
+        if(user.isPresent())
+        {
+            LoginTable detail = user.get();
+            detail.password = requestBody.password;
+            loginTableRepository.save(detail);
+        }
+        else
+        {
+            throw new CustomException("User not Available");
+        }
+        resp.message = "Password Reset Successful";
         return resp;
     }
 
     public BasicResponse register(RegistrationRequest requestBody) throws CustomException
     {
         BasicResponse resp = new BasicResponse();
-        Optional<LoginTable> user = loginTableRepository.findById(requestBody.email);
-        if(requestBody.relatedEmail !=null && !requestBody.email.isEmpty())
+        Optional<LoginTable> user = loginTableRepository.findByEmail(requestBody.email);
+        if(requestBody.relationEmail !=null && !requestBody.email.isEmpty())
         {
-            Optional<LoginTable> userRelated = loginTableRepository.findById(requestBody.relatedEmail);
+            Optional<LoginTable> userRelated = loginTableRepository.findByEmail(requestBody.relationEmail);
             if(userRelated.isEmpty())
             {
                 throw new CustomException("No Account found with " + requestBody.email + " email ID");
@@ -60,14 +81,7 @@ public class LoginTableService {
         }
         if(user.isEmpty())
         {
-            LoginTable userDetails = LoginTable.builder().firstName(requestBody.firstName)
-                    .lastName(requestBody.lastName)
-//                    .userType(UserType.valueOf(requestBody.userType))
-                    .email(requestBody.email)
-                    .hasInsurance(requestBody.hasInsurance)
-                    .relation(requestBody.relation)
-                    .relationEmail(requestBody.relatedEmail)
-                    .password(requestBody.password).build();
+            LoginTable userDetails = loginTableConversion.toLoginTable(requestBody);
             loginTableRepository.save(userDetails);
         }
         else
@@ -75,13 +89,23 @@ public class LoginTableService {
             throw new CustomException("Account exists with provided Email ID");
         }
 
-        resp.message = "Login Success";
+        resp.message = "Registration Success";
         return resp;
     }
 
     public List<LoginTable> getAllUsers()
     {
         return loginTableRepository.findAll();
+    }
+
+    public LoginTable getDetailsById(String emailId) throws CustomException
+    {
+        Optional<LoginTable> user = loginTableRepository.findByEmail(emailId);
+        if(user.isEmpty())
+        {
+            throw new CustomException("No details found");
+        }
+        return user.get();
     }
 
     public List<LoginTable> getUsersByType(String uType)
@@ -103,11 +127,6 @@ public class LoginTableService {
         }
 
         return inpP;
-    }
-
-    public Optional<LoginTable> getById(String userId)
-    {
-        return loginTableRepository.findById(userId);
     }
 
     public List<Map<String, String>> getSymptomScore(int patientId){
