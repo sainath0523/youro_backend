@@ -149,18 +149,23 @@ public class LoginTableService {
     public List<Map<String, String>> getAppointments(String uType,int uId, String apptStatus){
         List<Map<String, String>> returnRes = new ArrayList<>();
         Map<String, String> item;
-        if(apptStatus == null){
-            item = new HashMap<>();
-            item.put("test_optional_pathVar" , "Success");
-            returnRes.add(item);
-            return returnRes;
-        }
         List<Appointments> res = new ArrayList<>();
-        if(uType.equals(UserType.PATIENT.toString())){
-            res.addAll( appointmentsRepository.findByPatientId(uId, getApptStatusAsInt(apptStatus)));
+        boolean hasStatus = apptStatus != null;
+        if(hasStatus){
+            if(uType.equals(UserType.PATIENT.toString())){
+                res.addAll( appointmentsRepository.findByPatientIdAndStatus(uId, getApptStatusAsInt(apptStatus)));
+            }
+            if(uType.equals(UserType.PROVIDER.toString())){
+                res.addAll(appointmentsRepository.findByDoctorIdAndStatus(uId, getApptStatusAsInt(apptStatus)));
+            }
         }
-        if(uType.equals(UserType.PROVIDER.toString())){
-            res.addAll(appointmentsRepository.findByDoctorId(uId, getApptStatusAsInt(apptStatus)));
+        else{
+            if(uType.equals(UserType.PATIENT.toString())){
+                res.addAll( appointmentsRepository.findByPatientId(uId));
+            }
+            if(uType.equals(UserType.PROVIDER.toString())){
+                res.addAll(appointmentsRepository.findByDoctorId(uId));
+            }
         }
         for(Appointments app : res){
             String patPrefix = app.getPatientId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
