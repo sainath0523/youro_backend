@@ -9,8 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @RestController
@@ -35,7 +34,25 @@ public class YouroController {
     @GetMapping("/getDetails")
     public List<LoginTable> getAllUsers()
     {
-        return loginTableService.get();
+        return loginTableService.getAllUsers();
     }
+
+    @GetMapping("/allUsers/{type}")
+    public List<LoginTable> getUsersByType(@PathVariable("type") String uType) {
+        return loginTableService.getUsersByType(uType);
+    }
+
+    @GetMapping("/symptomScore/{uId}")
+    public List<Map<String, String>> getPatientSymptomScores(@PathVariable("uId") int uId) {
+        return loginTableService.getSymptomScore(uId);
+    }
+
+    @GetMapping("/appointments/{uType}/{uId}/{apptStatus}")
+    public List<Map<String, String>> getUserAppointments(@PathVariable("uType") String uType, @PathVariable("uId") int uId, @PathVariable("apptStatus") String apptStatus) {
+        return loginTableService.getAppointments(uType, uId, apptStatus);
+    }
+
+
+
 
 }
