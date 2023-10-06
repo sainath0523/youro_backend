@@ -33,7 +33,7 @@ public class LoginTableService {
     public BasicResponse login(LoginRequest requestBody) throws CustomException
     {
         BasicResponse resp = new BasicResponse();
-        Optional<LoginTable> user = loginTableRepository.findById(requestBody.username);
+        Optional<LoginTable> user = loginTableRepository.findByEmail(requestBody.username);
         if(user.isPresent())
         {
             if(!user.get().password.equals(requestBody.password))
@@ -45,7 +45,6 @@ public class LoginTableService {
         {
             throw new CustomException("User not Available");
         }
-
         resp.message = "Login Success";
         return resp;
     }

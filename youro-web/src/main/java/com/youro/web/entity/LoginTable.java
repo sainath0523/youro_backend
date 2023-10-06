@@ -82,6 +82,8 @@ public class LoginTable {
 
     public SubscriptionStatus subscriptionStatus;
 
+    public Boolean verified;
+
     @Column(name="soft_delete")
     public Boolean softDelete;
 

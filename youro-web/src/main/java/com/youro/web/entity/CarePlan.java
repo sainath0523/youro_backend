@@ -21,10 +21,16 @@ public class CarePlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int carePlanId;
+
+
     public PrescriptionType presType;
     @ManyToOne
     @JoinColumn(name = "diagnosisId")
     private Diagnosis diagnosis;
+
+    @ManyToOne
+    @JoinColumn(name = "presId")
+    private Prescription presId;
 
     @ManyToOne
     @JoinColumn(name = "apptId")
