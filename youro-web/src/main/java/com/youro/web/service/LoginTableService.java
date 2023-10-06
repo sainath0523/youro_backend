@@ -117,12 +117,12 @@ public class LoginTableService {
 
         for(SymptomScore ss : res){
             item = new HashMap<>();
-            item.put("scoreId", ss.scoreId+ "");
-            item.put("patientId", ss.getPatientId().userId + "");
-            item.put("diagnosisId", ss.getDiagnosis().diagId + "");
-            item.put("symptomScore", ss.symptomScore+"");
-            item.put("questionData", ss.questionData);
-            item.put("dateTime", ss.dateTime+"");
+            item.put("scoreId", ss.getScoreId()+ "");
+            item.put("patientId", ss.getPatientId().getUserId() + "");
+            item.put("diagnosisId", ss.getDiagnosis().getDiagId() + "");
+            item.put("symptomScore", ss.getSymptomScore()+"");
+            item.put("questionData", ss.getQuestionData());
+            item.put("dateTime", ss.getDateTime()+"");
 
             returnRes.add(item);
         }
@@ -149,6 +149,12 @@ public class LoginTableService {
     public List<Map<String, String>> getAppointments(String uType,int uId, String apptStatus){
         List<Map<String, String>> returnRes = new ArrayList<>();
         Map<String, String> item;
+        if(apptStatus == null){
+            item = new HashMap<>();
+            item.put("test_optional_pathVar" , "Success");
+            returnRes.add(item);
+            return returnRes;
+        }
         List<Appointments> res = new ArrayList<>();
         if(uType.equals(UserType.PATIENT.toString())){
             res.addAll( appointmentsRepository.findByPatientId(uId, getApptStatusAsInt(apptStatus)));
@@ -157,15 +163,19 @@ public class LoginTableService {
             res.addAll(appointmentsRepository.findByDoctorId(uId, getApptStatusAsInt(apptStatus)));
         }
         for(Appointments app : res){
+            String patPrefix = app.getPatientId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
+            String docPrefix = app.getDoctorId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
             item = new HashMap<>();
-            item.put("apptId", app.apptId+ "");
-            item.put("patientId", app.getPatientId().userId + "");
-            item.put("doctorId", app.getDoctorId().userId + "");
-            item.put("apptDate", app.apptDate+"");
-            item.put("apptStartTime", app.apptStartTime+"");
-            item.put("apptEndTime", app.apptEndTime+"");
-            item.put("link", app.link);
-            item.put("status", app.status+"");
+            item.put("apptId", app.getApptId()+ "");
+            item.put("patientId", app.getPatientId().getUserId() + "");
+            item.put("doctorName", docPrefix + app.getDoctorId().getLastName());
+            item.put("patientName", patPrefix + app.getPatientId().getLastName());
+            item.put("doctorId", app.getDoctorId().getUserId() + "");
+            item.put("apptDate", app.getApptDate()+"");
+            item.put("apptStartTime", app.getApptStartTime()+"");
+            item.put("apptEndTime", app.getApptEndTime()+"");
+            item.put("link", app.getLink());
+            item.put("status", app.getStatus()+"");
 
             returnRes.add(item);
         }

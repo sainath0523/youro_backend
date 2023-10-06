@@ -47,8 +47,8 @@ public class YouroController {
         return loginTableService.getSymptomScore(uId);
     }
 
-    @GetMapping("/appointments/{uType}/{uId}/{apptStatus}")
-    public List<Map<String, String>> getUserAppointments(@PathVariable("uType") String uType, @PathVariable("uId") int uId, @PathVariable("apptStatus") String apptStatus) {
+    @GetMapping({"/appointments/{uType}/{uId}/{apptStatus}", "/appointments/{uType}/{uId}"})
+    public List<Map<String, String>> getUserAppointments(@PathVariable("uType") String uType, @PathVariable("uId") int uId, @PathVariable(value="apptStatus", required = false) String apptStatus) {
         return loginTableService.getAppointments(uType, uId, apptStatus);
     }
 
