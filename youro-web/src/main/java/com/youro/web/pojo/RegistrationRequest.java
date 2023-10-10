@@ -1,4 +1,4 @@
-package com.youro.web.controller.request;
+package com.youro.web.pojo;
 
 import java.util.Date;
 
@@ -16,6 +16,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegistrationRequest {
+	
+	@NotNull(message = "is required")
+    public UserType userType;
 
     @NotNull(message = "is required")
     public String firstName;
@@ -27,21 +30,30 @@ public class RegistrationRequest {
     public String password;
 
     @NotNull(message = "is required")
-    public String confirmPassword;
-
-    @NotNull(message = "is required")
     @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
             flags = Pattern.Flag.CASE_INSENSITIVE)
     public String email;
 
     @NotNull(message = "is required")
-    public UserType userType;
+    public Date dateOfBirth;
+    
+    @NotNull(message = "is required")
+    public String phoneNumber;
 
     @NotNull(message = "is required")
+    public Gender gender;
+    
     public Boolean hasInsurance;
 
-    @NotNull(message = "is required")
-    public Date dateOfBirth;
+    public SubscriptionStatus subscriptionStatus;
+
+    public String relation;
+
+    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
+            flags = Pattern.Flag.CASE_INSENSITIVE)
+    public String relationEmail;
+    
+    public String license;
 
     @NotNull(message = "is required")
     public String address;
@@ -54,23 +66,5 @@ public class RegistrationRequest {
 
     @NotNull(message = "is required")
     public String zipCode;
-
-    @NotNull(message = "is required")
-    public Gender gender;
-
-    @NotNull(message = "is required")
-    public String phoneNumber;
-
-    @NotNull(message = "is required")
-    public String license;
-
-    @NotNull(message = "is required")
-    public SubscriptionStatus subscriptionStatus;
-
-    public String relation;
-
-    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
-            flags = Pattern.Flag.CASE_INSENSITIVE)
-    public String relationEmail;
 
 }

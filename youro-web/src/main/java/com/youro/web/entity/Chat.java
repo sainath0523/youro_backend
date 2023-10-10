@@ -23,10 +23,10 @@ public class Chat {
     public int chatId;
     @ManyToOne
     @JoinColumn(name = "from_id")
-    private LoginTable fromId;
+    private User fromId;
     @ManyToOne
     @JoinColumn(name = "to_id")
-    private LoginTable toId;
+    private User toId;
 
     @Temporal(TemporalType.TIMESTAMP)
     public Date dateTime;

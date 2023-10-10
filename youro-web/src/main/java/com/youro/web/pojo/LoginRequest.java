@@ -1,4 +1,4 @@
-package com.youro.web.controller.request;
+package com.youro.web.pojo;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
