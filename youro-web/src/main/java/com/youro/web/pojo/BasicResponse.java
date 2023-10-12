@@ -1,4 +1,4 @@
-package com.youro.web.controller.response;
+package com.youro.web.pojo;
 
 public class BasicResponse {
 

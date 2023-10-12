@@ -22,7 +22,7 @@ public class DoctorSchedule {
     public int schId;
     @ManyToOne
     @JoinColumn(name = "doctorId")
-    private LoginTable doctorId;
+    private User doctorId;
 
     public DrSchdStatus status;
 
