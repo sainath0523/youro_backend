@@ -24,7 +24,7 @@ public class SymptomScore {
 
     @ManyToOne
     @JoinColumn(name = "patientId")
-    private LoginTable patientId;
+    private User patientId;
 
     @ManyToOne
     @JoinColumn(name = "diagnosisId")

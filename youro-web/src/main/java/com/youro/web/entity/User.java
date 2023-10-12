@@ -8,13 +8,13 @@ import lombok.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "login_table")
+@Table(name = "user")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LoginTable {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

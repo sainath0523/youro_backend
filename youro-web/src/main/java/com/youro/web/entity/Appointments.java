@@ -25,11 +25,11 @@ public class Appointments {
 
     @ManyToOne
     @JoinColumn(name = "patientId")
-    private LoginTable patientId;
+    private User patientId;
 
     @ManyToOne
     @JoinColumn(name = "doctorId")
-    private LoginTable doctorId;
+    private User doctorId;
 
     @Temporal(TemporalType.DATE)
     public Date apptDate;

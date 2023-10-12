@@ -1,20 +1,20 @@
-package com.youro.web.conversion;
+package com.youro.web.mapper;
 
 import java.util.EnumSet;
 
 import org.springframework.stereotype.Component;
 
-import com.youro.web.controller.request.RegistrationRequest;
-import com.youro.web.entity.LoginTable;
+import com.youro.web.entity.User;
 import com.youro.web.entity.SubscriptionStatus;
 import com.youro.web.entity.UserType;
+import com.youro.web.pojo.RegistrationRequest;
 import com.youro.web.entity.Gender;
 
 @Component
-public class LoginTableConversion {
+public class UserMapper {
 	
-	public LoginTable toLoginTable(RegistrationRequest requestBody) {
-		LoginTable userDetails = new LoginTable();
+	public User toUser(RegistrationRequest requestBody) {
+		User userDetails = new User();
 		
         EnumSet<Gender> validGenders = EnumSet.allOf(Gender.class);
         EnumSet<UserType> validUserTypes = EnumSet.allOf(UserType.class);
