@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.youro.web.mapper.AppointmentMapper;
+import com.youro.web.mapper.SymptomScoreMapper;
+import com.youro.web.pojo.Response.GetAppointmentsReponse;
+import com.youro.web.pojo.Response.GetSymptomScoreResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,63 +28,26 @@ public class PatientService {
     @Autowired
     AppointmentsRepository appointmentsRepository;
 	
-	public List<Map<String, String>> getSymptomScore(int patientId){
+	public List<GetSymptomScoreResponse> getSymptomScore(int patientId){
         List<SymptomScore> res = symptomScoreRepo.findByPatientId(patientId);
-        List<Map<String, String>> returnRes = new ArrayList<>();
-        Map<String, String> item;
 
-        for(SymptomScore ss : res){
-            item = new HashMap<>();
-            item.put("scoreId", ss.getScoreId()+ "");
-            item.put("patientId", ss.getPatientId().getUserId() + "");
-            item.put("diagnosisId", ss.getDiagnosis().getDiagId() + "");
-            item.put("symptomScore", ss.getSymptomScore()+"");
-            item.put("questionData", ss.getQuestionData());
-            item.put("dateTime", ss.getDateTime()+"");
-
-            returnRes.add(item);
-        }
-        return returnRes;
+        return SymptomScoreMapper.getSymptomsScore(res);
     }
 	
-	public List<Map<String, String>> getAppointments(String uType,int uId, String apptStatus){
-        List<Map<String, String>> returnRes = new ArrayList<>();
-        Map<String, String> item;
-        if(apptStatus == null){
-            item = new HashMap<>();
-            item.put("test_optional_pathVar" , "Success");
-            returnRes.add(item);
-            return returnRes;
-        }
+	public List<GetAppointmentsReponse> getAppointments(int uId, String apptStatus){
         List<Appointments> res = new ArrayList<>();
-        if(uType.equals(UserType.PATIENT.toString())){
-            res.addAll( appointmentsRepository.findByPatientId(uId, getApptStatusAsInt(apptStatus)));
-        }
-        if(uType.equals(UserType.PROVIDER.toString())){
-            res.addAll(appointmentsRepository.findByDoctorId(uId, getApptStatusAsInt(apptStatus)));
-        }
-        for(Appointments app : res){
-            String patPrefix = app.getPatientId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
-            String docPrefix = app.getDoctorId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
-            item = new HashMap<>();
-            item.put("apptId", app.getApptId()+ "");
-            item.put("patientId", app.getPatientId().getUserId() + "");
-            item.put("doctorName", docPrefix + app.getDoctorId().getLastName());
-            item.put("patientName", patPrefix + app.getPatientId().getLastName());
-            item.put("doctorId", app.getDoctorId().getUserId() + "");
-            item.put("apptDate", app.getApptDate()+"");
-            item.put("apptStartTime", app.getApptStartTime()+"");
-            item.put("apptEndTime", app.getApptEndTime()+"");
-            item.put("link", app.getLink());
-            item.put("status", app.getStatus()+"");
+        if(apptStatus == null)
+        {
+            res.addAll( appointmentsRepository.findByUId(uId));
 
-            returnRes.add(item);
+        }else
+        {
+            res.addAll(appointmentsRepository.findByStatus(uId, getApptStatusAsInt(apptStatus)));
         }
-        System.out.println(res);
-        return returnRes;
+        return AppointmentMapper.getAppointments(res);
     }
 	
-	private int getApptStatusAsInt(String apptStatus){
+	private static int getApptStatusAsInt(String apptStatus){
         int res = -1;
         if(apptStatus.equals(AppointmentStatus.COMPLETED.toString())){
             res = 0;
