@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87313d41-b896-4ede-9a19-20ade30a5ba6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="87313d41-b896-4ede-9a19-20ade30a5ba6" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,12 +28,25 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
+    "git-widget-placeholder": "arvi__in__progress",
     "ignore.virus.scanning.warn.message": "true",
     "settings.editor.selected.configurable": "reference.settings.project.maven.importing"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.YouroWebApplication">
+    <configuration name="YouroWebApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.youro.web.YouroWebApplication" />
+      <module name="youro-web" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.youro.web.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="All in youro-web" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="youro-web" />
       <option name="PACKAGE_NAME" value="" />
@@ -47,6 +57,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.YouroWebApplication" />
         <item itemvalue="JUnit.All in youro-web" />
       </list>
     </recent_temporary>
