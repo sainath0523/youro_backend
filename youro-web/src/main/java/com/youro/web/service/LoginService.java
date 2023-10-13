@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.youro.web.entity.User;
 import com.youro.web.exception.CustomException;
-import com.youro.web.pojo.BasicResponse;
-import com.youro.web.pojo.LoginRequest;
+import com.youro.web.pojo.Response.BasicResponse;
+import com.youro.web.pojo.Request.LoginRequest;
 import com.youro.web.repository.UserRepository;
 
 @Service

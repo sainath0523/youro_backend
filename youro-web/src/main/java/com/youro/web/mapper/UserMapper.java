@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.youro.web.entity.User;
 import com.youro.web.entity.SubscriptionStatus;
 import com.youro.web.entity.UserType;
-import com.youro.web.pojo.RegistrationRequest;
+import com.youro.web.pojo.Request.RegistrationRequest;
 import com.youro.web.entity.Gender;
 
 @Component

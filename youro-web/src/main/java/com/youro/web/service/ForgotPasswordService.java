@@ -2,8 +2,8 @@ package com.youro.web.service;
 
 import com.youro.web.entity.*;
 import com.youro.web.exception.CustomException;
-import com.youro.web.pojo.BasicResponse;
-import com.youro.web.pojo.LoginRequest;
+import com.youro.web.pojo.Response.BasicResponse;
+import com.youro.web.pojo.Request.LoginRequest;
 import com.youro.web.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

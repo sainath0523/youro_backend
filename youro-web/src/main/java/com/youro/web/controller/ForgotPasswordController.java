@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.youro.web.pojo.BasicResponse;
-import com.youro.web.pojo.LoginRequest;
+import com.youro.web.pojo.Response.BasicResponse;
+import com.youro.web.pojo.Request.LoginRequest;
 import com.youro.web.service.ForgotPasswordService;
 import com.youro.web.utils.OtpUtils;
 

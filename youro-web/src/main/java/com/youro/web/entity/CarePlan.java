@@ -32,6 +32,9 @@ public class CarePlan {
     @JoinColumn(name = "presId")
     private Prescription presId;
 
+    @Column(length = 100)
+    public String dosage;
+
     @ManyToOne
     @JoinColumn(name = "apptId")
     private Appointments appointments;

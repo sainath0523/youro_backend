@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.youro.web.pojo.BasicResponse;
-import com.youro.web.pojo.RegistrationRequest;
+import com.youro.web.pojo.Response.BasicResponse;
+import com.youro.web.pojo.Request.RegistrationRequest;
 import com.youro.web.service.RegistrationService;
 
 import jakarta.validation.Valid;
