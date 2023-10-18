@@ -3,6 +3,7 @@ package com.youro.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,7 +19,7 @@ import com.youro.web.utils.OtpUtils;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/youro/api/v1")
+@RequestMapping("/youro/api/v1/forgotPwd")
 public class ForgotPasswordController {
 	
 	@Autowired
@@ -28,7 +29,8 @@ public class ForgotPasswordController {
     JavaMailSender javaMailSender;
 
     OtpUtils otpUtils = new OtpUtils();
-
+    
+    @PreAuthorize("hasAnyRole('ADMIN','PROVIDER','PATIENT')")
 	@PutMapping("/password-rest")
     public BasicResponse passwordReset(@RequestBody @Valid LoginRequest requestBody)
     {
@@ -45,7 +47,8 @@ public class ForgotPasswordController {
         javaMailSender.send(mes);
         return "Email sent successfully";
     }
-
+    
+    @PreAuthorize("hasAnyRole('ADMIN','PROVIDER','PATIENT')")
     @GetMapping("/send-otp/{emailId}")
     public String sendOtp(@PathVariable("emailId") String emailId)
     {
