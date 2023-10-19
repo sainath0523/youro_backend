@@ -19,7 +19,7 @@ public class ForgotPasswordService {
     public BasicResponse passwordReset(LoginRequest requestBody) throws CustomException
     {
         BasicResponse resp = new BasicResponse();
-        Optional<User> user = userRepository.findById(requestBody.username);
+        Optional<User> user = userRepository.findByEmail(requestBody.username);
         if(user.isPresent())
         {
             User detail = user.get();
