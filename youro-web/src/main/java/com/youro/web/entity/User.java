@@ -12,6 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {

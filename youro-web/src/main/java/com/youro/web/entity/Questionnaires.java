@@ -25,6 +25,8 @@ public class Questionnaires {
 
     public QuestionType qType;
 
+    public int weight;
+
     @ManyToOne
     @JoinColumn(name = "diagnosisId")
     private Diagnosis diagnosis;
