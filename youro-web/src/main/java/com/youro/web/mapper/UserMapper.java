@@ -2,6 +2,7 @@ package com.youro.web.mapper;
 
 import java.util.EnumSet;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.youro.web.entity.User;
@@ -13,7 +14,7 @@ import com.youro.web.entity.Gender;
 @Component
 public class UserMapper {
 	
-	public User toUser(RegistrationRequest requestBody) {
+	public User toUser(RegistrationRequest requestBody, PasswordEncoder passwordEncoder) {
 		User userDetails = new User();
 		
         EnumSet<Gender> validGenders = EnumSet.allOf(Gender.class);
@@ -45,7 +46,9 @@ public class UserMapper {
         }
         
         if(requestBody.password != null) {
-            userDetails.password = requestBody.password;
+            userDetails.password = passwordEncoder.encode(requestBody.password);
+            System.out.println("length of encoded password: "+ userDetails.password.length());
+            System.out.println("encoded password: "+ userDetails.password);
         }
         
         if(requestBody.hasInsurance != null) {

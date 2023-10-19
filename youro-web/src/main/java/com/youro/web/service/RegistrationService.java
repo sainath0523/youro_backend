@@ -3,6 +3,7 @@ package com.youro.web.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.youro.web.entity.User;
@@ -19,32 +20,31 @@ public class RegistrationService {
     UserRepository userRepository;
 	
 	@Autowired
+	PasswordEncoder passwordEncoder;
+	
+	@Autowired
     UserMapper userMapper;
 	
-	public BasicResponse register(RegistrationRequest requestBody) throws CustomException
+	public User register(RegistrationRequest registrationRequest) throws CustomException
     {
-        BasicResponse resp = new BasicResponse();
-        Optional<User> user = userRepository.findByEmail(requestBody.email);
-        if(requestBody.relationEmail !=null && !requestBody.email.isEmpty())
+        Optional<User> user = userRepository.findByEmail(registrationRequest.email);
+        if(registrationRequest.relationEmail !=null && !registrationRequest.email.isEmpty())
         {
-            Optional<User> userRelated = userRepository.findByEmail(requestBody.relationEmail);
+            Optional<User> userRelated = userRepository.findByEmail(registrationRequest.relationEmail);
             if(userRelated.isEmpty())
             {
-                throw new CustomException("No Account found with " + requestBody.relationEmail + " email ID");
+                throw new CustomException("No Account found with " + registrationRequest.relationEmail + " email ID");
             }
         }
         if(user.isEmpty())
         {
-            User userDetails = userMapper.toUser(requestBody);
-            userRepository.save(userDetails);
+        	User registeredUser = userMapper.toUser(registrationRequest, passwordEncoder);
+            return userRepository.save(registeredUser);
         }
         else
         {
-            throw new CustomException("Account exists with provided Email ID");
+            throw new CustomException("Account already exists with provided Email ID");
         }
-
-        resp.message = "Registration Success";
-        return resp;
     }
 
 }

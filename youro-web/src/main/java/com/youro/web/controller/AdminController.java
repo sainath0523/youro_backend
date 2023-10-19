@@ -26,6 +26,8 @@ public class AdminController {
     LoginService loginService;
 
 
+
+
     @GetMapping("/getPrescriptions/{diagnosisId}")
     public GetCarePlaneDetails getPrescriptions(@PathVariable("diagnosisId") int diagnosisId) {
         return new GetCarePlaneDetails();
