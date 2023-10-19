@@ -5,20 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87313d41-b896-4ede-9a19-20ade30a5ba6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/mapper/DiagnosisMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/mapper/QuestionnairesMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/pojo/Request/SymptomScoreRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/pojo/Response/DiagnosisResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/pojo/Response/QuestionnairesResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/repository/DiagnosisRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/controller/PatientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/controller/PatientController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/entity/Diagnosis.java" beforeDir="false" afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/entity/Diagnosis.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/entity/Questionnaires.java" beforeDir="false" afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/entity/Questionnaires.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/entity/SymptomScore.java" beforeDir="false" afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/entity/SymptomScore.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/mapper/SymptomScoreMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/mapper/SymptomScoreMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/repository/QuestionnairesRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/repository/QuestionnairesRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/pojo/Request/SymptomScoreRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/pojo/Request/SymptomScoreRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/service/PatientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/service/PatientService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,15 +38,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;arvi__in__progress&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "arvi__in__progress",
+    "ignore.virus.scanning.warn.message": "true",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.YouroWebApplication">
     <configuration name="YouroWebApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.youro.web.YouroWebApplication" />
@@ -107,5 +97,21 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/service/PatientService.java</url>
+          <line>69</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/youro-web/src/main/java/com/youro/web/service/PatientService.java</url>
+          <line>75</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

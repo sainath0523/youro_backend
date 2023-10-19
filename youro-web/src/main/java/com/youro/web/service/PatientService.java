@@ -72,16 +72,9 @@ public class PatientService {
         System.out.println("===============================");
         System.out.println("===============================");
         System.out.println("===============================");
-        System.out.println(sC);
-
-        System.out.println("===============================");
-        System.out.println("===============================");
-        System.out.println("===============================");
-        SymptomScore sC1 = symptomScoreRepo.saveAndFlush(sC);
-        System.out.println(sC1);
+        symptomScoreRepo.save(sC);
         BasicResponse res = new BasicResponse();
 
-//        symptomScoreRepo.save(req);
         res.message = "new symptom score saved";
         return res;
     }

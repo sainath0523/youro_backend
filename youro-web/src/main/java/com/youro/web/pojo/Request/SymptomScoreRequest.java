@@ -2,14 +2,15 @@ package com.youro.web.pojo.Request;
 
 import com.youro.web.entity.UserType;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Map;
 
 @Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class SymptomScoreRequest {

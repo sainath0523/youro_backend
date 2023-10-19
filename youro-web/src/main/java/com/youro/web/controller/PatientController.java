@@ -42,7 +42,6 @@ public class PatientController {
     @PostMapping("/saveNewSymptomScore")
     public BasicResponse saveNewSymptomScore(@RequestBody @Valid SymptomScoreRequest requestBody)
     {
-
         return patientService.saveNewSymptomScore(requestBody);
     }
 
