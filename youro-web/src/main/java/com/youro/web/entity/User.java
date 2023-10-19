@@ -3,7 +3,10 @@ package com.youro.web.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.Date;
@@ -29,7 +32,7 @@ public class User implements UserDetails {
     @Column(unique = true, length = 30)
     public String email;
 
-    @Column(name="password", length = 60)
+    @Column(name="password", length = 100)
     public String password;
 
     public UserType userType;
@@ -133,5 +136,8 @@ public class User implements UserDetails {
         return true;
     }
 
+    public void setUserId(int patientId) {
+        this.userId = patientId;
+    }
 }
 

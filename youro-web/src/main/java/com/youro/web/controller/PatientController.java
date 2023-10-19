@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.youro.web.entity.AppointmentStatus;
 import com.youro.web.pojo.Response.GetAppointmentsReponse;
 import com.youro.web.pojo.Response.GetSymptomScoreResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.youro.web.service.PatientService;
 
@@ -19,11 +20,13 @@ public class PatientController {
     @Autowired
     PatientService patientService;
 
+    @PreAuthorize("hasRole('PATIENT')")
     @GetMapping("/symptomScore/{uId}")
     public List<GetSymptomScoreResponse> getPatientSymptomScores(@PathVariable("uId") int uId) {
         return patientService.getSymptomScore(uId);
     }
 
+    @PreAuthorize("hasRole('PATIENT')")
     @GetMapping({"/appointments/{uId}"})
     public List<GetAppointmentsReponse> getUserAppointments(@PathVariable("uId") int uId, @RequestParam(name = "apptStatus", required = false) AppointmentStatus apptStatus) {
         return patientService.getAppointments(uId, apptStatus);
