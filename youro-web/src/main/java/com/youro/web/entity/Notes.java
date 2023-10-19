@@ -25,12 +25,15 @@ public class Notes {
 
     @ManyToOne
     @JoinColumn(name = "patientId")
-    private User patientId;
+    public User patientId;
+
+    @Column(columnDefinition = "TEXT")
+    public String notes;
 
     @ManyToOne
     @JoinColumn(name = "doctorId")
-    private User doctorId;
+    public User doctorId;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date lastUpdated;
 }
