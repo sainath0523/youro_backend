@@ -53,4 +53,12 @@ public class PatientController {
         return patientService.getAvailableSlotsByDate(selDate);
     }
 
+
+    @PostMapping("/saveNewAppointment")
+    public BasicResponse saveNewAppointment(@RequestBody @Valid SymptomScoreRequest requestBody)
+    {
+        return patientService.saveNewSymptomScore(requestBody);
+    }
+
+
 }

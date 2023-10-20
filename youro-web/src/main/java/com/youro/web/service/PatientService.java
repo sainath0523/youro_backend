@@ -80,4 +80,17 @@ public class PatientService {
         List<AvailableSlotsByDateResponse> res = DoctorSchToSlotsMapper.convertDoctorSchToSlots(output);
         return res;
     }
+
+
+    public BasicResponse saveNewAppointment(SymptomScoreRequest req){
+        SymptomScore sC = SymptomScoreMapper.convertReqBodyToEntity(req);
+        symptomScoreRepo.save(sC);
+        BasicResponse res = new BasicResponse();
+
+        System.out.println("===============================");
+        System.out.println("===============================");
+        System.out.println("===============================");
+        res.message = "new symptom score saved";
+        return res;
+    }
 }
