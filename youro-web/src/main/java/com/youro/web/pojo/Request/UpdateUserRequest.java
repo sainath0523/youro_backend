@@ -49,4 +49,8 @@ public class UpdateUserRequest {
     public Boolean softDelete;
 
     public byte[] profilePicture;
+
+    public String email;
+
+    public String password;
 }
