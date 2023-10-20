@@ -7,10 +7,15 @@ import com.youro.web.service.ProviderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -65,7 +70,6 @@ public class ProviderController {
         return new BasicResponse();
     }
 
-
     @GetMapping("/provider/getUser/{userId}")
     public User getProfile(@PathVariable("userId") String email) {
         return providerService.getProfile(email);
@@ -80,4 +84,20 @@ public class ProviderController {
         return ResponseEntity.ok(registeredUser);
     }
 
+    @PutMapping("/removeDoctorAvailability")
+    public BasicResponse removeDoctorAvailability(@RequestBody AddAvailabilityRequest requestBody) throws ParseException {
+        providerService.removeAvailability(requestBody);
+        return new BasicResponse();
+    }
+
+    @PutMapping("/addDoctorAvailability")
+    public BasicResponse addDoctorAvailability(@RequestBody AddAvailabilityRequest request)  {
+        return providerService.addAvailability(request);
+    }
+
+    @PutMapping("/cancelAppointment/{apptId}/{docId}")
+    public BasicResponse cancelAppointment(@PathVariable("apptId") int id, @PathVariable("docId") int docId)
+    {
+        return providerService.cancelAppointment(id, docId);
+    }
 }
