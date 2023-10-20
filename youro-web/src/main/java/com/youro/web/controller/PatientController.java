@@ -1,5 +1,6 @@
 package com.youro.web.controller;
 
+import java.util.Date;
 import java.util.List;
 import com.youro.web.pojo.Request.SymptomScoreRequest;
 import com.youro.web.pojo.Response.*;
@@ -44,6 +45,9 @@ public class PatientController {
     {
         return patientService.saveNewSymptomScore(requestBody);
     }
-
+    @GetMapping({"/getAvailableSlotsByDate/{selDate}"})
+    public List<AvailableSlotsByDateResponse> getAvailableSlotsByDate(@PathVariable("selDate") Date selDate){
+        return patientService.getAvailableSlotsByDate(selDate);
+    }
 
 }
