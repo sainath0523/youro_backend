@@ -6,6 +6,7 @@ import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Request.LoginRequest;
 import com.youro.web.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,15 +16,19 @@ public class ForgotPasswordService {
 
     @Autowired
     UserRepository userRepository;
+    
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public BasicResponse passwordReset(LoginRequest requestBody) throws CustomException
     {
+    	System.out.println("In FPService's passwordReset()");
         BasicResponse resp = new BasicResponse();
-        Optional<User> user = userRepository.findById(requestBody.username);
+        Optional<User> user = userRepository.findByEmail(requestBody.username);
         if(user.isPresent())
         {
             User detail = user.get();
-            detail.password = requestBody.password;
+            detail.password = passwordEncoder.encode(requestBody.password);
             userRepository.save(detail);
         }
         else
