@@ -1,20 +1,27 @@
 package com.youro.web.controller;
 
-import com.youro.web.pojo.Request.SaveCarePlanRequest;
-import com.youro.web.pojo.Request.SaveCheckListRequest;
-import com.youro.web.pojo.Request.SaveNotesRequest;
-import com.youro.web.pojo.Request.UpdateResultDetailsRequest;
+import com.youro.web.pojo.Request.*;
 import com.youro.web.pojo.Response.*;
+import com.youro.web.service.ProviderService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/youro/api/v1")
 public class ProviderController {
+
+    @Autowired
+    ProviderService providerService;
 
     @PostMapping("/saveCheckList")
     public BasicResponse saveCheckList(@RequestBody @Valid SaveCheckListRequest requestBody) {
@@ -62,4 +69,20 @@ public class ProviderController {
         return new BasicResponse();
     }
 
+    @PutMapping("/removeDoctorAvailability")
+    public BasicResponse removeDoctorAvailability(@RequestBody AddAvailabilityRequest requestBody) throws ParseException {
+        providerService.removeAvailability(requestBody);
+        return new BasicResponse();
+    }
+
+    @PutMapping("/addDoctorAvailability")
+    public BasicResponse addDoctorAvailability(@RequestBody AddAvailabilityRequest request)  {
+        return providerService.addAvailability(request);
+    }
+
+    @PutMapping("/cancelAppointment/{apptId}/{docId}")
+    public BasicResponse cancelAppointment(@PathVariable("apptId") int id, @PathVariable("docId") int docId)
+    {
+        return providerService.cancelAppointment(id, docId);
+    }
 }
