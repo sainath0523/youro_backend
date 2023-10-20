@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface AppointmentsRepository extends JpaRepository<Appointments, String> {
+public interface AppointmentsRepository extends JpaRepository<Appointments, Integer> {
 
     @Query(value = "select * from appointment as appt where appt.patient_id = ?1 or appt.doctor_id = ?1", nativeQuery = true)
     List<Appointments> findByUId(int uId);
