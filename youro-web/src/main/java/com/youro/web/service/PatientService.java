@@ -1,17 +1,14 @@
 package com.youro.web.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.youro.web.entity.*;
-import com.youro.web.mapper.AppointmentMapper;
-import com.youro.web.mapper.DiagnosisMapper;
-import com.youro.web.mapper.QuestionnairesMapper;
-import com.youro.web.mapper.SymptomScoreMapper;
+import com.youro.web.mapper.*;
 import com.youro.web.pojo.Request.SymptomScoreRequest;
 import com.youro.web.pojo.Response.*;
-import com.youro.web.repository.DiagnosisRepository;
-import com.youro.web.repository.QuestionnairesRepository;
+import com.youro.web.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +17,6 @@ import com.youro.web.entity.Appointments;
 import com.youro.web.entity.SymptomScore;
 import com.youro.web.pojo.Response.GetAppointmentsReponse;
 import com.youro.web.pojo.Response.GetSymptomScoreResponse;
-
-import com.youro.web.repository.AppointmentsRepository;
-import com.youro.web.repository.SymptomScoreRepository;
 
 @Service
 public class PatientService {
@@ -38,6 +32,9 @@ public class PatientService {
 
     @Autowired
     QuestionnairesRepository questionnairesRepository;
+
+    @Autowired
+    DoctorScheduleRepository doctorScheduleRepository;
 	
 	public List<GetSymptomScoreResponse> getSymptomScore(int patientId){
 
@@ -68,14 +65,19 @@ public class PatientService {
 
     public BasicResponse saveNewSymptomScore(SymptomScoreRequest req){
         SymptomScore sC = SymptomScoreMapper.convertReqBodyToEntity(req);
-
-        System.out.println("===============================");
-        System.out.println("===============================");
-        System.out.println("===============================");
         symptomScoreRepo.save(sC);
         BasicResponse res = new BasicResponse();
 
+        System.out.println("===============================");
+        System.out.println("===============================");
+        System.out.println("===============================");
         res.message = "new symptom score saved";
+        return res;
+    }
+
+    public List<AvailableSlotsByDateResponse> getAvailableSlotsByDate(Date inpDate){
+        List<DoctorSchedule> output = doctorScheduleRepository.findBySchDate(inpDate);
+        List<AvailableSlotsByDateResponse> res = DoctorSchToSlotsMapper.convertDoctorSchToSlots(output);
         return res;
     }
 }

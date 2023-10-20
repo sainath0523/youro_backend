@@ -1,11 +1,13 @@
 package com.youro.web.controller;
 
+import com.youro.web.entity.User;
 import com.youro.web.pojo.Request.*;
 import com.youro.web.pojo.Response.*;
 import com.youro.web.service.ProviderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,12 +19,11 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/youro/api/v1")
+@RequestMapping("/youro/api/v1/")
 public class ProviderController {
 
     @Autowired
     ProviderService providerService;
-
     @PostMapping("/saveCheckList")
     public BasicResponse saveCheckList(@RequestBody @Valid SaveCheckListRequest requestBody) {
         return new BasicResponse();
@@ -85,4 +86,19 @@ public class ProviderController {
     {
         return providerService.cancelAppointment(id, docId);
     }
+
+    @GetMapping("/provider/getUser/{userId}")
+    public User getProfile(@PathVariable("userId") String email) {
+        return providerService.getProfile(email);
+    }
+
+    @PostMapping("/provider/updateProfile")
+    public ResponseEntity<User> update(@RequestBody @Valid UpdateUserRequest registrationRequest)
+    {
+        System.out.println("In prov control update()");
+
+        User registeredUser =  providerService.updateProfile(registrationRequest);
+        return ResponseEntity.ok(registeredUser);
+    }
+
 }

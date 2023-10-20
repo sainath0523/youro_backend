@@ -100,7 +100,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userType.toString());
+        String temp = userType==null ? "PATIENT" : userType.toString();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + temp);
         return List.of(authority);
     }
 

@@ -37,5 +37,4 @@ public class DoctorSchedule {
     @Column(name="endTime")
     @Temporal(TemporalType.TIME)
     public Date schEndTime;
-
 }

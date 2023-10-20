@@ -13,5 +13,8 @@ public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, 
      @Query(value = "select * from doctor_schedule as dct where dct.doctor_id = ?1 and dct.date = ?2", nativeQuery = true)
      List<DoctorSchedule> findByDoctorIdAndSchDate(int id, String date);
 
-}
 
+public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, String> {
+    List<DoctorSchedule> findBySchDate(Date date);
+}
+}

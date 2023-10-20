@@ -19,7 +19,7 @@ import com.youro.web.utils.OtpUtils;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/youro/api/v1")
+@RequestMapping("/youro/api/v1/")
 public class ForgotPasswordController {
 
     @Autowired

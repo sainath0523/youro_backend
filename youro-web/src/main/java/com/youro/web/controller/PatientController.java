@@ -1,5 +1,6 @@
 package com.youro.web.controller;
 
+import java.util.Date;
 import java.util.List;
 import com.youro.web.pojo.Request.SymptomScoreRequest;
 import com.youro.web.pojo.Response.*;
@@ -14,7 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import com.youro.web.service.PatientService;
 
 @RestController
-@RequestMapping("/youro/api/v1")
+@RequestMapping("/youro/api/v1/")
 public class PatientController {
 
     @Autowired
@@ -47,6 +48,9 @@ public class PatientController {
     {
         return patientService.saveNewSymptomScore(requestBody);
     }
-
+    @GetMapping({"/getAvailableSlotsByDate/{selDate}"})
+    public List<AvailableSlotsByDateResponse> getAvailableSlotsByDate(@PathVariable("selDate") Date selDate){
+        return patientService.getAvailableSlotsByDate(selDate);
+    }
 
 }
