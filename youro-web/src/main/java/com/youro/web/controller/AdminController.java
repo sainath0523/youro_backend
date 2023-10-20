@@ -9,6 +9,7 @@ import com.youro.web.pojo.Response.PrescriptionDetails;
 import com.youro.web.service.AdminService;
 import com.youro.web.service.LoginService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class AdminController {
 
     @Autowired
     LoginService loginService;
+
 
 
 
@@ -47,10 +49,10 @@ public class AdminController {
     public BasicResponse addDiagnosis(@RequestBody @Valid AddDiagnosisRequest requestBody) {
         return new BasicResponse();
     }
-
+    
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllUsers/{type}")
     public List<User> getUsersByType(@PathVariable("type") UserType uType, @RequestParam(name = "subscription", required = false) SubscriptionStatus status, @RequestParam(name = "drStatus", required = false) DoctorStatus drStatus) {
-
         return adminService.getUsersByType(uType);
     }
 

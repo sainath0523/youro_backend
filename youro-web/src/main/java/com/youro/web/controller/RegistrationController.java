@@ -14,7 +14,11 @@ import com.youro.web.service.RegistrationService;
 import jakarta.validation.Valid;
 
 @RestController
+<<<<<<< HEAD
 @RequestMapping("/youro/api/v1/")
+=======
+@RequestMapping("/youro/api/v1/auth")
+>>>>>>> refs/remotes/origin/dev_jwt
 public class RegistrationController {
 	
 	@Autowired

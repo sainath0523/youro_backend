@@ -2,7 +2,10 @@ package com.youro.web.mapper;
 
 import java.util.EnumSet;
 
+<<<<<<< HEAD
 import com.youro.web.pojo.Request.UpdateUserRequest;
+=======
+>>>>>>> refs/remotes/origin/dev_jwt
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
