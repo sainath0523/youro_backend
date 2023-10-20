@@ -16,8 +16,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
+//@EnableWebSecurity
+//@EnableMethodSecurity
 public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -35,7 +35,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf
                 .disable())
                 .authorizeHttpRequests()
-                .requestMatchers("/youro/api/v1/auth/**")
+                .requestMatchers("/youro/api/v1/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

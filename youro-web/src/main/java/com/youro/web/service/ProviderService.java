@@ -21,11 +21,24 @@ public class ProviderService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    public User getProfile(String email){
+        Optional<User> res = userRepository.findByEmail(email);
+        return res.get();
+    }
     public User updateProfile(UpdateUserRequest user){
+        System.out.println("+++++=========+++++");
+        System.out.println("+++++=========+++++");
         Optional<User> temp = userRepository.findByEmail(user.email);
+        System.out.println("+++++=========+++++");
+        System.out.println("+++++=========+++++");
+        System.out.println(temp.get().getEmail());
+        System.out.println("+++++=========+++++");
+        System.out.println("+++++=========+++++");
+
         User res = new User();
         if(user.email.equals(temp.get().email)){
             res = UserMapper.updateRequestToUser(user, passwordEncoder);
+            res.userId = temp.get().getUserId();
             return userRepository.save(res);
         }
         return res;

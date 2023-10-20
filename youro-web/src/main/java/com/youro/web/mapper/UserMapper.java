@@ -101,8 +101,8 @@ public class UserMapper {
         User userDetails = new User();
 
         EnumSet<Gender> validGenders = EnumSet.allOf(Gender.class);
-        EnumSet<UserType> validUserTypes = EnumSet.allOf(UserType.class);
-        EnumSet<SubscriptionStatus> validSubscriptionStatus = EnumSet.allOf(SubscriptionStatus.class);
+//        EnumSet<UserType> validUserTypes = EnumSet.allOf(UserType.class);
+//        EnumSet<SubscriptionStatus> validSubscriptionStatus = EnumSet.allOf(SubscriptionStatus.class);
 
         if (validGenders.contains(requestBody.gender)) {
             userDetails.gender = requestBody.gender;

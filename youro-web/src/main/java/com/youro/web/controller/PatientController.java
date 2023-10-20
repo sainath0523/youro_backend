@@ -15,7 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import com.youro.web.service.PatientService;
 
 @RestController
-@RequestMapping("/youro/api/v1")
+@RequestMapping("/youro/api/v1/")
 public class PatientController {
 
     @Autowired

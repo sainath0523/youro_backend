@@ -76,9 +76,6 @@ public class PatientService {
     }
 
     public List<AvailableSlotsByDateResponse> getAvailableSlotsByDate(Date inpDate){
-        BasicResponse bRes = new BasicResponse();
-        bRes.message = "Testing get avail slots by date";
-
         List<DoctorSchedule> output = doctorScheduleRepository.findBySchDate(inpDate);
         List<AvailableSlotsByDateResponse> res = DoctorSchToSlotsMapper.convertDoctorSchToSlots(output);
         return res;

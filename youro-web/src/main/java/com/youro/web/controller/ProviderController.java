@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/youro/api/v1")
+@RequestMapping("/youro/api/v1/")
 public class ProviderController {
 
     @Autowired
@@ -66,11 +66,15 @@ public class ProviderController {
     }
 
 
+    @GetMapping("/provider/getUser/{userId}")
+    public User getProfile(@PathVariable("userId") String email) {
+        return providerService.getProfile(email);
+    }
 
     @PostMapping("/provider/updateProfile")
     public ResponseEntity<User> update(@RequestBody @Valid UpdateUserRequest registrationRequest)
     {
-        System.out.println("In RegistrationController's register()");
+        System.out.println("In prov control update()");
 
         User registeredUser =  providerService.updateProfile(registrationRequest);
         return ResponseEntity.ok(registeredUser);
