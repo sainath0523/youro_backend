@@ -98,8 +98,9 @@ public class ProviderController {
     }
 
     @PutMapping("/cancelAppointment/{apptId}/{docId}")
-    public BasicResponse cancelAppointment(@PathVariable("apptId") int id, @PathVariable("docId") int docId)
+        public BasicResponse cancelAppointment(@PathVariable("apptId") int id, @PathVariable("docId") int docId)
     {
+        System.out.println(id + " :: " + docId);
         return providerService.cancelAppointment(id, docId);
     }
 }
