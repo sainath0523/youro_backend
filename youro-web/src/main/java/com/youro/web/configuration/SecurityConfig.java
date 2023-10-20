@@ -19,6 +19,7 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+	
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -29,13 +30,20 @@ public class SecurityConfig {
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
+    
+    private static final String[] WHITE_LIST_URLS = {
+    		"/youro/api/v1/auth/**", 
+    		"/swagger-ui/**",
+    		"/api-docs/swagger-config",
+    		"/api-docs"  		 		
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf
                 .disable())
                 .authorizeHttpRequests()
-                .requestMatchers("/youro/api/v1/auth/**")
+                .requestMatchers(WHITE_LIST_URLS)
                 .permitAll()
                 .anyRequest()
                 .authenticated()

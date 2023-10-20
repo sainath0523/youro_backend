@@ -2,6 +2,7 @@ package com.youro.web.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
+
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.access.AccessDeniedException;
@@ -15,8 +16,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleSecurityException(Exception exception) {
         ProblemDetail errorDetail = null;
-
-        // TODO send this stack trace to an observability tool
         exception.printStackTrace();
 
         if (exception instanceof BadCredentialsException) {
@@ -45,7 +44,7 @@ public class GlobalExceptionHandler {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
             errorDetail.setProperty("description", "The JWT token has expired");
         }
-
+                
         if (errorDetail == null) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(500), exception.getMessage());
             errorDetail.setProperty("description", "Unknown internal server error.");
