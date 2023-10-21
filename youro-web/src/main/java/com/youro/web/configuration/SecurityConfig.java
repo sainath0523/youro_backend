@@ -32,7 +32,8 @@ public class SecurityConfig {
     }
     
     private static final String[] WHITE_LIST_URLS = {
-    		"/youro/api/v1/auth/**", 
+    		"/youro/api/v1/login",
+    		"/youro/api/v1/register",
     		"/swagger-ui/**",
     		"/api-docs/swagger-config",
     		"/api-docs"  		 		

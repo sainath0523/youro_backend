@@ -1,23 +1,14 @@
 package com.youro.web.service;
 
-<<<<<<< HEAD
-=======
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
->>>>>>> refs/remotes/origin/dev_jwt
 import com.youro.web.entity.User;
 import com.youro.web.exception.CustomException;
 import com.youro.web.pojo.Request.LoginRequest;
-import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -26,26 +17,9 @@ public class LoginService {
 
     @Autowired
     UserRepository userRepository;
-<<<<<<< HEAD
     private final AuthenticationManager authenticationManager;
-
-    public BasicResponse login(LoginRequest requestBody) throws CustomException {
-        BasicResponse resp = new BasicResponse();
-        Optional<User> user = userRepository.findByEmail(requestBody.username);
-        if (user.isPresent()) {
-            if (!user.get().password.equals(requestBody.password)) {
-                throw new CustomException("Password Incorrect");
-            }
-        } else {
-            throw new CustomException("User not Available");
-        }
-        resp.message = "Login Success";
-        return resp;
-=======
-	
-	private final AuthenticationManager authenticationManager;
-
-	public LoginService(AuthenticationManager authenticationManager) {
+    
+    public LoginService(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
 	}
 	
@@ -64,7 +38,6 @@ public class LoginService {
 
         return userRepository.findByEmail(loginRequest.getUsername())
                 .orElseThrow();
->>>>>>> refs/remotes/origin/dev_jwt
     }
 
     public User getDetailsById(String emailId) throws CustomException {
@@ -74,26 +47,4 @@ public class LoginService {
         }
         return user.get();
     }
-
-    public LoginService(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
-
-    public User authenticate(LoginRequest loginRequest) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()
-                    )
-            );
-        }
-        catch(Exception e) {
-            throw new CustomException("Invalid Credentials");
-        }
-
-        return userRepository.findByEmail(loginRequest.getUsername())
-                .orElseThrow();
-    }
-
 }

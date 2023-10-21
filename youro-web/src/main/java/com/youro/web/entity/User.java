@@ -94,11 +94,11 @@ public class User implements UserDetails {
     @Column(name="soft_delete")
     public Boolean softDelete;
     
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userType.toString());
-        return List.of(authority);
-    }
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userType.toString());
+//        return List.of(authority);
+//    }
     
 
     @Lob

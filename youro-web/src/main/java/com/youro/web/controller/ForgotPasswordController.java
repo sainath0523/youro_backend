@@ -19,11 +19,7 @@ import com.youro.web.utils.OtpUtils;
 import jakarta.validation.Valid;
 
 @RestController
-<<<<<<< HEAD
 @RequestMapping("/youro/api/v1/")
-=======
-@RequestMapping("/youro/api/v1/forgotPwd")
->>>>>>> refs/remotes/origin/dev_jwt
 public class ForgotPasswordController {
 
     @Autowired
@@ -33,15 +29,9 @@ public class ForgotPasswordController {
     JavaMailSender javaMailSender;
 
     OtpUtils otpUtils = new OtpUtils();
-<<<<<<< HEAD
 
     @PreAuthorize("hasAnyRole('ADMIN','PROVIDER','PATIENT')")
-    @PutMapping("/password-rest")
-=======
-    
-    @PreAuthorize("hasAnyRole('ADMIN','PROVIDER','PATIENT')")
 	@PutMapping("/password-rest")
->>>>>>> refs/remotes/origin/dev_jwt
     public BasicResponse passwordReset(@RequestBody @Valid LoginRequest requestBody)
     {
         return forgotPasswordService.passwordReset(requestBody);
@@ -57,11 +47,7 @@ public class ForgotPasswordController {
         javaMailSender.send(mes);
         return "Email sent successfully";
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> refs/remotes/origin/dev_jwt
     @PreAuthorize("hasAnyRole('ADMIN','PROVIDER','PATIENT')")
     @GetMapping("/send-otp/{emailId}")
     public String sendOtp(@PathVariable("emailId") String emailId)

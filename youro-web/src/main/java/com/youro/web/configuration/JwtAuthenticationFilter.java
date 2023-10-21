@@ -99,7 +99,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request)
       throws ServletException {  	
         String path = request.getRequestURI();
-    	String[] validUrls = { "/youro/api/v1/auth/", "/swagger-ui", "/api-docs/swagger-config","/api-docs" };
+    	String[] validUrls = { "/youro/api/v1/login",
+    			"/youro/api/v1/register",
+    			"/swagger-ui",
+    			"/api-docs/swagger-config",
+    			"/api-docs" };
     	boolean isMatchingPath = Arrays.stream(validUrls).anyMatch(path::contains);
     	System.out.println(isMatchingPath);
     	return isMatchingPath;
