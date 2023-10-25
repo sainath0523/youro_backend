@@ -25,12 +25,12 @@ public class LoginController {
     @Autowired
     JwtService jwtService;
 
-    @PostMapping("/login")
+	
+	@PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginRequest loginRequest) {
-
-        System.out.println("In LoginController's authenticate()");
-        User authenticatedUser = loginService.authenticate(loginRequest);
-
+        
+		User authenticatedUser = loginService.authenticate(loginRequest);
+		
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());

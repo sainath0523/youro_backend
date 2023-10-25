@@ -31,7 +31,7 @@ public class ForgotPasswordController {
     OtpUtils otpUtils = new OtpUtils();
 
     @PreAuthorize("hasAnyRole('ADMIN','PROVIDER','PATIENT')")
-    @PutMapping("/password-rest")
+	@PutMapping("/password-rest")
     public BasicResponse passwordReset(@RequestBody @Valid LoginRequest requestBody)
     {
         return forgotPasswordService.passwordReset(requestBody);

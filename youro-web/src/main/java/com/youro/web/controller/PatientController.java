@@ -8,9 +8,14 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.youro.web.entity.AppointmentStatus;
+
 import com.youro.web.pojo.Response.GetAppointmentsReponse;
 import com.youro.web.pojo.Response.GetSymptomScoreResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.youro.web.service.PatientService;
 
@@ -22,7 +27,7 @@ public class PatientController {
     PatientService patientService;
 
     @PreAuthorize("hasRole('PATIENT')")
-    @GetMapping("/symptomScore/{uId}")
+	@GetMapping("/symptomScore/{uId}")
     public List<GetSymptomScoreResponse> getPatientSymptomScores(@PathVariable("uId") int uId) {
         return patientService.getSymptomScore(uId);
     }
