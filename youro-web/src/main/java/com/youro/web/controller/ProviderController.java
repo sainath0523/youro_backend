@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins ="*")
 @RequestMapping("/youro/api/v1/")
 public class ProviderController {
 

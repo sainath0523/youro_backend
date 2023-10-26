@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins ="*")
 @RequestMapping("/youro/api/v1/")
 public class AdminController {
 
@@ -48,7 +49,7 @@ public class AdminController {
         return new BasicResponse();
     }
     
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllUsers/{type}")
     public List<User> getUsersByType(@PathVariable("type") UserType uType, @RequestParam(name = "subscription", required = false) SubscriptionStatus status, @RequestParam(name = "drStatus", required = false) DoctorStatus drStatus) {
         return adminService.getUsersByType(uType);

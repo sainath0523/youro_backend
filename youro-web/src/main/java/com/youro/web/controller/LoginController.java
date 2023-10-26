@@ -30,10 +30,10 @@ public class LoginController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginRequest loginRequest) {
         
 		User authenticatedUser = loginService.authenticate(loginRequest);
-		
+		System.out.println(authenticatedUser.getEmail() + " : " + authenticatedUser.getUserType());
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
-        LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
+        LoginResponse loginResponse = new LoginResponse(jwtToken, authenticatedUser.getUserId(), authenticatedUser.getUserType().toString(), jwtService.getExpirationTime());
 
         return ResponseEntity.ok(loginResponse);
     }
