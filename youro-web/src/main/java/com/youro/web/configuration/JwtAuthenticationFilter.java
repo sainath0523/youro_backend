@@ -103,8 +103,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     			"/youro/api/v1/register",
     			"/swagger-ui",
     			"/api-docs/swagger-config",
-    			"/api-docs" };
+    			"/api-docs",
+                "/youro/api/v1/"};
+
     	boolean isMatchingPath = Arrays.stream(validUrls).anyMatch(path::contains);
+        System.out.println("TEST PRINT");
     	System.out.println(isMatchingPath);
     	return isMatchingPath;
     }

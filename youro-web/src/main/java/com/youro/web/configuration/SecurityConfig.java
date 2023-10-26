@@ -12,7 +12,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -36,7 +38,8 @@ public class SecurityConfig {
     		"/youro/api/v1/register",
     		"/swagger-ui/**",
     		"/api-docs/swagger-config",
-    		"/api-docs"  		 		
+    		"/api-docs",
+            "/youro/api/v1/**"
     };
 
     @Bean
@@ -58,14 +61,20 @@ public class SecurityConfig {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    CorsFilter corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedMethod("GET");
-        configuration.addAllowedMethod("POST");
-        configuration.addAllowedMethod("PUT");
-        configuration.addAllowedMethod("DELETE");
+        configuration.addAllowedMethod("*");
+        configuration.setExposedHeaders(Collections.singletonList("*"));
+        configuration.setAllowCredentials(true);
+
+//        configuration.addAllowedMethod("POST");
+//        configuration.addAllowedMethod("PUT");
+//        configuration.addAllowedMethod("DELETE");
+//        configuration.setAllowCredentials(true);
+
+
 //        configuration.setAllowedOrigins(List.of("http://localhost:9092"));
 //        configuration.setAllowedMethods(List.of("GET","POST", "PUT"));
 //        configuration.setAllowedHeaders(List.of("*"));
@@ -74,6 +83,8 @@ public class SecurityConfig {
 
         source.registerCorsConfiguration("/**",configuration);
 
-        return source;
+//        return source;
+        return new CorsFilter(source);
+
     }
 }

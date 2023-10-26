@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.youro.web.service.PatientService;
 
 @RestController
+@CrossOrigin(origins ="*")
 @RequestMapping("/youro/api/v1/")
 public class PatientController {
 
