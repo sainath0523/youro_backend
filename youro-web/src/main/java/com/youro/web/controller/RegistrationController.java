@@ -13,18 +13,20 @@ import com.youro.web.service.RegistrationService;
 
 import jakarta.validation.Valid;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 @RestController
 @RequestMapping("/youro/api/v1/")
 public class RegistrationController {
 	
 	@Autowired
     RegistrationService registrationService;
-	
-	@PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody @Valid RegistrationRequest registrationRequest)
-    {
-		System.out.println("In RegistrationController's register()");
 
+
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody @Valid RegistrationRequest registrationRequest) throws ParseException {
+		System.out.println("In RegistrationController's register()");
 		User registeredUser = registrationService.register(registrationRequest);
         return ResponseEntity.ok(registeredUser);
     }

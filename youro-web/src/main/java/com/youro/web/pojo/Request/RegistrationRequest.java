@@ -35,7 +35,7 @@ public class RegistrationRequest {
     public String email;
 
     @NotNull(message = "is required")
-    public Date dateOfBirth;
+    public String dateOfBirth;
     
     @NotNull(message = "is required")
     public String phoneNumber;

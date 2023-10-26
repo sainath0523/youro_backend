@@ -1,5 +1,7 @@
 package com.youro.web.mapper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.EnumSet;
 
 import com.youro.web.pojo.Request.UpdateUserRequest;
@@ -14,8 +16,10 @@ import com.youro.web.entity.Gender;
 
 @Component
 public class UserMapper {
+
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
-	public User toUser(RegistrationRequest requestBody, PasswordEncoder passwordEncoder) {
+	public User toUser(RegistrationRequest requestBody, PasswordEncoder passwordEncoder) throws ParseException {
 		User userDetails = new User();
 		
         EnumSet<Gender> validGenders = EnumSet.allOf(Gender.class);
@@ -65,7 +69,7 @@ public class UserMapper {
         }
         
         if(requestBody.dateOfBirth != null) {
-            userDetails.dateOfBirth = requestBody.dateOfBirth;
+            userDetails.dateOfBirth = dateFormat.parse(requestBody.dateOfBirth);
         }
         
         if(requestBody.address != null) {
