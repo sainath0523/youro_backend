@@ -88,6 +88,11 @@ public class HelpUtils {
 
     }
 
+    public static String addTime(String date) throws ParseException {
+        Date formated_date = addTime(outputFormat.parse(date));
+        return outputFormat.format(formated_date);
+    }
+
     public static User getUser(int uID)
     {
         User user = new User();

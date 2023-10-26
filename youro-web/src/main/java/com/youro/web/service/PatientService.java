@@ -113,11 +113,11 @@ public class PatientService {
     public BasicResponse saveAppointment(SaveAppoitmentRequest saveAppoitmentRequest) throws ParseException {
 
         BasicResponse resp = new BasicResponse();
-        appointmentsRepository.save(AppointmentMapper.saveAppointments(saveAppoitmentRequest));
         AddAvailabilityRequest request = new AddAvailabilityRequest();
         request.docId = saveAppoitmentRequest.docId;
         request.startTime = saveAppoitmentRequest.startTime;
-        request.endTime = saveAppoitmentRequest.endTime;
+        request.endTime = HelpUtils.addTime(saveAppoitmentRequest.startTime);
+        appointmentsRepository.save(AppointmentMapper.saveAppointments(saveAppoitmentRequest,request.endTime));
         providerService.removeAvailability(request);
         userRepository.findById(request.docId).ifPresent(a -> resp.message = a.getFirstName() + " " + a.getLastName());
         return resp;
