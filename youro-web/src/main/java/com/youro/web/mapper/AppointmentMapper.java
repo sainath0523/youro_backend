@@ -54,9 +54,9 @@ public class AppointmentMapper {
         appt.status = AppointmentStatus.SCHEDULED;
         appt.setDoctorId(HelpUtils.getUser(request.docId));
         appt.setPatientId(HelpUtils.getUser(request.patId));
-        appt.setApptDate(Constants.dateFormat.parse(request.startTime));
-        appt.setApptStartTime(Constants.timeFormat.parse(request.startTime));
-        appt.setApptEndTime(Constants.timeFormat.parse(request.endTime));
+        //appt.setApptDate(dateFormat.aoutputFormat.parse(request.startTime));
+        appt.setApptStartTime(timeFormat.parse(request.startTime));
+        appt.setApptEndTime(timeFormat.parse(request.endTime));
         return appt;
 
     }

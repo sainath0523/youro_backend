@@ -4,6 +4,7 @@ import com.youro.web.entity.DoctorSchedule;
 import com.youro.web.entity.User;
 import com.youro.web.entity.UserType;
 import com.youro.web.pojo.Response.GetCustomerAvailResponse;
+import com.youro.web.pojo.Response.SlotInfo;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.text.ParseException;
@@ -16,7 +17,7 @@ public class HelpUtils {
     static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     static SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
-    public static Map<Date, GetCustomerAvailResponse.SlotInfo> slotsInfo = new TreeMap<>();
+    public static Map<Date, SlotInfo> slotsInfo = new TreeMap<>();
 
 
     public static String convertDateTime(Date date, Date time)
@@ -45,7 +46,8 @@ public class HelpUtils {
             dateCal.set(Calendar.MINUTE, minutes);
             dateCal.set(Calendar.SECOND, seconds);
 
-            // Format the final date
+            Date final_Date = dateCal.getTime();
+
             formattedDate = outputFormat.format(dateCal.getTime());
 
             System.out.println(formattedDate);
@@ -55,7 +57,7 @@ public class HelpUtils {
         return formattedDate;
     }
 
-    public  static List<GetCustomerAvailResponse.SlotInfo> getSlots(List<DoctorSchedule> doctorsSch) throws ParseException {
+    public  static List<SlotInfo> getSlots(List<DoctorSchedule> doctorsSch) throws ParseException {
         //List<GetCustomerAvailResponse.SlotInfo> slots = new ArrayList<>();
 
         slotsInfo = new HashMap<>();
@@ -94,7 +96,7 @@ public class HelpUtils {
     }
 
     public static void addDetails(Date startTime, int doctorID) {
-        GetCustomerAvailResponse.SlotInfo slotInfo = new GetCustomerAvailResponse.SlotInfo();
+        SlotInfo slotInfo = new SlotInfo();
         if (slotsInfo.containsKey(startTime)) {
             slotInfo = slotsInfo.get(startTime);
             slotInfo.noOfDoctors += slotInfo.noOfDoctors;

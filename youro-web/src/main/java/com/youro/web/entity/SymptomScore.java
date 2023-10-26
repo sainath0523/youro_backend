@@ -16,6 +16,8 @@ import java.util.Date;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SymptomScore {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int scoreId;
