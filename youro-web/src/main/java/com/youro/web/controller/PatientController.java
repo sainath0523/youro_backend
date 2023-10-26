@@ -51,10 +51,10 @@ public class PatientController {
         return patientService.getQuestionsByDiagId(diagId);
     }
 
-    @PostMapping("/saveNewSymptomScore")
-    public BasicResponse saveNewSymptomScore(@RequestBody @Valid SymptomScoreRequest requestBody)
+    @PostMapping("/saveSymptomScore")
+    public BasicResponse saveSymptomScore(@RequestBody @Valid SymptomScoreRequest requestBody)
     {
-        return patientService.saveNewSymptomScore(requestBody);
+        return patientService.saveSymptomScore(requestBody);
     }
     @GetMapping({"/getAvailableSlotsByDate"})
     public List<GetCustomerAvailResponse> getAvailableSlotsByDate() throws ParseException {

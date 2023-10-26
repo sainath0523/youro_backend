@@ -19,6 +19,7 @@ public class SymptomScoreRequest {
     @NotNull(message = "is required")
     private List<questionData> questionData;
 
+    @Getter
     public static class questionData {
         public int qId;
 
@@ -27,6 +28,7 @@ public class SymptomScoreRequest {
         public List<optionsData> optionsData;
     }
 
+    @Getter
     public static class optionsData {
 
         public int oId;

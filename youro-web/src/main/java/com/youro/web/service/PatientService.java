@@ -42,6 +42,9 @@ public class PatientService {
     OptionsRepository optionsRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     DoctorScheduleRepository doctorScheduleRepository;
 	
 	public List<GetSymptomScoreResponse> getSymptomScore(int patientId){
@@ -72,8 +75,14 @@ public class PatientService {
         return QuestionnairesMapper.convertQuestionnairesEntityToPojo(res, options);
     }
 
-    public BasicResponse saveNewSymptomScore(SymptomScoreRequest req){
-        SymptomScore sC = SymptomScoreMapper.convertReqBodyToEntity(req);
+    public BasicResponse saveSymptomScore(SymptomScoreRequest req){
+
+        List<Integer> oIds = req.getQuestionData().stream()
+                .flatMap(qData -> qData.optionsData.stream())
+                .map(SymptomScoreRequest.optionsData::getOId)
+                .toList();
+        int score = optionsRepository.sumWeightsForOIds(oIds);
+        SymptomScore sC = SymptomScoreMapper.convertReqBodyToEntity(req, score);
         symptomScoreRepo.save(sC);
         BasicResponse res = new BasicResponse();
         res.message = "new symptom score saved";
@@ -110,7 +119,7 @@ public class PatientService {
         request.startTime = saveAppoitmentRequest.startTime;
         request.endTime = saveAppoitmentRequest.endTime;
         providerService.removeAvailability(request);
-        resp.message = "Booked";
+        userRepository.findById(request.docId).ifPresent(a -> resp.message = a.getFirstName() + " " + a.getLastName());
         return resp;
     }
 
