@@ -21,7 +21,6 @@ public class UserMapper {
 	
 	public User toUser(RegistrationRequest requestBody, PasswordEncoder passwordEncoder) throws ParseException {
 		User userDetails = new User();
-		
         EnumSet<Gender> validGenders = EnumSet.allOf(Gender.class);
         EnumSet<UserType> validUserTypes = EnumSet.allOf(UserType.class);
         EnumSet<SubscriptionStatus> validSubscriptionStatus = EnumSet.allOf(SubscriptionStatus.class);

@@ -38,7 +38,7 @@ public class PatientController {
 
     //@PreAuthorize("hasRole('PATIENT')")
     @GetMapping({"/appointments/{uId}"})
-    public List<GetAppointmentsResponse> getUserAppointments(@PathVariable("uId") int uId, @RequestParam(name = "apptStatus", required = false) AppointmentStatus apptStatus) {
+    public GetAppointmentsResponse getUserAppointments(@PathVariable("uId") int uId, @RequestParam(name = "apptStatus", required = false) AppointmentStatus apptStatus) {
         return patientService.getAppointments(uId, apptStatus);
     }
 

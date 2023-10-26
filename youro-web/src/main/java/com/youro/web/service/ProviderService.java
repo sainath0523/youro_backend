@@ -217,7 +217,7 @@ public class ProviderService {
     {
         DoctorAvailabilityResponse resp = new DoctorAvailabilityResponse();
         List<Appointments> apptList = appointmentsRepository.findAppointments(docId);
-        resp.setAppoitments(DoctorSchToSlotsMapper.getAppointments(apptList));
+        resp.setAppointments(DoctorSchToSlotsMapper.getAppointments(apptList));
         List<DoctorSchedule> schedules= drScheduleRepo.findDoctorAvail(docId);
         resp.setDocAvail(DoctorSchToSlotsMapper.convertDoctorScheduleToAvail(schedules));
         return resp;

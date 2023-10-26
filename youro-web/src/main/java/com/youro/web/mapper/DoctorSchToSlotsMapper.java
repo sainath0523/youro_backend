@@ -42,12 +42,12 @@ public class DoctorSchToSlotsMapper {
         return resp;
     }
 
-    public static List<GetAppointmentsResponse> getAppointments(List<Appointments> response)
+    public static List<AppointmentResponse> getAppointments(List<Appointments> response)
     {
-        List<GetAppointmentsResponse> responses = new ArrayList<>();
+        List<AppointmentResponse> responses = new ArrayList<>();
         for(Appointments app : response)
         {
-            GetAppointmentsResponse res = new GetAppointmentsResponse();
+            AppointmentResponse res = new AppointmentResponse();
             String patPrefix = app.getPatientId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
             String docPrefix = app.getDoctorId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
             res.apptId = app.apptId;

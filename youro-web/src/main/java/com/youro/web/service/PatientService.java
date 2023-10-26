@@ -54,7 +54,7 @@ public class PatientService {
         return SymptomScoreMapper.convertEntityToResPojo(res);
     }
 
-    public List<GetAppointmentsResponse> getAppointments(int uId, AppointmentStatus apptStatus) {
+    public GetAppointmentsResponse getAppointments(int uId, AppointmentStatus apptStatus) {
         List<Appointments> res = new ArrayList<>();
         if (apptStatus == null) {
             res.addAll(appointmentsRepository.findByUId(uId));

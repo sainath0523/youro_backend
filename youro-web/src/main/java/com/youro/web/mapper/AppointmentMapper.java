@@ -4,6 +4,7 @@ import com.youro.web.entity.AppointmentStatus;
 import com.youro.web.entity.Appointments;
 import com.youro.web.entity.User;
 import com.youro.web.pojo.Request.SaveAppoitmentRequest;
+import com.youro.web.pojo.Response.AppointmentResponse;
 import com.youro.web.pojo.Response.GetAppointmentsResponse;
 import com.youro.web.pojo.Response.GetAppointmentsResponse;
 import com.youro.web.utils.Constants;
@@ -12,6 +13,7 @@ import com.youro.web.utils.HelpUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AppointmentMapper {
@@ -19,13 +21,17 @@ public class AppointmentMapper {
     static SimpleDateFormat  timeFormat = new SimpleDateFormat("HH:mm:ss");
     static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     static SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
-    public static List<GetAppointmentsResponse> getAppointments(List<Appointments> response)
+    public static GetAppointmentsResponse getAppointments(List<Appointments> response)
     {
-        List<GetAppointmentsResponse> responses = new ArrayList<>();
+        GetAppointmentsResponse resp = new GetAppointmentsResponse();
+        List<AppointmentResponse> previous = new ArrayList<>();
+        List<AppointmentResponse> upComing = new ArrayList<>();
 
+        Date date = new Date();
         for(Appointments app : response)
         {
-            GetAppointmentsResponse res = new GetAppointmentsResponse();
+            AppointmentResponse res = new AppointmentResponse();
+
 
             String patPrefix = app.getPatientId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
             String docPrefix = app.getDoctorId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
@@ -39,14 +45,18 @@ public class AppointmentMapper {
             res.doctorName = docPrefix + app.getDoctorId().firstName + " " + app.getDoctorId().lastName;
             res.patientName = patPrefix + app.getPatientId().firstName + " " + app.getPatientId().lastName;
             res.status = app.getStatus();
-            if(app.followupId != null)
-            {
-                res.followUpId = app.followupId.getApptId();
+            if(app.apptDate.before(date)) {
+                previous.add(res);
             }
-            responses.add(res);
+            else
+            {
+                upComing.add(res);
+            }
 
         }
-        return responses;
+        resp.previousAppointments = previous;
+        resp.upComingAppointments = upComing;
+        return resp;
     }
 
     public static Appointments saveAppointments(SaveAppoitmentRequest request, String endTime) throws ParseException {

@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 public class DoctorAvailabilityResponse {
 
-    List<GetAppointmentsResponse> appoitments;
+    List<AppointmentResponse> appointments;
 
     List<DoctorAvailability> docAvail;
 
