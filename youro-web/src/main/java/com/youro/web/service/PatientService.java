@@ -97,12 +97,12 @@ public class PatientService {
     public List<GetCustomerAvailResponse> getSlots(List<DoctorSchedule> output) throws ParseException {
          Map<Date, List<DoctorSchedule>> doctorsByStartDate = output.stream()
             .collect(Collectors.groupingBy(DoctorSchedule::getSchDate));
-        Map<Date, List<GetCustomerAvailResponse.SlotInfo>> result = getSlotInfo(doctorsByStartDate);
+        Map<Date, List<SlotInfo>> result = getSlotInfo(doctorsByStartDate);
         return DoctorSchToSlotsMapper.getCustomerAvailResponse(result);
     }
 
-    public Map<Date, List<GetCustomerAvailResponse.SlotInfo>> getSlotInfo(Map<Date, List<DoctorSchedule>> doctorsByStartDate) throws ParseException {
-        Map<Date, List<GetCustomerAvailResponse.SlotInfo>> res = new HashMap<>();
+    public Map<Date, List<SlotInfo>> getSlotInfo(Map<Date, List<DoctorSchedule>> doctorsByStartDate) throws ParseException {
+        Map<Date, List<SlotInfo>> res = new HashMap<>();
         for(Date date : doctorsByStartDate.keySet())
         {
             res.put(date,HelpUtils.getSlots(doctorsByStartDate.get(date)));
@@ -113,11 +113,11 @@ public class PatientService {
     public BasicResponse saveAppointment(SaveAppoitmentRequest saveAppoitmentRequest) throws ParseException {
 
         BasicResponse resp = new BasicResponse();
-        appointmentsRepository.save(AppointmentMapper.saveAppointments(saveAppoitmentRequest));
         AddAvailabilityRequest request = new AddAvailabilityRequest();
         request.docId = saveAppoitmentRequest.docId;
         request.startTime = saveAppoitmentRequest.startTime;
-        request.endTime = saveAppoitmentRequest.endTime;
+        request.endTime = HelpUtils.addTime(saveAppoitmentRequest.startTime);
+        appointmentsRepository.save(AppointmentMapper.saveAppointments(saveAppoitmentRequest,request.endTime));
         providerService.removeAvailability(request);
         userRepository.findById(request.docId).ifPresent(a -> resp.message = a.getFirstName() + " " + a.getLastName());
         return resp;

@@ -18,19 +18,18 @@ import java.util.Map;
 @Component
 public  class SymptomScoreMapper {
 
-
         public static List<GetSymptomScoreResponse> convertEntityToResPojo(List<SymptomScore> response)
         {
             List<GetSymptomScoreResponse> responses = new ArrayList<>();
             for(SymptomScore res : response)
             {
                 GetSymptomScoreResponse sym = new GetSymptomScoreResponse();
+                sym.scoreId = res.scoreId;
                 sym.dateTime = res.dateTime;
                 sym.diagnosisId = res.getDiagnosis().getDiagId();
                 sym.patientId = res.getPatientId().userId;
                 sym.symptomScore = res.symptomScore;
                 sym.questionData = res.questionData;
-
                 responses.add(sym);
 
             }

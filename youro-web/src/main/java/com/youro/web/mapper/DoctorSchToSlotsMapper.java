@@ -2,19 +2,13 @@ package com.youro.web.mapper;
 
 import com.youro.web.entity.Appointments;
 import com.youro.web.entity.DoctorSchedule;
-import com.youro.web.pojo.Response.AvailableSlotsByDateResponse;
-import com.youro.web.pojo.Response.DoctorAvailabilityResponse;
-import com.youro.web.pojo.Response.GetAppointmentsResponse;
-import com.youro.web.pojo.Response.GetCustomerAvailResponse;
+import com.youro.web.pojo.Response.*;
 import com.youro.web.utils.HelpUtils;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class DoctorSchToSlotsMapper {
@@ -70,18 +64,23 @@ public class DoctorSchToSlotsMapper {
     }
 
 
-    public static List<GetCustomerAvailResponse> getCustomerAvailResponse(Map<Date, List<GetCustomerAvailResponse.SlotInfo>> response) throws ParseException {
+    public  static List<GetCustomerAvailResponse> getCustomerAvailResponse(Map<Date, List<SlotInfo>> response) throws ParseException {
         List<GetCustomerAvailResponse> resp = new ArrayList<>();
         for(Date date : response.keySet())
         {
-            List<GetCustomerAvailResponse.SlotInfo> slotInfo = new ArrayList<>();
+            List<SlotRequest> slotInfo = new ArrayList<>();
             GetCustomerAvailResponse res = new GetCustomerAvailResponse();
             res.date = date;
             res.noOfSlots = response.get(date).size();
-            for(GetCustomerAvailResponse.SlotInfo info : response.get(date))
+            List<SlotInfo> list = new ArrayList<>(response.get(date));
+            list.sort(Comparator.comparing(SlotInfo :: getStartTime));
+            for(SlotInfo info : list)
             {
-                info.startTime = outputFormat.parse(HelpUtils.convertDateTime(date, info.startTime));
-                slotInfo.add(info);
+                SlotRequest slot_req = new SlotRequest();
+                slot_req.startTime = HelpUtils.convertDateTime(date, info.startTime);
+                slot_req.noOfDoctors = info.noOfDoctors;
+                slot_req.doctorIds = info.doctorIds;
+                slotInfo.add(slot_req);
             }
             res.slotInfo = slotInfo;
             resp.add(res);

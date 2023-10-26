@@ -15,19 +15,21 @@ import java.util.Map;
 public class QuestionnairesMapper {
     public static List<QuestionnairesResponse> convertQuestionnairesEntityToPojo(List<Questionnaires> dbResponseList, List<Options> optionsList){
         List<QuestionnairesResponse> res = new ArrayList<>();
-        Map<Integer, List<String>> optionsByQID = new HashMap<>();
+        Map<Integer, List<QuestionnairesResponse.options>> optionsByQID = new HashMap<>();
 
         for (Options option : optionsList) {
+            QuestionnairesResponse.options op = new QuestionnairesResponse.options();
             int qID = option.questionnaires.getQId();
-            optionsByQID.computeIfAbsent(qID, k -> new ArrayList<>()).add(option.getOptionName());
+            op.oId = option.oId;
+            op.oName = option.optionName;
+            optionsByQID.computeIfAbsent(qID, k -> new ArrayList<>()).add(op);
         }
 
         for(Questionnaires itr : dbResponseList){
             QuestionnairesResponse temp = new QuestionnairesResponse();
             temp.setQuestionId(itr.getQId());
             temp.setQuestion(itr.getQuestion());
-            String[] ansStr = optionsByQID.get(itr.getQId()).toArray(new String[0]);
-            temp.setOptions(ansStr);
+            temp.setOptions(optionsByQID.get(itr.getQId()));
             res.add(temp);
         }
         return res;

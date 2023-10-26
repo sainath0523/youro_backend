@@ -6,6 +6,4 @@ public class SaveAppoitmentRequest {
     public int patId;
     public String startTime;
 
-    public String endTime;
-
 }

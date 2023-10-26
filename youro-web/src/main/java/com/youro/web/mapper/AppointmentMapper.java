@@ -49,14 +49,14 @@ public class AppointmentMapper {
         return responses;
     }
 
-    public static Appointments saveAppointments(SaveAppoitmentRequest request) throws ParseException {
+    public static Appointments saveAppointments(SaveAppoitmentRequest request, String endTime) throws ParseException {
         Appointments appt = new Appointments();
         appt.status = AppointmentStatus.SCHEDULED;
         appt.setDoctorId(HelpUtils.getUser(request.docId));
         appt.setPatientId(HelpUtils.getUser(request.patId));
-        appt.setApptDate(Constants.dateFormat.parse(request.startTime));
-        appt.setApptStartTime(Constants.timeFormat.parse(request.startTime));
-        appt.setApptEndTime(Constants.timeFormat.parse(request.endTime));
+        appt.setApptDate(outputFormat.parse(request.startTime));
+        appt.setApptStartTime(outputFormat.parse(request.startTime));
+        appt.setApptEndTime(outputFormat.parse(endTime));
         return appt;
 
     }

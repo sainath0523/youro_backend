@@ -29,11 +29,12 @@ public class SymptomScoreRequest {
     }
 
     @Getter
+    @Setter
     public static class optionsData {
 
         public int oId;
 
-        public String optionName;
+        public String oName;
     }
 
 }
