@@ -7,26 +7,26 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Entity
-@Table(name = "questionnaires")
+@Table(name = "options")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Questionnaires {
+public class Options {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int qId;
+    public int oId;
 
-    public String question;
+    @ManyToOne
+    @JoinColumn(name = "qId")
+    public Questionnaires questionnaires;
 
-    public QuestionType qType;
+    public String optionName;
 
     public int weight;
 
-    @ManyToOne
-    @JoinColumn(name = "diagnosisId")
-    private Diagnosis diagnosis;
 }

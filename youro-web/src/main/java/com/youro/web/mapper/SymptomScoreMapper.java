@@ -45,18 +45,18 @@ public  class SymptomScoreMapper {
             diagnosis.setDiagId(reqBody.getDiagnosisId());
 
             res.setPatientId(temp);
-            res.setDateTime(reqBody.getTakenDate());
+            //res.setDateTime(reqBody.getTakenDate());
             res.setDiagnosis(diagnosis);
 
-            final double[] sum = {0};
+            /*final double[] sum = {0};
             reqBody.getQuestionData().forEach((key, value) -> {
                 value.forEach((k1, v1) -> {
                     sum[0] += k1.equals("weight") ?  Double.parseDouble(v1) : 0;
                 });
-            });
+            });*/
 
             res.setQuestionData(reqBody.getQuestionData().toString());
-            res.setSymptomScore(sum[0]);
+            res.setSymptomScore(1);
             return res;
         }
 }

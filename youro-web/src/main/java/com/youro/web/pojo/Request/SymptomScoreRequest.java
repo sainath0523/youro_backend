@@ -1,12 +1,8 @@
 package com.youro.web.pojo.Request;
 
-import com.youro.web.entity.UserType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 @Data
 @Getter
@@ -21,9 +17,21 @@ public class SymptomScoreRequest {
     private int diagnosisId;
 
     @NotNull(message = "is required")
-    private Map<String, Map<String, String>> questionData;
+    private List<questionData> questionData;
 
-    @NotNull(message = "is required")
-    private Date takenDate;
+    public static class questionData {
+        public int qId;
+
+        public String question;
+
+        public List<optionsData> optionsData;
+    }
+
+    public static class optionsData {
+
+        public int oId;
+
+        public String optionName;
+    }
 
 }

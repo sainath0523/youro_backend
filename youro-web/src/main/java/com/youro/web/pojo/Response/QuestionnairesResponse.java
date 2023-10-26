@@ -9,5 +9,4 @@ public class QuestionnairesResponse {
     private int questionId;
     private String question;
     private String[] options;
-    private int weight;
 }

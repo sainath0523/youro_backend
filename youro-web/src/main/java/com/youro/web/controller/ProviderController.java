@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -88,8 +85,8 @@ public class ProviderController {
 
     @PutMapping("/removeDoctorAvailability")
     public BasicResponse removeDoctorAvailability(@RequestBody AddAvailabilityRequest requestBody) throws ParseException {
-        providerService.removeAvailability(requestBody);
-        return new BasicResponse();
+       return providerService.removeAvailability(requestBody);
+
     }
 
     @PutMapping("/addDoctorAvailability")
@@ -103,4 +100,11 @@ public class ProviderController {
         System.out.println(id + " :: " + docId);
         return providerService.cancelAppointment(id, docId);
     }
+
+    @GetMapping("/getAvailability/{docId}")
+    public DoctorAvailabilityResponse getAvailability(@PathVariable("docId") int docId)
+    {
+        return providerService.getAvailability(docId);
+    }
+
 }

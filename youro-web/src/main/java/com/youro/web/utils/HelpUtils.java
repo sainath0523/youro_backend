@@ -1,0 +1,112 @@
+package com.youro.web.utils;
+
+import com.youro.web.entity.DoctorSchedule;
+import com.youro.web.entity.User;
+import com.youro.web.entity.UserType;
+import com.youro.web.pojo.Response.GetCustomerAvailResponse;
+import org.springframework.context.annotation.ComponentScan;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+@ComponentScan
+public class HelpUtils {
+
+    static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    static SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
+    public static Map<Date, GetCustomerAvailResponse.SlotInfo> slotsInfo = new TreeMap<>();
+
+
+    public static String convertDateTime(Date date, Date time)
+    {
+        String formattedDate = "";
+        try {
+
+            // Parse the time and date strings
+            Date time_Conv = timeFormat.parse(timeFormat.format(time));
+            Date date_Conv = dateFormat.parse(dateFormat.format(date));
+
+            // Convert the Date objects to Calendar objects
+            Calendar startTimeCal = Calendar.getInstance();
+            startTimeCal.setTime(time_Conv);
+
+            Calendar dateCal = Calendar.getInstance();
+            dateCal.setTime(date_Conv);
+
+            // Extract the time components
+            int hours = startTimeCal.get(Calendar.HOUR_OF_DAY);
+            int minutes = startTimeCal.get(Calendar.MINUTE);
+            int seconds = startTimeCal.get(Calendar.SECOND);
+
+            // Set the time components in the date Calendar
+            dateCal.set(Calendar.HOUR_OF_DAY, hours);
+            dateCal.set(Calendar.MINUTE, minutes);
+            dateCal.set(Calendar.SECOND, seconds);
+
+            // Format the final date
+            formattedDate = outputFormat.format(dateCal.getTime());
+
+            System.out.println(formattedDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+
+    public  static List<GetCustomerAvailResponse.SlotInfo> getSlots(List<DoctorSchedule> doctorsSch) throws ParseException {
+        //List<GetCustomerAvailResponse.SlotInfo> slots = new ArrayList<>();
+
+        slotsInfo = new HashMap<>();
+
+        for(DoctorSchedule sch : doctorsSch)
+        {
+
+            Date tempDate = sch.getSchStartTime();
+            addDetails(tempDate, sch.getDoctorId().userId);
+            while(tempDate.before(sch.getSchEndTime()))
+            {
+                tempDate = timeFormat.parse(timeFormat.format(addTime(tempDate)));
+                addDetails(tempDate, sch.getDoctorId().userId);
+            }
+        }
+
+        return slotsInfo.values().stream().toList();
+
+    }
+
+    public static Date addTime(Date date)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, 30);
+        Date updatedDate = calendar.getTime();
+        return updatedDate;
+
+    }
+
+    public static User getUser(int uID)
+    {
+        User user = new User();
+        user.setUserId(uID);
+        return user;
+    }
+
+    public static void addDetails(Date startTime, int doctorID) {
+        GetCustomerAvailResponse.SlotInfo slotInfo = new GetCustomerAvailResponse.SlotInfo();
+        if (slotsInfo.containsKey(startTime)) {
+            slotInfo = slotsInfo.get(startTime);
+            slotInfo.noOfDoctors += slotInfo.noOfDoctors;
+            slotInfo.doctorIds.add(doctorID);
+        } else {
+            slotInfo.noOfDoctors = 1;
+            slotInfo.doctorIds = new ArrayList<>();
+            slotInfo.doctorIds.add(doctorID);
+            slotInfo.startTime = startTime;
+
+        }
+        slotsInfo.put(startTime, slotInfo);
+    }
+
+    }

@@ -28,8 +28,6 @@ public class AdminController {
 
 
 
-
-
     @GetMapping("/getPrescriptions/{diagnosisId}")
     public GetCarePlaneDetails getPrescriptions(@PathVariable("diagnosisId") int diagnosisId) {
         return new GetCarePlaneDetails();
