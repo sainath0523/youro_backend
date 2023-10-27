@@ -119,7 +119,7 @@ public class ProviderService {
                        shcp.setSchStartTime(timeFormat.parse(timeFormat.format(list.get(0).schStartTime)));
                        shcp.setSchEndTime(timeFormat.parse(timeFormat.format(sche.schStartTime)));
                        shcp.setDoctorId(sche.getDoctorId());
-                       shcp.setSchDate(timeFormat.parse(timeFormat.format(sche.schDate)));
+                       shcp.setSchDate(startDate);
                        drScheduleRepo.save(shcp);
                        sche.setSchStartTime(timeFormat.parse(timeFormat.format(sche.schEndTime)));
                        sche.setSchEndTime(timeFormat.parse(timeFormat.format(list.get(0).schEndTime)));
@@ -153,9 +153,9 @@ public class ProviderService {
                         drScheduleRepo.save(sche);
                     }
                 }
-                resp.message = "Removed Successfully";
-            }
 
+            }
+            resp.message = "Removed Successfully";
             System.out.println(list);
         }catch (Exception e)
         {
