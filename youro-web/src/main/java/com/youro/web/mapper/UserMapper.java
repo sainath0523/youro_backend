@@ -1,18 +1,17 @@
 package com.youro.web.mapper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.EnumSet;
-
+import com.youro.web.entity.Gender;
+import com.youro.web.entity.SubscriptionStatus;
+import com.youro.web.entity.User;
+import com.youro.web.entity.UserType;
+import com.youro.web.pojo.Request.RegistrationRequest;
 import com.youro.web.pojo.Request.UpdateUserRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.youro.web.entity.User;
-import com.youro.web.entity.SubscriptionStatus;
-import com.youro.web.entity.UserType;
-import com.youro.web.pojo.Request.RegistrationRequest;
-import com.youro.web.entity.Gender;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.EnumSet;
 
 @Component
 public class UserMapper {

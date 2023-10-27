@@ -1,19 +1,16 @@
 package com.youro.web.controller;
 
 import com.youro.web.entity.*;
-import com.youro.web.pojo.Request.AddDescriptionRequest;
 import com.youro.web.pojo.Request.AddDiagnosisRequest;
+import com.youro.web.pojo.Request.AddPrescriptionRequest;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.GetCarePlaneDetails;
 import com.youro.web.pojo.Response.PrescriptionDetails;
 import com.youro.web.service.AdminService;
-import com.youro.web.service.LoginService;
 import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,29 +21,29 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-    @Autowired
-    LoginService loginService;
-
-
-
     @GetMapping("/getPrescriptions/{diagnosisId}")
-    public GetCarePlaneDetails getPrescriptions(@PathVariable("diagnosisId") int diagnosisId) {
+    public GetCarePlaneDetails getPrescriptionsByDiagId(@PathVariable("diagId") int diagnosisId) {
         return new GetCarePlaneDetails();
     }
 
     @GetMapping("/getPrescriptions/{type}")
     public List<PrescriptionDetails> getPrescriptionsByType(@PathVariable("type") PrescriptionType prescriptionType) {
-        return new ArrayList<>();
+        return adminService.getPrescriptionDetailsByType(prescriptionType);
     }
 
     @PostMapping("/addPrescription")
-    public BasicResponse addPrescription(@RequestBody @Valid AddDescriptionRequest requestBody) {
-        return new BasicResponse();
+    public BasicResponse addPrescription(@RequestBody @Valid AddPrescriptionRequest requestBody) {
+        return adminService.addPrescription(requestBody);
     }
 
     @PostMapping("/addDiagnosis")
     public BasicResponse addDiagnosis(@RequestBody @Valid AddDiagnosisRequest requestBody) {
-        return new BasicResponse();
+        return adminService.addDiagnosis(requestBody);
+    }
+
+    @DeleteMapping("/deletePrescription/{presId}")
+    public BasicResponse addDiagnosis(@PathVariable("predId") int presId) {
+        return adminService.deletePrescription(presId);
     }
     
 //    @PreAuthorize("hasRole('ADMIN')")

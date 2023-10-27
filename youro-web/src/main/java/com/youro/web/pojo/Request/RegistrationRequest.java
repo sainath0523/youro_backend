@@ -1,7 +1,5 @@
 package com.youro.web.pojo.Request;
 
-import java.util.Date;
-
 import com.youro.web.entity.Gender;
 import com.youro.web.entity.SubscriptionStatus;
 import com.youro.web.entity.UserType;
@@ -34,13 +32,11 @@ public class RegistrationRequest {
             flags = Pattern.Flag.CASE_INSENSITIVE)
     public String email;
 
-    @NotNull(message = "is required")
     public String dateOfBirth;
     
     @NotNull(message = "is required")
     public String phoneNumber;
 
-    @NotNull(message = "is required")
     public Gender gender;
     
     public Boolean hasInsurance;
@@ -55,16 +51,16 @@ public class RegistrationRequest {
     
     public String license;
 
-    @NotNull(message = "is required")
+
     public String address;
 
-    @NotNull(message = "is required")
+
     public String state;
 
-    @NotNull(message = "is required")
+
     public String city;
 
-    @NotNull(message = "is required")
+
     public String zipCode;
 
 }

@@ -1,26 +1,16 @@
 package com.youro.web.controller;
 
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-
+import com.youro.web.entity.AppointmentStatus;
 import com.youro.web.pojo.Request.SaveAppoitmentRequest;
 import com.youro.web.pojo.Request.SymptomScoreRequest;
 import com.youro.web.pojo.Response.*;
+import com.youro.web.service.PatientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.youro.web.entity.AppointmentStatus;
 
-import com.youro.web.pojo.Response.GetAppointmentsResponse;
-import com.youro.web.pojo.Response.GetSymptomScoreResponse;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.youro.web.service.PatientService;
+import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins ="*")
@@ -53,7 +43,7 @@ public class PatientController {
     }
 
     @PostMapping("/saveSymptomScore")
-    public BasicResponse saveSymptomScore(@RequestBody @Valid SymptomScoreRequest requestBody)
+    public SaveSymptomResponse saveSymptomScore(@RequestBody @Valid SymptomScoreRequest requestBody)
     {
         return patientService.saveSymptomScore(requestBody);
     }
@@ -67,5 +57,7 @@ public class PatientController {
 
         return patientService.saveAppointment(requestBody);
     }
+
+
 
 }

@@ -51,7 +51,7 @@ public class DoctorSchToSlotsMapper {
             String patPrefix = app.getPatientId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
             String docPrefix = app.getDoctorId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
             res.apptId = app.apptId;
-            res.apptStartTime= HelpUtils.convertDateTime(app.apptDate, app.apptStartTime); ;
+            res.apptStartTime= HelpUtils.convertDateTime(app.apptDate, app.apptStartTime);
             res.apptEndTime = HelpUtils.convertDateTime(app.apptDate, app.apptEndTime);
             res.link = app.link;
             res.doctorId = app.getDoctorId().userId;

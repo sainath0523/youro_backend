@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface QuestionnairesRepository extends JpaRepository<Questionnaires, String> {
     @Query(value = "select * from questionnaires as ques where (ques.diagnosis_id = ?1)", nativeQuery=true)
-    public List<Questionnaires> findByDiagnosisId(int diagId);
+    List<Questionnaires> findByDiagnosisId(int diagId);
 }

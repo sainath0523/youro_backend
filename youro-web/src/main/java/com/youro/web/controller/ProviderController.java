@@ -7,7 +7,6 @@ import com.youro.web.service.ProviderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,17 +68,15 @@ public class ProviderController {
         return new BasicResponse();
     }
 
-
-    @GetMapping("/provider/getUser/{userId}")
-    public User getProfile(@PathVariable("userId") String email) {
-        return providerService.getProfile(email);
+    @GetMapping("/getUser/{userId}")
+    public User getProfile(@PathVariable("userId") int userId) {
+        return providerService.getProfile(userId);
     }
 
     @PostMapping("/provider/updateProfile")
     public ResponseEntity<User> update(@RequestBody @Valid UpdateUserRequest registrationRequest)
     {
         System.out.println("In prov control update()");
-
         User registeredUser =  providerService.updateProfile(registrationRequest);
         return ResponseEntity.ok(registeredUser);
     }

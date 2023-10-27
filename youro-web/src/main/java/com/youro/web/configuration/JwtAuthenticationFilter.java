@@ -87,7 +87,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
     
-    private void handleInvalidRequest(HttpServletResponse response, String errorDescription) throws JsonProcessingException, IOException {
+    private void handleInvalidRequest(HttpServletResponse response, String errorDescription) throws IOException {
     	ErrorResponse errorResponse = new ErrorResponse("Invalid Request", errorDescription);
     	response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

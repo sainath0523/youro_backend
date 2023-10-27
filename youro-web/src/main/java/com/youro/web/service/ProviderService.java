@@ -1,29 +1,22 @@
 package com.youro.web.service;
 
+import com.youro.web.entity.AppointmentStatus;
+import com.youro.web.entity.Appointments;
+import com.youro.web.entity.DoctorSchedule;
 import com.youro.web.entity.User;
-import com.youro.web.mapper.AppointmentMapper;
+import com.youro.web.exception.CustomException;
 import com.youro.web.mapper.DoctorSchToSlotsMapper;
 import com.youro.web.mapper.UserMapper;
+import com.youro.web.pojo.Request.AddAvailabilityRequest;
 import com.youro.web.pojo.Request.UpdateUserRequest;
+import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.DoctorAvailabilityResponse;
+import com.youro.web.repository.AppointmentsRepository;
+import com.youro.web.repository.DoctorScheduleRepository;
 import com.youro.web.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-
-import com.youro.web.entity.AppointmentStatus;
-import com.youro.web.entity.Appointments;
-import com.youro.web.entity.DoctorSchedule;
-
-import java.util.TimeZone;
-import com.youro.web.exception.CustomException;
-import com.youro.web.pojo.Request.AddAvailabilityRequest;
-import com.youro.web.pojo.Response.BasicResponse;
-import com.youro.web.repository.AppointmentsRepository;
-import com.youro.web.repository.DoctorScheduleRepository;
-
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,8 +40,12 @@ public class ProviderService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public User getProfile(String email){
-        Optional<User> res = userRepository.findByEmail(email);
+    public User getProfile(int id){
+        Optional<User> res = userRepository.findById(id);
+        if(res.isEmpty())
+        {
+            throw new CustomException("User not available");
+        }
         return res.get();
     }
 

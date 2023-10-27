@@ -1,9 +1,5 @@
 package com.youro.web.service;
 
-import java.text.ParseException;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.youro.web.entity.*;
 import com.youro.web.mapper.*;
 import com.youro.web.pojo.Request.AddAvailabilityRequest;
@@ -15,11 +11,9 @@ import com.youro.web.utils.HelpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.youro.web.entity.AppointmentStatus;
-import com.youro.web.entity.Appointments;
-import com.youro.web.entity.SymptomScore;
-import com.youro.web.pojo.Response.GetAppointmentsResponse;
-import com.youro.web.pojo.Response.GetSymptomScoreResponse;
+import java.text.ParseException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PatientService {
@@ -75,8 +69,8 @@ public class PatientService {
         return QuestionnairesMapper.convertQuestionnairesEntityToPojo(res, options);
     }
 
-    public BasicResponse saveSymptomScore(SymptomScoreRequest req){
-
+    public SaveSymptomResponse saveSymptomScore(SymptomScoreRequest req){
+        SaveSymptomResponse response = new SaveSymptomResponse();
         List<Integer> oIds = req.getQuestionData().stream()
                 .flatMap(qData -> qData.optionsData.stream())
                 .map(SymptomScoreRequest.optionsData::getOId)
@@ -84,9 +78,9 @@ public class PatientService {
         int score = optionsRepository.sumWeightsForOIds(oIds);
         SymptomScore sC = SymptomScoreMapper.convertReqBodyToEntity(req, score);
         symptomScoreRepo.save(sC);
-        BasicResponse res = new BasicResponse();
-        res.message = "new symptom score saved";
-        return res;
+        response.score = score;
+        diagnosisRepository.findById(req.getDiagnosisId()).ifPresent(a -> response.diagName = a.getName());
+        return response;
     }
 
     public List<GetCustomerAvailResponse> getAvailableSlotsByDate() throws ParseException {
