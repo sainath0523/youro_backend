@@ -102,6 +102,7 @@ public class User implements UserDetails {
     
 
     @Lob
+    @Column(columnDefinition="LONGBLOB")
     @Basic(fetch = FetchType.LAZY)
     public byte[] profilePicture;
 
