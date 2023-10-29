@@ -9,6 +9,8 @@ public class AppointmentResponse {
     public String doctorName;
     public String patientName;
 
+    public byte[] picture;
+
     public int doctorId;
     public String apptDate;
     public String apptStartTime;

@@ -50,12 +50,17 @@ public class PatientService {
 
     public GetAppointmentsResponse getAppointments(int uId, AppointmentStatus apptStatus) {
         List<Appointments> res = new ArrayList<>();
+
+        User user = userRepository.findById(uId).get();
+
+
+
         if (apptStatus == null) {
             res.addAll(appointmentsRepository.findByUId(uId));
         } else {
             res.addAll(appointmentsRepository.findAppointments(uId, 1 ));
         }
-        return AppointmentMapper.getAppointments(res);
+        return AppointmentMapper.getAppointments(res, user.userType, userRepository);
     }
 
 
