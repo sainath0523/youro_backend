@@ -32,9 +32,8 @@ public class LoginController {
 		User authenticatedUser = loginService.authenticate(loginRequest);
 		System.out.println(authenticatedUser.getEmail() + " : " + authenticatedUser.getUserType());
         String jwtToken = jwtService.generateToken(authenticatedUser);
-
-        LoginResponse loginResponse = new LoginResponse(jwtToken, authenticatedUser.getUserId(), authenticatedUser.getUserType().toString(), jwtService.getExpirationTime());
-
+        LoginResponse loginResponse = new LoginResponse(jwtToken, authenticatedUser.getUserId(), authenticatedUser.getUserType().toString(), authenticatedUser.firstName + " " + authenticatedUser.lastName);
+        
         return ResponseEntity.ok(loginResponse);
     }
 

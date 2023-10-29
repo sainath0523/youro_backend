@@ -4,12 +4,14 @@ public class LoginResponse {
     private String token;
 	private int userId;
 	private String uType;
+	private String fullName;
     
-    public LoginResponse(String token, int userId, String uType, long expiresIn) {
+    public LoginResponse(String token, int userId, String uType, String fullName) {
 		super();
 		this.userId = userId;
 		this.token = token;
 		this.uType = uType;
+		this.fullName = fullName;
 	}
 
     public String getToken() {
@@ -38,5 +40,12 @@ public class LoginResponse {
 		this.uType = uType;
 	}
 
-	// Getters and setters...
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
 }
