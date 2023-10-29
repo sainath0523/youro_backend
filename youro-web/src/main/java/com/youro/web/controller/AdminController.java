@@ -26,6 +26,11 @@ public class AdminController {
         return new GetCarePlaneDetails();
     }
 
+    @GetMapping("/getAllPrescriptions")
+    public List<Prescription> getAllPrescriptions() {
+        return adminService.getAllPrescriptions();
+    }
+
     @GetMapping("/getPrescriptions/{type}")
     public List<PrescriptionDetails> getPrescriptionsByType(@PathVariable("type") PrescriptionType prescriptionType) {
         return adminService.getPrescriptionDetailsByType(prescriptionType);
@@ -42,7 +47,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/deletePrescription/{presId}")
-    public BasicResponse addDiagnosis(@PathVariable("predId") int presId) {
+    public BasicResponse addDiagnosis(@PathVariable("presId") int presId) {
         return adminService.deletePrescription(presId);
     }
     

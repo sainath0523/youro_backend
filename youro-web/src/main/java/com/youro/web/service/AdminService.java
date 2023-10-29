@@ -56,10 +56,18 @@ public class AdminService {
         {
             throw new CustomException("Already exits in the records");
         }
+        Prescription newPres = new Prescription();
+        newPres.setName( request.name);
+        newPres.setPresType( request.type);
+        newPres.setDiagnosis(diag);
+        prescriptionRepository.save(newPres);
         response.message ="Added successfully";
         return response;
     }
 
+    public List<Prescription> getAllPrescriptions(){
+        return prescriptionRepository.findAll();
+    }
 
     public List<PrescriptionDetails> getPrescriptionDetailsByType(PrescriptionType type)
     {
