@@ -73,7 +73,7 @@ public class ProviderController {
         return providerService.getProfile(userId);
     }
 
-    @PostMapping("/provider/updateProfile")
+    @PutMapping("/provider/updateProfile")
     public ResponseEntity<User> update(@RequestBody @Valid UpdateUserRequest registrationRequest)
     {
         System.out.println("In prov control update()");
