@@ -47,7 +47,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/deletePrescription/{presId}")
-    public BasicResponse addDiagnosis(@PathVariable("presId") int presId) {
+    public BasicResponse deletePrescription(@PathVariable("presId") int presId) {
         return adminService.deletePrescription(presId);
     }
     
