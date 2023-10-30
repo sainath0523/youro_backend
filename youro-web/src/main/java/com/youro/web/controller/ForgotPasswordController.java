@@ -25,39 +25,17 @@ public class ForgotPasswordController {
     @Autowired
     ForgotPasswordService forgotPasswordService;
 
-    @Autowired
-    JavaMailSender javaMailSender;
-
-    OtpUtils otpUtils = new OtpUtils();
-
-    @PreAuthorize("hasAnyRole('ADMIN','PROVIDER','PATIENT')")
-	@PutMapping("/password-rest")
+//    @PreAuthorize("hasAnyRole('ADMIN','PROVIDER','PATIENT')")
+	@PutMapping("/password-reset")
     public BasicResponse passwordReset(@RequestBody @Valid LoginRequest requestBody)
     {
         return forgotPasswordService.passwordReset(requestBody);
     }
 
-    @GetMapping("/send-email")
-    public String sendEmail()
-    {
-        SimpleMailMessage mes = new SimpleMailMessage();
-        mes.setTo("rmandava1404@gmail.com");
-        mes.setSubject("Test Main");
-        mes.setText("Testing the mail");
-        javaMailSender.send(mes);
-        return "Email sent successfully";
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN','PROVIDER','PATIENT')")
+//    @PreAuthorize("hasAnyRole('ADMIN','PROVIDER','PATIENT')")
     @GetMapping("/send-otp/{emailId}")
-    public String sendOtp(@PathVariable("emailId") String emailId)
+    public BasicResponse sendOtp(@PathVariable("emailId") String emailId)
     {
-        String otp = otpUtils.generateOTP(6);
-        SimpleMailMessage mes = new SimpleMailMessage();
-        mes.setTo(emailId);
-        mes.setSubject("OTP for password reset");
-        mes.setText(otp);
-        javaMailSender.send(mes);
-        return otp;
+    	return forgotPasswordService.sendOpt(emailId);
     }
 }
