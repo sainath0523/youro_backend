@@ -74,7 +74,7 @@ public class ProviderController {
     }
 
     @PutMapping("/provider/updateProfile")
-    public ResponseEntity<User> update(@RequestBody @Valid UpdateUserRequest registrationRequest)
+    public ResponseEntity<User> updateProfile(@RequestBody @Valid UpdateUserRequest registrationRequest)
     {
         System.out.println("In prov control update()");
         User registeredUser =  providerService.updateProfile(registrationRequest);

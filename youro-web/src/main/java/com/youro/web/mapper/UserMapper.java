@@ -1,9 +1,6 @@
 package com.youro.web.mapper;
 
-import com.youro.web.entity.Gender;
-import com.youro.web.entity.SubscriptionStatus;
-import com.youro.web.entity.User;
-import com.youro.web.entity.UserType;
+import com.youro.web.entity.*;
 import com.youro.web.pojo.Request.RegistrationRequest;
 import com.youro.web.pojo.Request.UpdateUserRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -93,18 +90,32 @@ public class UserMapper {
         if(requestBody.license != null) {
             userDetails.license = requestBody.license;
         }
-        
+
+        if(requestBody.specialization != null) {
+            userDetails.specialization = requestBody.specialization;
+        }
+
+        if(requestBody.middleName != null) {
+            userDetails.middleName = requestBody.middleName;
+        }
+
+        userDetails.status = DoctorStatus.PENDING;
+        userDetails.verified = false;
+        userDetails.softDelete = false;
+
+
 		return userDetails;
 		
 	}
 
 
-    public static User updateRequestToUser(UpdateUserRequest requestBody, PasswordEncoder passwordEncoder) {
-        User userDetails = new User();
+    public static User updateRequestToUser(UpdateUserRequest requestBody, User existObj, PasswordEncoder passwordEncoder) {
+        User userDetails = existObj;
 
         EnumSet<Gender> validGenders = EnumSet.allOf(Gender.class);
-//        EnumSet<UserType> validUserTypes = EnumSet.allOf(UserType.class);
-//        EnumSet<SubscriptionStatus> validSubscriptionStatus = EnumSet.allOf(SubscriptionStatus.class);
+        EnumSet<UserType> validUserTypes = EnumSet.allOf(UserType.class);
+        EnumSet<SubscriptionStatus> validSubscriptionStatus = EnumSet.allOf(SubscriptionStatus.class);
+        EnumSet<DoctorStatus> validDocStatus = EnumSet.allOf(DoctorStatus.class);
 
         if (validGenders.contains(requestBody.gender)) {
             userDetails.gender = requestBody.gender;
@@ -166,6 +177,38 @@ public class UserMapper {
 
         if(requestBody.license != null) {
             userDetails.license = requestBody.license;
+        }
+
+        if(requestBody.softDelete != null) {
+            userDetails.softDelete = requestBody.softDelete;
+        }
+
+
+        if(requestBody.verified != null) {
+            userDetails.verified = requestBody.verified;
+        }
+
+        if (validDocStatus.contains(requestBody.status)) {
+            userDetails.status = requestBody.status;
+        }
+
+        if (validUserTypes.contains(requestBody.userType)) {
+            userDetails.userType = requestBody.userType;
+        }
+        if (validSubscriptionStatus.contains(requestBody.subscriptionStatus)) {
+            userDetails.subscriptionStatus = requestBody.subscriptionStatus;
+        }
+
+        if(requestBody.middleName != null) {
+            userDetails.middleName = requestBody.middleName;
+        }
+
+        if(requestBody.phone2 != null) {
+            userDetails.phone2 = requestBody.phone2;
+        }
+
+        if(requestBody.specialization != null) {
+            userDetails.specialization = requestBody.specialization;
         }
 
         return userDetails;

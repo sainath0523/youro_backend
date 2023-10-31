@@ -30,8 +30,8 @@ public class AppointmentMapper {
         for(Appointments app : response)
         {
             AppointmentResponse res = new AppointmentResponse();
-            String patPrefix = app.getPatientId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
-            String docPrefix = app.getDoctorId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
+            String patPrefix = app.getPatientId().getGender() == null ? "" : (app.getPatientId().getGender().toString().equals("MALE") )  ? "Mr. " : "Ms. ";
+            String docPrefix = app.getDoctorId().getGender() == null ? "" : (app.getDoctorId().getGender().toString().equals("MALE") )  ? "Mr. " : "Ms. ";
             res.apptId = app.apptId;
             res.apptDate =dateFormat.format(app.apptDate);
             res.apptStartTime= timeFormat.format(app.apptStartTime) ;

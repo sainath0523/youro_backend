@@ -49,12 +49,18 @@ public class ProviderService {
         return res.get();
     }
 
-    public User updateProfile(UpdateUserRequest user){
-        Optional<User> temp = userRepository.findByEmail(user.email);
+    public User updateProfile(UpdateUserRequest userReq){
+        Optional<User> temp = userRepository.findById(userReq.userId);
+        String actualMailId = temp.get().email;
         User res = new User();
-        if(user.email.equals(temp.get().email)){
-            res = UserMapper.updateRequestToUser(user, passwordEncoder);
+        int exists = userRepository.checkIfEmailExists(userReq.email);
+        if(userReq.userId == temp.get().userId){
+
+            res = UserMapper.updateRequestToUser(userReq, temp.get(), passwordEncoder);
             res.userId = temp.get().getUserId();
+            if(exists == 1){
+                res.setEmail(actualMailId);
+            }
             return userRepository.save(res);
         }
         return res;

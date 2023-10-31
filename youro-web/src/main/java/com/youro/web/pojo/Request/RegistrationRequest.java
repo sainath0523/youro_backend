@@ -63,4 +63,7 @@ public class RegistrationRequest {
 
     public String zipCode;
 
+    public String specialization;
+
+    public String middleName;
 }
