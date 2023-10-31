@@ -64,10 +64,10 @@ public class SecurityConfig {
     CorsFilter corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
-        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("*");
         configuration.addAllowedMethod("*");
         configuration.setExposedHeaders(Collections.singletonList("*"));
-        configuration.setAllowCredentials(true);
+//        configuration.setAllowCredentials(true);
 
 //        configuration.addAllowedMethod("POST");
 //        configuration.addAllowedMethod("PUT");
