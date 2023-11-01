@@ -24,6 +24,10 @@ public class HelpUtils {
     {
         String formattedDate = "";
         try {
+        	
+        	timeFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+            outputFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+            dateFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
 
             // Parse the time and date strings
             Date time_Conv = timeFormat.parse(timeFormat.format(time));
