@@ -16,7 +16,6 @@ public class CarePlanMapper {
 
     public static GetCarePlaneDetails getCarePlaneDetails(GetCarePlaneDetails carePlaneDetails, GetCarePlaneDetails prescriptionDetails)
     {
-
         GetCarePlaneDetails getCarePlaneDetails = new GetCarePlaneDetails();
         getCarePlaneDetails.vitamins = combineLists(carePlaneDetails.vitamins, prescriptionDetails.vitamins);
         getCarePlaneDetails.imaging = combineLists(carePlaneDetails.imaging, prescriptionDetails.imaging);
@@ -24,11 +23,12 @@ public class CarePlanMapper {
         getCarePlaneDetails.medicines = combineLists(carePlaneDetails.medicines, prescriptionDetails.medicines);
         getCarePlaneDetails.lifeStyle = combineLists(carePlaneDetails.lifeStyle, prescriptionDetails.lifeStyle);
         return getCarePlaneDetails;
-
     }
     public static List<PrescriptionDetails> combineLists(List<PrescriptionDetails> details, List<PrescriptionDetails> detailsList)
     {
-        return details.stream()
+        List<PrescriptionDetails> combinedList = new ArrayList<>(details);
+        combinedList.addAll(detailsList);
+        return combinedList.stream()
                 .collect(Collectors.toMap(
                         PrescriptionDetails::getPresId, // Key by id
                         // Value resolver: Keep the object if indicator is true or if it's the only occurrence for that id
@@ -91,27 +91,27 @@ public class CarePlanMapper {
         {
             PrescriptionDetails presDetails = new PrescriptionDetails();
             presDetails.setPresId(pres.getPresId().getPresId());
-            presDetails.setType(pres.getPresType());
+            presDetails.setType(pres.getPresId().getPresType());
             presDetails.setName(pres.getPresId().getName());
             presDetails.setDosage(pres.getDosage());
             presDetails.setIndicator(true);
-            if(pres.getPresType() == PrescriptionType.VITAMINS)
+            if(presDetails.getType()== PrescriptionType.VITAMINS)
             {
                 getCarePlaneDetails.vitamins.add(presDetails);
             }
-            else if(pres.getPresType() == PrescriptionType.MEDICINES)
+            else if(presDetails.getType() == PrescriptionType.MEDICINES)
             {
                 getCarePlaneDetails.medicines.add(presDetails);
             }
-            else if(pres.getPresType() == PrescriptionType.LAB)
+            else if(presDetails.getType() == PrescriptionType.LAB)
             {
                 getCarePlaneDetails.labs.add(presDetails);
             }
-            else if(pres.getPresType() == PrescriptionType.LIFESTYLE)
+            else if(presDetails.getType() == PrescriptionType.LIFESTYLE)
             {
                 getCarePlaneDetails.lifeStyle.add(presDetails);
             }
-            else if(pres.getPresType() == PrescriptionType.IMAGING)
+            else if(presDetails.getType() == PrescriptionType.IMAGING)
             {
                 getCarePlaneDetails.imaging.add(presDetails);
             }
@@ -157,6 +157,7 @@ public class CarePlanMapper {
 
         return carePlanList;
     }
+
 
 
 }
