@@ -11,5 +11,8 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Inte
 
     List<Prescription> findByPresTypeAndDiagnosis(PrescriptionType type, Diagnosis diag);
 
+    List<Prescription> findByPresTypeInAndDiagnosis(List<PrescriptionType> type, Diagnosis diag);
+
+    List<Prescription> findByDiagnosis(Diagnosis diag);
     List<Prescription> findByPresType(PrescriptionType type);
 }

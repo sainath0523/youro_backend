@@ -1,7 +1,6 @@
 package com.youro.web.utils;
 
-import com.youro.web.entity.DoctorSchedule;
-import com.youro.web.entity.User;
+import com.youro.web.entity.*;
 import com.youro.web.pojo.Response.SlotInfo;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -99,6 +98,26 @@ public class HelpUtils {
         User user = new User();
         user.setUserId(uID);
         return user;
+    }
+
+    public static Diagnosis getDiagnosis(int dID)
+    {
+        Diagnosis diagnosis = new Diagnosis();
+        diagnosis.setDiagId(dID);
+        return diagnosis;
+    }
+    public static Prescription getPrescription(int pID)
+    {
+        Prescription prescription = new Prescription();
+        prescription.setPresId(pID);
+        return prescription;
+    }
+
+    public static Appointments getAppointments(int aID)
+    {
+        Appointments appointments = new Appointments();
+        appointments.setApptId(aID);
+        return appointments;
     }
 
     public static void addDetails(Date startTime, int doctorID) {

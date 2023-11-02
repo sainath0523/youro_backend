@@ -12,6 +12,6 @@ public class PrescriptionDetails {
     public int presId;
     public String name;
     public String dosage;
-    public Boolean indicator;
+    public Boolean indicator = false;
     public PrescriptionType type;
 }

@@ -5,7 +5,9 @@ import com.youro.web.pojo.Request.SaveCheckListRequest;
 import com.youro.web.pojo.Request.SaveNotesRequest;
 import com.youro.web.pojo.Request.UpdateResultDetailsRequest;
 import com.youro.web.pojo.Response.*;
+import com.youro.web.service.CarePlanService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +19,9 @@ import java.util.List;
 @CrossOrigin(origins ="*")
 @RequestMapping("/youro/api/v1/")
 public class CarePlanController {
+
+    @Autowired
+    CarePlanService carePlanService;
 
     @PostMapping("/saveCheckList")
     public BasicResponse saveCheckList(@RequestBody @Valid SaveCheckListRequest requestBody) {
@@ -54,11 +59,10 @@ public class CarePlanController {
         return new ArrayList<>();
     }
 
-    @GetMapping("/getCarePlanDetails/{apptId}")
-    public List<GetCarePlaneDetails> getCarePlanDetailsById(@PathVariable(required = false, name = "apptId") int apptId) {
+    @GetMapping("/getCarePlanDetails")
+    public GetCarePlaneDetails getCarePlanDetails(@RequestParam(required = false, name = "apptId") int apptId, @RequestParam(required = false, name = "diagId") int diagId) {
 
-
-        return new ArrayList<>();
+        return carePlanService.getCarePlaneDetails(apptId, diagId);
     }
 
     @PostMapping("/saveCarePlanDetails")
