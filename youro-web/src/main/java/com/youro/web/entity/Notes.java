@@ -27,7 +27,7 @@ public class Notes {
     @JoinColumn(name = "patientId")
     public User patientId;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     public String notes;
 
     @ManyToOne

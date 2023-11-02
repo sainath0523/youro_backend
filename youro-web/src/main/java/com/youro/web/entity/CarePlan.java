@@ -22,8 +22,8 @@ public class CarePlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int carePlanId;
 
-
     public PrescriptionType presType;
+
     @ManyToOne
     @JoinColumn(name = "diagnosisId")
     private Diagnosis diagnosis;
@@ -32,7 +32,7 @@ public class CarePlan {
     @JoinColumn(name = "presId")
     private Prescription presId;
 
-    @Column(length = 100)
+    @Lob
     public String dosage;
 
     @ManyToOne

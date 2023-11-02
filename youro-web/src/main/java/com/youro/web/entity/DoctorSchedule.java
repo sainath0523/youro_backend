@@ -28,10 +28,10 @@ public class DoctorSchedule {
     public Date schDate;
 
     @Column(name="startTime")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date schStartTime;
 
     @Column(name="endTime")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date schEndTime;
 }

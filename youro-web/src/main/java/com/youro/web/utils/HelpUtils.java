@@ -2,8 +2,6 @@ package com.youro.web.utils;
 
 import com.youro.web.entity.DoctorSchedule;
 import com.youro.web.entity.User;
-import com.youro.web.entity.UserType;
-import com.youro.web.pojo.Response.GetCustomerAvailResponse;
 import com.youro.web.pojo.Response.SlotInfo;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -14,7 +12,7 @@ import java.util.*;
 @ComponentScan
 public class HelpUtils {
 
-    static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+    static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
     static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     static SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
     public static Map<Date, SlotInfo> slotsInfo = new TreeMap<>();
@@ -22,6 +20,9 @@ public class HelpUtils {
 
     public static String convertDateTime(Date date, Date time)
     {
+        timeFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        outputFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
         String formattedDate = "";
         try {
 
