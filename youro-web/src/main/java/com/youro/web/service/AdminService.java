@@ -10,6 +10,7 @@ import com.youro.web.pojo.Response.PrescriptionDetails;
 import com.youro.web.repository.DiagnosisRepository;
 import com.youro.web.repository.PrescriptionRepository;
 import com.youro.web.repository.UserRepository;
+import com.youro.web.utils.HelpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,22 +48,21 @@ public class AdminService {
 
     public BasicResponse addPrescription(AddPrescriptionRequest request)
     {
-        BasicResponse response = new BasicResponse();
-        Diagnosis diag = new Diagnosis();
-        diag.setDiagId(request.diagnosisId);
-        List<Prescription> list = prescriptionRepository.findByPresTypeAndDiagnosis(request.type, diag);
-        List<String> names = list.stream().map(Prescription :: getName).toList();
-        if(names.contains(request.name))
-        {
-            throw new CustomException("Already exits in the records");
+        for(int diagId : request.diagnosisId) {
+            Diagnosis diag = HelpUtils.getDiagnosis(diagId);
+            List<Prescription> list = prescriptionRepository.findByPresTypeAndDiagnosis(request.type, diag);
+            List<String> names = list.stream().map(Prescription::getName).toList();
+            if (names.contains(request.name)) {
+                throw new CustomException("Already exits in the records");
+            }
+            Prescription newPres = new Prescription();
+            newPres.setName(request.name);
+            newPres.setPresType(request.type);
+            newPres.setDiagnosis(diag);
+            prescriptionRepository.save(newPres);
         }
-        Prescription newPres = new Prescription();
-        newPres.setName( request.name);
-        newPres.setPresType( request.type);
-        newPres.setDiagnosis(diag);
-        prescriptionRepository.save(newPres);
-        response.message ="Added successfully";
-        return response;
+
+        return new BasicResponse("Added Successfully");
     }
 
     public List<Prescription> getAllPrescriptions(){

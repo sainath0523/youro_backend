@@ -6,8 +6,6 @@ public class AddPrescriptionRequest {
 
 
         public String name;
-
         public PrescriptionType type;
-
-        public int diagnosisId;
+        public int[] diagnosisId;
 }
