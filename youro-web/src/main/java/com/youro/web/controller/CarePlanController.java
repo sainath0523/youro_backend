@@ -30,9 +30,9 @@ public class CarePlanController {
         return new BasicResponse();
     }
 
-    @GetMapping("/getCheckList/{uId}")
-    public List<GetCheckListResponse> getCheckList(@PathVariable("uId") int uId) {
-        return new ArrayList<GetCheckListResponse>();
+    @GetMapping("/getCheckList/{doctorId}")
+    public List<GetCheckListResponse> getCheckList(@PathVariable("doctorId") int doctorId) {   	
+        return carePlanService.getCheckList(doctorId);
     }
     
     @PostMapping("/uploadResults")

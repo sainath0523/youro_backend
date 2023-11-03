@@ -22,12 +22,12 @@ import com.youro.web.bucket.BucketName;
 import com.youro.web.entity.Results;
 import com.youro.web.entity.User;
 import com.youro.web.exception.CustomException;
-import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.repository.ResultsRepository;
 import com.youro.web.repository.UserRepository;
 import com.youro.web.utils.HelpUtils;
 import com.youro.web.entity.*;
 import com.youro.web.mapper.CarePlanMapper;
+import com.youro.web.mapper.CheckListMapper;
 import com.youro.web.mapper.NotesMapper;
 import com.youro.web.pojo.Request.SaveCarePlanRequest;
 import com.youro.web.pojo.Request.SaveNotesRequest;
@@ -50,6 +50,9 @@ public class CarePlanService {
 	
 	@Autowired
 	ResultsRepository resultsRepository;
+	
+	@Autowired
+	CheckListRepository checkListRepository;
 	
 	@Autowired
     CarePlanRepository carePlanRepository;
@@ -246,6 +249,11 @@ public class CarePlanService {
 		catch(AmazonServiceException | IOException e) {
 			throw new CustomException("Failed to get files from S3");
 		}
+	}
+
+	public List<GetCheckListResponse> getCheckList(int doctorId) {
+        List<CheckList> checklists = checkListRepository.findByDoctorId(HelpUtils.getUser(doctorId));
+		return CheckListMapper.entityToResponseMapping(checklists);
 	}
 
 }
