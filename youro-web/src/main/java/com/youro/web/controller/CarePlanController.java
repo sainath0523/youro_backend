@@ -5,7 +5,9 @@ import com.youro.web.pojo.Request.SaveCheckListRequest;
 import com.youro.web.pojo.Request.SaveNotesRequest;
 import com.youro.web.pojo.Request.UpdateResultDetailsRequest;
 import com.youro.web.pojo.Response.*;
+import com.youro.web.service.CarePlanService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +19,9 @@ import java.util.List;
 @CrossOrigin(origins ="*")
 @RequestMapping("/youro/api/v1/")
 public class CarePlanController {
+
+    @Autowired
+    CarePlanService carePlanService;
 
     @PostMapping("/saveCheckList")
     public BasicResponse saveCheckList(@RequestBody @Valid SaveCheckListRequest requestBody) {
@@ -46,23 +51,28 @@ public class CarePlanController {
 
     @PostMapping("/saveNotes")
     public BasicResponse saveNotes(@RequestBody @Valid SaveNotesRequest requestBody) {
-        return new BasicResponse();
+
+        return carePlanService.saveNotes(requestBody);
     }
 
     @GetMapping("/getNotes/{uId}")
     public List<GetNotesResponse> getNotes(@PathVariable("uId") int uId) {
-        return new ArrayList<>();
+
+        return carePlanService.getNotes(uId);
     }
 
-    @GetMapping("/getCarePlanDetails/{apptId}")
-    public List<GetCarePlaneDetails> getCarePlanDetailsById(@PathVariable(required = false, name = "apptId") int apptId) {
+    @GetMapping("/getCarePlanDetails")
+    public GetCarePlaneDetails getCarePlanDetails(@RequestParam(required = false, name = "apptId") Integer apptId, @RequestParam(required = false, name = "diagId") Integer diagId) {
+        return carePlanService.getCarePlaneDetails(apptId, diagId);
+    }
 
-
-        return new ArrayList<>();
+    @GetMapping("/getCarePlanDetailsByPatientID/{uID}")
+    public List<GetCarePlanByPatientResponse> getCarePlanDetailsById(@PathVariable("uID") Integer uId) {
+        return carePlanService.getCarePlanByPatient(uId);
     }
 
     @PostMapping("/saveCarePlanDetails")
-    public BasicResponse saveCarePlanDetails2311(@RequestBody @Valid SaveCarePlanRequest requestBody) {
-        return new BasicResponse();
+    public BasicResponse saveCarePlanDetails(@RequestBody @Valid SaveCarePlanRequest requestBody) {
+        return carePlanService.saveCarePlan(requestBody);
     }
 }

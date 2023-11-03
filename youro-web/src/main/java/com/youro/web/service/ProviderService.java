@@ -31,11 +31,8 @@ public class ProviderService {
     @Autowired
     AppointmentsRepository appointmentsRepository;
 
-
-
     SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
     SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -77,9 +74,9 @@ public class ProviderService {
             List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(request.docId, scheDate);
             List<DoctorSchedule> list = new ArrayList<>();
             DoctorSchedule sche = new DoctorSchedule();
-            sche.setSchDate(outputFormat.parse(outputFormat.format(startDate)));
-            sche.setSchEndTime(timeFormat.parse(timeFormat.format(endTime)));
-            sche.setSchStartTime(timeFormat.parse(timeFormat.format(startTime)));
+            sche.setSchDate(startDate);
+            sche.setSchEndTime(endTime);
+            sche.setSchStartTime(startTime);
             User user = new User();
             user.setUserId(request.docId);
             sche.setDoctorId(user);
@@ -106,8 +103,8 @@ public class ProviderService {
                    }
                    else
                    {
-                       sche.setSchStartTime(timeFormat.parse(timeFormat.format(sche.schEndTime)));
-                       sche.setSchEndTime(timeFormat.parse(timeFormat.format(list.get(0).getSchEndTime())));
+                       sche.setSchStartTime(sche.schEndTime);
+                       sche.setSchEndTime(list.get(0).getSchEndTime());
                        sche.setSchId(list.get(0).schId);
                        drScheduleRepo.save(sche);
 
@@ -116,19 +113,19 @@ public class ProviderService {
                else
                {
                    if(sche.getSchEndTime().compareTo(list.get(0).schEndTime) == 0) {
-                       sche.setSchEndTime(timeFormat.parse(timeFormat.format(sche.schStartTime)));
-                       sche.setSchStartTime(timeFormat.parse(timeFormat.format(list.get(0).schStartTime)));
+                       sche.setSchEndTime(sche.schStartTime);
+                       sche.setSchStartTime(list.get(0).schStartTime);
                    }
                    else
                    {
                        DoctorSchedule shcp = new DoctorSchedule();
-                       shcp.setSchStartTime(timeFormat.parse(timeFormat.format(list.get(0).schStartTime)));
-                       shcp.setSchEndTime(timeFormat.parse(timeFormat.format(sche.schStartTime)));
+                       shcp.setSchStartTime(list.get(0).schStartTime);
+                       shcp.setSchEndTime(sche.schStartTime);
                        shcp.setDoctorId(sche.getDoctorId());
                        shcp.setSchDate(startDate);
                        drScheduleRepo.save(shcp);
-                       sche.setSchStartTime(timeFormat.parse(timeFormat.format(sche.schEndTime)));
-                       sche.setSchEndTime(timeFormat.parse(timeFormat.format(list.get(0).schEndTime)));
+                       sche.setSchStartTime(sche.schEndTime);
+                       sche.setSchEndTime(list.get(0).schEndTime);
                    }
                    sche.setSchId(list.get(0).schId);
                    drScheduleRepo.save(sche);
@@ -143,8 +140,8 @@ public class ProviderService {
                 {
                     if(rem_List.contains(drList.get(i).getSchId()))
                     {
-                        sche.setSchStartTime(timeFormat.parse(timeFormat.format(drList.get(i).schStartTime)));
-                        sche.setSchEndTime(timeFormat.parse(timeFormat.format(startTime)));
+                        sche.setSchStartTime(drList.get(i).schStartTime);
+                        sche.setSchEndTime(startTime);
                         sche.setSchId(drList.get(i).getSchId());
                         drScheduleRepo.save(sche);
                         i++;
@@ -153,8 +150,8 @@ public class ProviderService {
                             drScheduleRepo.deleteById(drList.get(i).getSchId());
                             i++;
                         }
-                        sche.setSchStartTime(timeFormat.parse(timeFormat.format(endTime)));
-                        sche.setSchEndTime(timeFormat.parse(timeFormat.format(drList.get(i).schEndTime)));
+                        sche.setSchStartTime(endTime);
+                        sche.setSchEndTime(drList.get(i).schEndTime);
                         sche.setSchId(drList.get(i).getSchId());
                         drScheduleRepo.save(sche);
                     }
@@ -183,9 +180,13 @@ public class ProviderService {
             User user = new User();
             user.setUserId(request.docId);
             doctorSchedule.setDoctorId(user);
-            doctorSchedule.setSchDate(new SimpleDateFormat("yyyy-MM-dd").parse(outputFormat.format(startDate)));
+           /* doctorSchedule.setSchDate(new SimpleDateFormat("yyyy-MM-dd").parse(outputFormat.format(startDate)));
             doctorSchedule.setSchEndTime(new SimpleDateFormat("HH:mm:ss").parse(timeFormat.format(endTime)));
             doctorSchedule.setSchStartTime(new SimpleDateFormat("HH:mm:ss").parse(timeFormat.format(startTime)));
+            */
+            doctorSchedule.setSchDate(startDate);
+            doctorSchedule.setSchEndTime(endTime);
+            doctorSchedule.setSchStartTime(startTime);
             String scheDate  = outputFormat.format(doctorSchedule.schDate);
             List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(request.docId,scheDate);
             drList.add(doctorSchedule);
@@ -238,11 +239,12 @@ public class ProviderService {
             }
             Appointments appt = appointments.get();
             DoctorSchedule doctorSchedule = new DoctorSchedule();
-            doctorSchedule.setSchDate(new SimpleDateFormat("yyyy-MM-dd").parse(outputFormat.format(appt.getApptDate())));
-            doctorSchedule.setSchEndTime(new SimpleDateFormat("HH:mm:ss").parse(timeFormat.format(appt.getApptEndTime())));
-            doctorSchedule.setSchStartTime(new SimpleDateFormat("HH:mm:ss").parse(timeFormat.format(appt.getApptStartTime())));
+            doctorSchedule.setSchDate(appt.getApptDate());
+            doctorSchedule.setSchEndTime(appt.getApptEndTime());
+            doctorSchedule.setSchStartTime(appt.getApptStartTime());
             User user = new User();
             user.setUserId(docId);
+            doctorSchedule.setDoctorId(user);
             String scheDate  = outputFormat.format(doctorSchedule.schDate);
             List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(docId, scheDate);
             drList.add(doctorSchedule);
@@ -260,7 +262,6 @@ public class ProviderService {
     public List<DoctorSchedule> mergeSlots (List<DoctorSchedule> list)
     {
         int index = 0;
-        int size = list.size();
         for (int i = 1; i < list.size(); i++) {
             if (list.get(index).schEndTime.compareTo(list.get(i).schStartTime) >=0) {
                 list.get(index).schEndTime
@@ -271,10 +272,11 @@ public class ProviderService {
                 list.set(index, list.get(i));
             }
         }
-        for(int i = index+1; i < size ; i++)
+        List<DoctorSchedule> list1 = new ArrayList<>();
+        for(int i = 0; i <= index ; i++)
         {
-            list.remove(index);
+            list1.add(list.get(i));
         }
-        return list;
+        return list1;
     }
 }

@@ -17,7 +17,6 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SymptomScore {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int scoreId;
@@ -32,6 +31,7 @@ public class SymptomScore {
 
     public double symptomScore;
 
+    @Lob
     public String questionData;
 
     @Temporal(TemporalType.TIMESTAMP)

@@ -16,7 +16,6 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Appointments {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int apptId;
@@ -32,18 +31,13 @@ public class Appointments {
     @Temporal(TemporalType.DATE)
     public Date apptDate;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date apptStartTime;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date apptEndTime;
 
-
     public String link;
-
-    @ManyToOne
-    @JoinColumn(name = "followupId", referencedColumnName = "apptId")
-    public Appointments followupId;
 
     public AppointmentStatus status;
 }

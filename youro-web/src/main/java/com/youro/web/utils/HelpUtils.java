@@ -1,9 +1,6 @@
 package com.youro.web.utils;
 
-import com.youro.web.entity.DoctorSchedule;
-import com.youro.web.entity.User;
-import com.youro.web.entity.UserType;
-import com.youro.web.pojo.Response.GetCustomerAvailResponse;
+import com.youro.web.entity.*;
 import com.youro.web.pojo.Response.SlotInfo;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -14,7 +11,7 @@ import java.util.*;
 @ComponentScan
 public class HelpUtils {
 
-    static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+    static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
     static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     static SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
     public static Map<Date, SlotInfo> slotsInfo = new TreeMap<>();
@@ -22,6 +19,9 @@ public class HelpUtils {
 
     public static String convertDateTime(Date date, Date time)
     {
+        timeFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        outputFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
         String formattedDate = "";
         try {
         	
@@ -102,6 +102,26 @@ public class HelpUtils {
         User user = new User();
         user.setUserId(uID);
         return user;
+    }
+
+    public static Diagnosis getDiagnosis(int dID)
+    {
+        Diagnosis diagnosis = new Diagnosis();
+        diagnosis.setDiagId(dID);
+        return diagnosis;
+    }
+    public static Prescription getPrescription(int pID)
+    {
+        Prescription prescription = new Prescription();
+        prescription.setPresId(pID);
+        return prescription;
+    }
+
+    public static Appointments getAppointments(int aID)
+    {
+        Appointments appointments = new Appointments();
+        appointments.setApptId(aID);
+        return appointments;
     }
 
     public static void addDetails(Date startTime, int doctorID) {
