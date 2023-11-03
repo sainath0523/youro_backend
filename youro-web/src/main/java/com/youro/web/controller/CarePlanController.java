@@ -24,7 +24,7 @@ public class CarePlanController {
 	
 	@Autowired
     CarePlanService carePlanService;
-	
+
     @PostMapping("/saveCheckList")
     public BasicResponse saveCheckList(@RequestBody @Valid SaveCheckListRequest requestBody) {
         return new BasicResponse();
@@ -48,23 +48,28 @@ public class CarePlanController {
 
     @PostMapping("/saveNotes")
     public BasicResponse saveNotes(@RequestBody @Valid SaveNotesRequest requestBody) {
-        return new BasicResponse();
+
+        return carePlanService.saveNotes(requestBody);
     }
 
     @GetMapping("/getNotes/{uId}")
     public List<GetNotesResponse> getNotes(@PathVariable("uId") int uId) {
-        return new ArrayList<>();
+
+        return carePlanService.getNotes(uId);
     }
 
-    @GetMapping("/getCarePlanDetails/{apptId}")
-    public List<GetCarePlaneDetails> getCarePlanDetailsById(@PathVariable(required = false, name = "apptId") int apptId) {
+    @GetMapping("/getCarePlanDetails")
+    public GetCarePlaneDetails getCarePlanDetails(@RequestParam(required = false, name = "apptId") Integer apptId, @RequestParam(required = false, name = "diagId") Integer diagId) {
+        return carePlanService.getCarePlaneDetails(apptId, diagId);
+    }
 
-
-        return new ArrayList<>();
+    @GetMapping("/getCarePlanDetailsByPatientID/{uID}")
+    public List<GetCarePlanByPatientResponse> getCarePlanDetailsById(@PathVariable("uID") Integer uId) {
+        return carePlanService.getCarePlanByPatient(uId);
     }
 
     @PostMapping("/saveCarePlanDetails")
-    public BasicResponse saveCarePlanDetails2311(@RequestBody @Valid SaveCarePlanRequest requestBody) {
-        return new BasicResponse();
+    public BasicResponse saveCarePlanDetails(@RequestBody @Valid SaveCarePlanRequest requestBody) {
+        return carePlanService.saveCarePlan(requestBody);
     }
 }

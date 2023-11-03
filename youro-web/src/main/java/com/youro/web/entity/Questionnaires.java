@@ -22,8 +22,6 @@ public class Questionnaires {
 
     public String question;
 
-    public QuestionType qType;
-
     public int weight;
 
     @ManyToOne

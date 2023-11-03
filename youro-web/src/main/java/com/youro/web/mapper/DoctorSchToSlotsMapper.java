@@ -7,13 +7,11 @@ import com.youro.web.utils.HelpUtils;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
 public class DoctorSchToSlotsMapper {
 
-    static SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
     public static List<AvailableSlotsByDateResponse> convertDoctorSchToSlots(List<DoctorSchedule> inp){
         List<AvailableSlotsByDateResponse> res = new ArrayList<>();
         AvailableSlotsByDateResponse temp;

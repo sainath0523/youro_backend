@@ -6,6 +6,5 @@ public class SaveNotesRequest {
 
     public int doctorId;
     public int patientId;
-
     public String notes;
 }

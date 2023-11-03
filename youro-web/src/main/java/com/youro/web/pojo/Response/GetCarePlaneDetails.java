@@ -1,17 +1,18 @@
 package com.youro.web.pojo.Response;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GetCarePlaneDetails {
 
 
-    public ArrayList<PrescriptionDetails> vitamins;
-    public ArrayList<PrescriptionDetails> medicines;
+    public List<PrescriptionDetails> vitamins = new ArrayList<>();
+    public List<PrescriptionDetails> medicines = new ArrayList<>();
 
-    public ArrayList<PrescriptionDetails> lifeStyle;
+    public List<PrescriptionDetails> lifeStyle = new ArrayList<>();
 
-    public ArrayList<PrescriptionDetails> labs;
+    public List<PrescriptionDetails> labs = new ArrayList<>();
 
-    public ArrayList<PrescriptionDetails> imaging;
+    public List<PrescriptionDetails> imaging  = new ArrayList<>();
 
 }
