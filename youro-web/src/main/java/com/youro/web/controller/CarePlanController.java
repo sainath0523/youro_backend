@@ -45,6 +45,12 @@ public class CarePlanController {
     public List<byte[]> getResults(@PathVariable("patientId") int patientId) {
         return carePlanService.getResults(patientId);
     }
+    
+    @GetMapping("/deleteResults")
+    public List<byte[]> deleteResults(@RequestParam("filename") String filename, @RequestParam("patientId") int patientId) {
+    	carePlanService.deleteResults(filename, patientId);
+    	return carePlanService.getResults(patientId);
+    }
 
     @PostMapping("/saveNotes")
     public BasicResponse saveNotes(@RequestBody @Valid SaveNotesRequest requestBody) {

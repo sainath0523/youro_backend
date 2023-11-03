@@ -250,6 +250,13 @@ public class CarePlanService {
 			throw new CustomException("Failed to get files from S3");
 		}
 	}
+	
+	public void deleteResults(String filename, int patientId) {
+		String bucketName = String.format("%s", BucketName.PROFILE_IMAGE.getBucketName());
+		String filePath = String.format("%s/%s", Integer.toString(patientId), filename);
+        s3.deleteObject(bucketName, filePath);		
+        System.out.println("File deleted from s3 successfully: " + filename);
+	}
 
 	public List<GetCheckListResponse> getCheckList(int doctorId) {
         List<CheckList> checklists = checkListRepository.findByDoctorId(HelpUtils.getUser(doctorId));
