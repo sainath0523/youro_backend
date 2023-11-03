@@ -35,6 +35,7 @@ import com.youro.web.pojo.Response.*;
 import com.youro.web.repository.*;
 
 import java.util.Comparator;
+import java.util.Date;
 
 
 @Service
@@ -190,11 +191,13 @@ public class CarePlanService {
 			Results res = new Results();
 			res.setPatientId(HelpUtils.getUser(patientId));
 			res.setResults_url(results_url);
+            res.setLastUpdated(new Date());
 			resultsRepository.save(res);		
 		}
 		else {
 			Results res = results.get();
             res.results_url = results_url;
+            res.setLastUpdated(new Date());
             resultsRepository.save(res);
 		}
 				
