@@ -259,6 +259,19 @@ public class ProviderService {
         return resp;
     }
 
+    public BasicResponse updateAppointment(int apptId, String link) throws CustomException
+    {
+        try {
+          Appointments appt = appointmentsRepository.findById(apptId).get();
+          appt.setLink(link);
+          appointmentsRepository.save(appt);
+        }catch (Exception e)
+        {
+            throw new CustomException(e.getLocalizedMessage());
+        }
+        return new BasicResponse("Updated Successfully");
+    }
+
     public List<DoctorSchedule> mergeSlots (List<DoctorSchedule> list)
     {
         int index = 0;

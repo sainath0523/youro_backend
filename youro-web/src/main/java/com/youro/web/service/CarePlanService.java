@@ -1,16 +1,5 @@
 package com.youro.web.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectListing;
@@ -19,13 +8,8 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.amazonaws.util.IOUtils;
 import com.youro.web.bucket.BucketName;
-import com.youro.web.entity.Results;
-import com.youro.web.entity.User;
-import com.youro.web.exception.CustomException;
-import com.youro.web.repository.ResultsRepository;
-import com.youro.web.repository.UserRepository;
-import com.youro.web.utils.HelpUtils;
 import com.youro.web.entity.*;
+import com.youro.web.exception.CustomException;
 import com.youro.web.mapper.CarePlanMapper;
 import com.youro.web.mapper.CheckListMapper;
 import com.youro.web.mapper.NotesMapper;
@@ -33,9 +17,15 @@ import com.youro.web.pojo.Request.SaveCarePlanRequest;
 import com.youro.web.pojo.Request.SaveNotesRequest;
 import com.youro.web.pojo.Response.*;
 import com.youro.web.repository.*;
+import com.youro.web.utils.HelpUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Comparator;
-import java.util.Date;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
 
 
 @Service
@@ -68,6 +58,7 @@ public class CarePlanService {
 
     @Autowired
     AppointmentsRepository appointmentsRepository;
+
     
     public GetCarePlaneDetails getPrescriptionByDiagId(int diagId)
     {
@@ -133,7 +124,6 @@ public class CarePlanService {
     public List<GetNotesResponse> getNotes(int uId)
     {
         List<Notes> notes = notesRepository.findByPatientId(HelpUtils.getUser(uId));
-
         return NotesMapper.entityToResponseMapping(notes);
     }
 
@@ -141,14 +131,36 @@ public class CarePlanService {
     public BasicResponse saveNotes(SaveNotesRequest request)
     {
         notesRepository.save(NotesMapper.requestToEntityMapper(request));
+		Appointments appt = HelpUtils.getAppointments(request.apptId);
+		saveCheckList(appt);
         return new BasicResponse("Notes Saved Successfully");
     }
 
     public BasicResponse saveCarePlan(SaveCarePlanRequest request)
     {
         carePlanRepository.saveAll(CarePlanMapper.toCarePlanEntity(request));
+		Appointments appt = HelpUtils.getAppointments(request.apptId);
+		saveCheckList(appt);
         return new BasicResponse("CarePlan Saved Successfully");
     }
+
+	public void saveCheckList(Appointments appointments)
+	{
+		CheckList checkList = new CheckList();
+		Optional<CheckList> check = checkListRepository.findByAppointments(appointments);
+		if(check.isEmpty())
+		{
+			checkList.setAppointments(appointments);
+			checkList.orders = true;
+			checkList.apptDate = appointments.getApptDate();
+		}
+		else
+		{
+			checkList = check.get();
+			checkList.orders = true;
+		}
+		checkListRepository.save(checkList);
+	}
 
 	public BasicResponse uploadResults(MultipartFile[] files, int patientId) {
 		
