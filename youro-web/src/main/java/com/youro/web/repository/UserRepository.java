@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     List<User> findByUserType(UserType userType);
-    
+	Optional<User> findByUserId(int uId);
     Optional<User> findByEmail(String email);
 
     @Query(value = "SELECT EXISTS (SELECT 1 FROM user as usr WHERE usr.email = ?1) AS value_exists;", nativeQuery = true)

@@ -19,9 +19,9 @@ public class HelpUtils {
 
     public static String convertDateTime(Date date, Date time)
     {
-        timeFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
-        outputFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
-        dateFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        timeFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
+        outputFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
         String formattedDate = "";
         try {
         	
@@ -73,7 +73,7 @@ public class HelpUtils {
             addDetails(tempDate, sch.getDoctorId().userId);
             while(tempDate.before(sch.getSchEndTime()))
             {
-                tempDate = timeFormat.parse(timeFormat.format(addTime(tempDate)));
+                tempDate = addTime(tempDate);
                 addDetails(tempDate, sch.getDoctorId().userId);
             }
         }
@@ -87,8 +87,7 @@ public class HelpUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MINUTE, 30);
-        Date updatedDate = calendar.getTime();
-        return updatedDate;
+        return calendar.getTime();
 
     }
 

@@ -32,6 +32,7 @@ public class SymptomScore {
     public double symptomScore;
 
     @Lob
+    @Column(columnDefinition = "TEXT")
     public String questionData;
 
     @Temporal(TemporalType.TIMESTAMP)

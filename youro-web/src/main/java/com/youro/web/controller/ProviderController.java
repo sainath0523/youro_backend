@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.TimeZone;
 
 @RestController
 @CrossOrigin(origins ="*")
@@ -52,9 +53,17 @@ public class ProviderController {
         return providerService.cancelAppointment(id, docId);
     }
 
+    @PutMapping("/updateAppointment/{apptId}")
+    public BasicResponse updateAppointments(@PathVariable("apptId") int id, @RequestParam(required = true, name = "link") String link)
+    {
+        //System.out.println(id + " :: " + docId);
+        return providerService.updateAppointment(id, link);
+    }
+
     @GetMapping("/getAvailability/{docId}")
     public DoctorAvailabilityResponse getAvailability(@PathVariable("docId") int docId)
     {
+        System.out.println("Default TimeZone :" + TimeZone.getDefault());
         return providerService.getAvailability(docId);
     }
 

@@ -6,7 +6,9 @@ import com.youro.web.pojo.Request.SaveNotesRequest;
 import com.youro.web.pojo.Request.UpdateResultDetailsRequest;
 import com.youro.web.pojo.Response.*;
 import com.youro.web.service.CarePlanService;
+
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +21,8 @@ import java.util.List;
 @CrossOrigin(origins ="*")
 @RequestMapping("/youro/api/v1/")
 public class CarePlanController {
-
-    @Autowired
+	
+	@Autowired
     CarePlanService carePlanService;
 
     @PostMapping("/saveCheckList")
@@ -28,26 +30,21 @@ public class CarePlanController {
         return new BasicResponse();
     }
 
-    @GetMapping("/getCheckList/{uId}")
-    public List<GetCheckListResponse> getCheckList(@PathVariable("uId") int uId) {
-        return new ArrayList<GetCheckListResponse>();
+    @GetMapping("/getCheckList/{doctorId}")
+    public List<GetCheckListResponse> getCheckList(@PathVariable("doctorId") int doctorId) {   	
+        return carePlanService.getCheckList(doctorId);
     }
-
+    
     @PostMapping("/uploadResults")
-    public List<UploadResultsResponse> uploadResults(@RequestParam("files") MultipartFile[] files) {
-        return new ArrayList<>();
+    public List<byte[]> uploadResults(@RequestParam("files") MultipartFile[] files, @RequestParam("patientId") int patientId) {
+    	carePlanService.uploadResults(files, patientId);
+    	return carePlanService.getResults(patientId);
     }
-
-    @PostMapping("/updateResultsDetails")
-    public BasicResponse updateResultsDetails(@RequestBody @Valid UpdateResultDetailsRequest requestBody) {
-        return new BasicResponse();
+    
+    @GetMapping("/getResults/{patientId}")
+    public List<byte[]> getResults(@PathVariable("patientId") int patientId) {
+        return carePlanService.getResults(patientId);
     }
-
-    @GetMapping("/getResults/{apptId}")
-    public List<byte[]> getResults(@PathVariable("apptId") int apptId) {
-        return new ArrayList<>();
-    }
-
 
     @PostMapping("/saveNotes")
     public BasicResponse saveNotes(@RequestBody @Valid SaveNotesRequest requestBody) {
