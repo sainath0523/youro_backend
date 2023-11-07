@@ -71,6 +71,7 @@ public class AppointmentMapper {
         appt.setPatientId(HelpUtils.getUser(request.patId));
         appt.setApptDate(outputFormat.parse(request.startTime));
         appt.setApptStartTime(outputFormat.parse(request.startTime));
+        appt.setDiagnosis(HelpUtils.getDiagnosis(request.getDiagId()));
         appt.setApptEndTime(outputFormat.parse(endTime));
         return appt;
     }

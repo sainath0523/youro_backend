@@ -30,6 +30,7 @@ public class Notes {
     public Appointments appointments;
 
     @Lob
+    @Column(columnDefinition = "TEXT")
     public String notes;
 
     @ManyToOne

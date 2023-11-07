@@ -10,7 +10,7 @@ import lombok.Setter;
 public class PrescriptionDetails {
 
     public int presId;
-    public String name;
+    public String presName;
     public String dosage;
     public Boolean indicator = false;
     public PrescriptionType type;

@@ -14,6 +14,7 @@ import com.youro.web.pojo.Response.DoctorAvailabilityResponse;
 import com.youro.web.repository.AppointmentsRepository;
 import com.youro.web.repository.DoctorScheduleRepository;
 import com.youro.web.repository.UserRepository;
+import com.youro.web.utils.HelpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,6 @@ public class ProviderService {
     AppointmentsRepository appointmentsRepository;
 
     SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
-    SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -65,13 +65,12 @@ public class ProviderService {
    
     public BasicResponse removeAvailability(AddAvailabilityRequest request) throws ParseException {
 
-        BasicResponse resp = new BasicResponse();
         try {
             Date startDate = inputFormat.parse(request.startTime);
             Date startTime = inputFormat.parse(request.startTime);
             Date endTime = inputFormat.parse(request.endTime);
-            String scheDate  = outputFormat.format(startDate);
-            List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(request.docId, scheDate);
+            //String scheDate  = outputFormat.format(startDate);
+            List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(HelpUtils.getUser(request.docId), startDate);
             List<DoctorSchedule> list = new ArrayList<>();
             DoctorSchedule sche = new DoctorSchedule();
             sche.setSchDate(startDate);
@@ -158,21 +157,17 @@ public class ProviderService {
                 }
 
             }
-            resp.message = "Removed Successfully";
-            System.out.println(list);
         }catch (Exception e)
         {
             throw new CustomException(e.getLocalizedMessage());
         }
-        return  resp;
+        return  new BasicResponse("Removed Successfully");
     }
 
     public BasicResponse addAvailability(AddAvailabilityRequest request)
     {
-        BasicResponse resp = new BasicResponse();
         try {
-            inputFormat.setTimeZone(TimeZone.getTimeZone("GMT-0400"));
-
+            inputFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
             Date startDate = inputFormat.parse(request.startTime);
             Date startTime = inputFormat.parse(request.startTime);
             Date endTime = inputFormat.parse(request.endTime);
@@ -180,24 +175,18 @@ public class ProviderService {
             User user = new User();
             user.setUserId(request.docId);
             doctorSchedule.setDoctorId(user);
-           /* doctorSchedule.setSchDate(new SimpleDateFormat("yyyy-MM-dd").parse(outputFormat.format(startDate)));
-            doctorSchedule.setSchEndTime(new SimpleDateFormat("HH:mm:ss").parse(timeFormat.format(endTime)));
-            doctorSchedule.setSchStartTime(new SimpleDateFormat("HH:mm:ss").parse(timeFormat.format(startTime)));
-            */
             doctorSchedule.setSchDate(startDate);
             doctorSchedule.setSchEndTime(endTime);
             doctorSchedule.setSchStartTime(startTime);
-            String scheDate  = outputFormat.format(doctorSchedule.schDate);
-            List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(request.docId,scheDate);
+           // String scheDate  = outputFormat.format(doctorSchedule.schDate);
+            List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(HelpUtils.getUser(request.docId),doctorSchedule.schDate);
             drList.add(doctorSchedule);
             saveDoctorSchedule(drList);
-            System.out.println(drList);
-            resp.message = "Added successfully";
-            return resp;
         }catch (Exception e)
         {
             throw new CustomException(e.getLocalizedMessage());
         }
+       return new BasicResponse("Added Successfully");
     }
 
     public void saveDoctorSchedule(List<DoctorSchedule> scheduleList)
@@ -231,7 +220,6 @@ public class ProviderService {
     {
         BasicResponse resp = new BasicResponse();
         try {
-            inputFormat.setTimeZone(TimeZone.getTimeZone("GMT-0400"));
             Optional<Appointments> appointments = appointmentsRepository.findById(apptId);
 
             if (appointments.isEmpty()) {
@@ -245,8 +233,8 @@ public class ProviderService {
             User user = new User();
             user.setUserId(docId);
             doctorSchedule.setDoctorId(user);
-            String scheDate  = outputFormat.format(doctorSchedule.schDate);
-            List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(docId, scheDate);
+            //String scheDate  = outputFormat.format(doctorSchedule.schDate);
+            List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(HelpUtils.getUser(docId), doctorSchedule.schDate);
             drList.add(doctorSchedule);
             saveDoctorSchedule(drList);
             appt.status = AppointmentStatus.CANCELED;

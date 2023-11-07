@@ -3,17 +3,13 @@ package com.youro.web.controller;
 import com.youro.web.pojo.Request.SaveCarePlanRequest;
 import com.youro.web.pojo.Request.SaveCheckListRequest;
 import com.youro.web.pojo.Request.SaveNotesRequest;
-import com.youro.web.pojo.Request.UpdateResultDetailsRequest;
 import com.youro.web.pojo.Response.*;
 import com.youro.web.service.CarePlanService;
-
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -48,13 +44,11 @@ public class CarePlanController {
 
     @PostMapping("/saveNotes")
     public BasicResponse saveNotes(@RequestBody @Valid SaveNotesRequest requestBody) {
-
         return carePlanService.saveNotes(requestBody);
     }
 
     @GetMapping("/getNotes/{uId}")
     public List<GetNotesResponse> getNotes(@PathVariable("uId") int uId) {
-
         return carePlanService.getNotes(uId);
     }
 
@@ -66,6 +60,21 @@ public class CarePlanController {
     @GetMapping("/getCarePlanDetailsByPatientID/{uID}")
     public List<GetCarePlanByPatientResponse> getCarePlanDetailsById(@PathVariable("uID") Integer uId) {
         return carePlanService.getCarePlanByPatient(uId);
+    }
+
+    @GetMapping("/getCarePlanVersions/{apptID}")
+    public List<GetCarePlanVersions> getCarePlanVersions(@PathVariable("apptID") Integer apptId) {
+        return carePlanService.getCarePlanVersions(apptId);
+    }
+
+    @GetMapping("/getCarePlanDetailsById/{diagId}")
+    public GetCarePlaneDetails getCarePlanDetailsByDiagId(@PathVariable("diagId") Integer diagId) {
+        return carePlanService.getCarePlaneDetailsById(diagId);
+    }
+
+    @GetMapping("/getCarePlanDetails/{cId}")
+    public GetCarePlanResponse getCarePlanVersions(@PathVariable("cId") Integer cId, @RequestParam(required = false, name ="edit") Boolean edit) {
+        return carePlanService.getCarePlanById(cId, edit);
     }
 
     @PostMapping("/saveCarePlanDetails")
