@@ -48,8 +48,8 @@ public class PatientController {
         return patientService.saveSymptomScore(requestBody);
     }
     @GetMapping({"/getAvailableSlotsByDate"})
-    public List<GetCustomerAvailResponse> getAvailableSlotsByDate() throws ParseException {
-        return patientService.getAvailableSlotsByDate();
+    public List<GetCustomerAvailResponse> getAvailableSlotsByDate(@RequestParam(required = true, name="timeZone") String timeZone) throws ParseException {
+        return patientService.getAvailableSlotsByDate(timeZone);
     }
 
     @PostMapping({"/saveAppointment"})

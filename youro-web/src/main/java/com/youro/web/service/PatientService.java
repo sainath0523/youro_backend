@@ -88,16 +88,16 @@ public class PatientService {
         return response;
     }
 
-    public List<GetCustomerAvailResponse> getAvailableSlotsByDate() throws ParseException {
+    public List<GetCustomerAvailResponse> getAvailableSlotsByDate(String timeZone) throws ParseException {
         List<DoctorSchedule> output = doctorScheduleRepository.findDoctorAvailCustomer();
-       return getSlots(output);
+       return getSlots(output, timeZone);
     }
 
-    public List<GetCustomerAvailResponse> getSlots(List<DoctorSchedule> output) throws ParseException {
+    public List<GetCustomerAvailResponse> getSlots(List<DoctorSchedule> output, String timeZone) throws ParseException {
          Map<Date, List<DoctorSchedule>> doctorsByStartDate = output.stream()
             .collect(Collectors.groupingBy(DoctorSchedule::getSchDate));
         Map<Date, List<SlotInfo>> result = getSlotInfo(doctorsByStartDate);
-        return DoctorSchToSlotsMapper.getCustomerAvailResponse(result);
+        return DoctorSchToSlotsMapper.getCustomerAvailResponse(result, timeZone);
     }
 
     public Map<Date, List<SlotInfo>> getSlotInfo(Map<Date, List<DoctorSchedule>> doctorsByStartDate) throws ParseException {
