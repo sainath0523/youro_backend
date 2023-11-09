@@ -17,4 +17,9 @@ public class AppointmentResponse {
     public String apptEndTime;
     public String link;
     public AppointmentStatus status;
+    
+    public int diagId;
+    public String diagName;
+    public double symptomScore;
+    public String dateOfGeneratedScore;
 }

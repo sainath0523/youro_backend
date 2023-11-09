@@ -39,5 +39,9 @@ public class Appointments {
 
     public String link;
 
+    @ManyToOne
+    @JoinColumn(name = "diagId")
+    public Diagnosis diagnosis;
+
     public AppointmentStatus status;
 }

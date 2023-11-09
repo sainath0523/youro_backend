@@ -60,7 +60,7 @@ public class PatientService {
         } else {
             res.addAll(appointmentsRepository.findAppointments(uId, 1 ));
         }
-        return AppointmentMapper.getAppointments(res, user.userType, userRepository);
+        return AppointmentMapper.getAppointments(res, user.userType, userRepository, diagnosisRepository, symptomScoreRepo);
     }
 
 

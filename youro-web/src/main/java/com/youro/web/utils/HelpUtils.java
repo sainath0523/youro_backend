@@ -11,7 +11,7 @@ import java.util.*;
 @ComponentScan
 public class HelpUtils {
 
-    static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
+    static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     static SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
     public static Map<Date, SlotInfo> slotsInfo = new TreeMap<>();
@@ -24,11 +24,6 @@ public class HelpUtils {
         dateFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
         String formattedDate = "";
         try {
-        	
-        	timeFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
-            outputFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
-            dateFormat.setTimeZone(TimeZone.getTimeZone("America/New_York"));
-
             // Parse the time and date strings
             Date time_Conv = timeFormat.parse(timeFormat.format(time));
             Date date_Conv = dateFormat.parse(dateFormat.format(date));
@@ -50,10 +45,7 @@ public class HelpUtils {
             dateCal.set(Calendar.MINUTE, minutes);
             dateCal.set(Calendar.SECOND, seconds);
 
-            Date final_Date = dateCal.getTime();
-
             formattedDate = outputFormat.format(dateCal.getTime());
-
             System.out.println(formattedDate);
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,6 +93,13 @@ public class HelpUtils {
         User user = new User();
         user.setUserId(uID);
         return user;
+    }
+
+    public static CarePlan getCarePlan(int cID)
+    {
+        CarePlan carePlan = new CarePlan();
+        carePlan.setCarePlanId(cID);
+        return carePlan;
     }
 
     public static Diagnosis getDiagnosis(int dID)

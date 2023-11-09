@@ -20,18 +20,9 @@ public class CarePlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int carePlanId;
 
-    public PrescriptionType presType;
-
     @ManyToOne
     @JoinColumn(name = "diagnosisId")
     private Diagnosis diagnosis;
-
-    @ManyToOne
-    @JoinColumn(name = "presId")
-    private Prescription presId;
-
-    @Lob
-    public String dosage;
 
     @ManyToOne
     @JoinColumn(name = "apptId")
@@ -39,4 +30,16 @@ public class CarePlan {
 
     @Temporal(TemporalType.TIMESTAMP)
     public Date lastUpdated;
+
+    @ManyToOne
+    @JoinColumn(name = "createdBy")
+    public User createBy;
+
+    @ManyToOne
+    @JoinColumn(name = "lastUpdatedBy")
+    public User lastUpdatedBy;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    public String notes;
 }

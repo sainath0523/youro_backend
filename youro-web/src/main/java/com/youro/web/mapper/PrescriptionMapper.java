@@ -16,7 +16,7 @@ public class PrescriptionMapper {
         for(Prescription prescription : prescriptionList)
         {
             PrescriptionDetails res = new PrescriptionDetails();
-            res.setName(prescription.getName());
+            res.setPresName(prescription.getName());
             res.setType(prescription.getPresType());
             res.setPresId(prescription.getPresId());
             resp.add(res);

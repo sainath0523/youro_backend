@@ -2,6 +2,8 @@ package com.youro.web.mapper;
 
 import com.youro.web.entity.*;
 import com.youro.web.pojo.Request.SaveCarePlanRequest;
+import com.youro.web.pojo.Response.GetCarePlanResponse;
+import com.youro.web.pojo.Response.GetCarePlanVersions;
 import com.youro.web.pojo.Response.GetCarePlaneDetails;
 import com.youro.web.pojo.Response.PrescriptionDetails;
 import com.youro.web.utils.HelpUtils;
@@ -14,9 +16,10 @@ import java.util.stream.Collectors;
 public class CarePlanMapper {
 
 
-    public static GetCarePlaneDetails getCarePlaneDetails(GetCarePlaneDetails carePlaneDetails, GetCarePlaneDetails prescriptionDetails)
+    public static GetCarePlaneDetails getCarePlaneDetails(GetCarePlaneDetails carePlaneDetails, List<Prescription> prescriptionList)
     {
         GetCarePlaneDetails getCarePlaneDetails = new GetCarePlaneDetails();
+        GetCarePlaneDetails prescriptionDetails = getCarePlaneByPrescription(prescriptionList);
         getCarePlaneDetails.vitamins = combineLists(carePlaneDetails.vitamins, prescriptionDetails.vitamins);
         getCarePlaneDetails.imaging = combineLists(carePlaneDetails.imaging, prescriptionDetails.imaging);
         getCarePlaneDetails.labs = combineLists(carePlaneDetails.labs, prescriptionDetails.labs);
@@ -56,7 +59,7 @@ public class CarePlanMapper {
             PrescriptionDetails presDetails = new PrescriptionDetails();
             presDetails.setPresId(pres.getPresId());
             presDetails.setType(pres.getPresType());
-            presDetails.setName(pres.getName());
+            //presDetails.setName(pres.getName());
             if(pres.getPresType() == PrescriptionType.VITAMINS)
             {
                 getCarePlaneDetails.vitamins.add(presDetails);
@@ -82,80 +85,151 @@ public class CarePlanMapper {
         return getCarePlaneDetails;
     }
 
-    public static GetCarePlaneDetails mapCarePlanEntity(List<CarePlan> carePlanList)
+    public static List<CarePlanDetails> toCarePlanDetailsEntity(GetCarePlaneDetails carePlaneDetails, CarePlan carePlan)
     {
-
-        GetCarePlaneDetails getCarePlaneDetails = new GetCarePlaneDetails();
-
-        for(CarePlan pres : carePlanList)
-        {
-            PrescriptionDetails presDetails = new PrescriptionDetails();
-            presDetails.setPresId(pres.getPresId().getPresId());
-            presDetails.setType(pres.getPresId().getPresType());
-            presDetails.setName(pres.getPresId().getName());
-            presDetails.setDosage(pres.getDosage());
-            presDetails.setIndicator(true);
-            if(presDetails.getType()== PrescriptionType.VITAMINS)
-            {
-                getCarePlaneDetails.vitamins.add(presDetails);
-            }
-            else if(presDetails.getType() == PrescriptionType.MEDICINES)
-            {
-                getCarePlaneDetails.medicines.add(presDetails);
-            }
-            else if(presDetails.getType() == PrescriptionType.LAB)
-            {
-                getCarePlaneDetails.labs.add(presDetails);
-            }
-            else if(presDetails.getType() == PrescriptionType.LIFESTYLE)
-            {
-                getCarePlaneDetails.lifeStyle.add(presDetails);
-            }
-            else if(presDetails.getType() == PrescriptionType.IMAGING)
-            {
-                getCarePlaneDetails.imaging.add(presDetails);
-            }
+        List<CarePlanDetails> carePlanDetails = new ArrayList<>();
+        if(carePlaneDetails!=null) {
+            carePlanDetails.addAll(getCarePlan(carePlaneDetails.imaging,carePlan ));
+            carePlanDetails.addAll(getCarePlan(carePlaneDetails.labs,carePlan ));
+            carePlanDetails.addAll(getCarePlan(carePlaneDetails.vitamins,carePlan ));
+            carePlanDetails.addAll(getCarePlan(carePlaneDetails.medicines,carePlan ));
+            carePlanDetails.addAll(getCarePlan(carePlaneDetails.lifeStyle,carePlan ));
         }
-
-        return getCarePlaneDetails;
+        return  carePlanDetails;
     }
 
 
-    public static List<CarePlan>    toCarePlanEntity(SaveCarePlanRequest saveCarePlanRequest)
+    public static CarePlan toCarePlanEntity(SaveCarePlanRequest saveCarePlanRequest, List<CarePlan> carePlanList)
     {
-
-        List<CarePlan> carePlanList = new ArrayList<>();
+        CarePlan carePlan = new CarePlan();
         Diagnosis diag = HelpUtils.getDiagnosis(saveCarePlanRequest.diagID);
         Appointments appt = HelpUtils.getAppointments(saveCarePlanRequest.apptId);
-        GetCarePlaneDetails details = saveCarePlanRequest.carePlanDetails;
-        if(details!=null) {
-            carePlanList.addAll(getCarePlan(details.imaging,appt, diag ));
-            carePlanList.addAll(getCarePlan(details.labs,appt, diag ));
-            carePlanList.addAll(getCarePlan(details.vitamins,appt, diag ));
-            carePlanList.addAll(getCarePlan(details.medicines,appt, diag ));
-            carePlanList.addAll(getCarePlan(details.lifeStyle,appt, diag ));
+        carePlan.setNotes(saveCarePlanRequest.getNotes());
+        if(carePlanList.isEmpty()) {
+            carePlan.setCreateBy(HelpUtils.getUser(saveCarePlanRequest.getDoctorId()));
+        }
+        else
+        {
+            carePlan.setCreateBy(carePlanList.get(0).getCreateBy());
+            carePlan.setLastUpdatedBy(HelpUtils.getUser(saveCarePlanRequest.getDoctorId()));
+        }
+        carePlan.setDiagnosis(diag);
+        carePlan.setAppointments(appt);
+        carePlan.setLastUpdated(new Date());
+        return carePlan;
+    }
+
+    public static List<CarePlanDetails> getCarePlan(List<PrescriptionDetails> prescriptionDetails, CarePlan carePlan)
+    {
+        List<CarePlanDetails> carePlanList = new ArrayList<>();
+        for(PrescriptionDetails pres : prescriptionDetails)
+        {
+            CarePlanDetails carePlanDetails = new CarePlanDetails();
+            carePlanDetails.setDosage(pres.getDosage());
+            carePlanDetails.setCarePlan(carePlan);
+            carePlanDetails.setPrescription(HelpUtils.getPrescription(pres.getPresId()));
+            carePlanList.add(carePlanDetails);
         }
         return carePlanList;
     }
 
-    public static List<CarePlan> getCarePlan(List<PrescriptionDetails> prescriptionDetails, Appointments appt, Diagnosis diag)
+    public static List<GetCarePlanVersions> mapCarePlanVersions(List<CarePlan> carePlanList)
     {
-        List<CarePlan> carePlanList = new ArrayList<>();
+        int count = carePlanList.size();
+        List<GetCarePlanVersions> versions = new ArrayList<>();
 
-        for(PrescriptionDetails pres : prescriptionDetails)
+        boolean flag = true;
+        for(CarePlan carePlan : carePlanList)
         {
-            CarePlan carePlan = new CarePlan();
-            carePlan.setDosage(pres.getDosage());
-            carePlan.setPresId(HelpUtils.getPrescription(pres.getPresId()));
-            carePlan.setAppointments(appt);
-            carePlan.setPresType(pres.getType());
-            carePlan.setLastUpdated(new Date());
-            carePlan.setDiagnosis(diag);
-            carePlanList.add(carePlan);
+            GetCarePlanVersions version = new GetCarePlanVersions();
+            version.cId = carePlan.getCarePlanId();
+            version.version = "version - " + count;
+            version.edit = flag;
+            flag = false;
+            count--;
+            versions.add(version);
+        }
+        return versions;
+    }
 
+    public static GetCarePlanResponse mapCarePlanResponse(List<CarePlanDetails> carePlanDetails, CarePlan carePlan, List<Prescription> prescriptionList)
+    {
+
+        GetCarePlanResponse res = new GetCarePlanResponse();
+        GetCarePlaneDetails carePlaneDetails = new GetCarePlaneDetails();
+        res.diagName = carePlan.getDiagnosis().getName();
+        res.lastModified = carePlan.getLastUpdated();
+        res.notes = carePlan.getNotes();
+        for(CarePlanDetails detail: carePlanDetails)
+        {
+            PrescriptionDetails details = new PrescriptionDetails();
+            details.setPresId(detail.getPrescription().getPresId());
+            details.setType(detail.getPrescription().getPresType());
+            details.setDosage(detail.getDosage());
+            details.setPresName(detail.getPrescription().getName());
+            details.setIndicator(true);
+            if(details.getType()== PrescriptionType.VITAMINS)
+            {
+                carePlaneDetails.vitamins.add(details);
+            }
+            else if(details.getType() == PrescriptionType.MEDICINES)
+            {
+                carePlaneDetails.medicines.add(details);
+            }
+            else if(details.getType() == PrescriptionType.LAB)
+            {
+                carePlaneDetails.labs.add(details);
+            }
+            else if(details.getType() == PrescriptionType.LIFESTYLE)
+            {
+                carePlaneDetails.lifeStyle.add(details);
+            }
+            else if(details.getType() == PrescriptionType.IMAGING)
+            {
+                carePlaneDetails.imaging.add(details);
+            }
+        }
+        if(!prescriptionList.isEmpty())
+        {
+            carePlaneDetails = getCarePlaneDetails(carePlaneDetails,prescriptionList);
+        }
+        res.setCarePlan(carePlaneDetails);
+        return res;
+    }
+
+    public static GetCarePlaneDetails getCarePlaneByPrescription(List<Prescription> prescriptionList)
+    {
+        GetCarePlaneDetails carePlaneDetails = new GetCarePlaneDetails();
+        for(Prescription prescription : prescriptionList)
+        {
+            PrescriptionDetails details = new PrescriptionDetails();
+            details.setPresId(prescription.getPresId());
+            details.setType(prescription.getPresType());
+            details.setPresName(prescription.getName());
+            details.setIndicator(false);
+            if(details.getType()== PrescriptionType.VITAMINS)
+            {
+                carePlaneDetails.vitamins.add(details);
+            }
+            else if(details.getType() == PrescriptionType.MEDICINES)
+            {
+                carePlaneDetails.medicines.add(details);
+            }
+            else if(details.getType() == PrescriptionType.LAB)
+            {
+                carePlaneDetails.labs.add(details);
+            }
+            else if(details.getType() == PrescriptionType.LIFESTYLE)
+            {
+                carePlaneDetails.lifeStyle.add(details);
+            }
+            else if(details.getType() == PrescriptionType.IMAGING)
+            {
+                carePlaneDetails.imaging.add(details);
+            }
         }
 
-        return carePlanList;
+        return carePlaneDetails;
     }
 
 

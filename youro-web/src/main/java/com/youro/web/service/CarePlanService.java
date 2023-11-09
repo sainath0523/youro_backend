@@ -59,6 +59,8 @@ public class CarePlanService {
     @Autowired
     AppointmentsRepository appointmentsRepository;
 
+	@Autowired
+	CarePlanDetailsRepository carePlanDetailsRepository;
     
     public GetCarePlaneDetails getPrescriptionByDiagId(int diagId)
     {
@@ -78,7 +80,8 @@ public class CarePlanService {
     {
         Appointments appointments= HelpUtils.getAppointments(apptId);
         List<CarePlan> carePlanList = carePlanRepository.findByAppointments(appointments);
-        return CarePlanMapper.mapCarePlanEntity(carePlanList);
+        //return CarePlanMapper.mapCarePlanEntity(carePlanList);
+		return new GetCarePlaneDetails();
     }
 
 
@@ -95,10 +98,11 @@ public class CarePlanService {
         else if (diagID == null)
         {
             return getCarePlanByApptId(apptId);
-        }
+        }/*
         else {
             return CarePlanMapper.getCarePlaneDetails(getPrescriptionByDiagId(diagID), getCarePlanByApptId(apptId));
-        }
+        }*/
+		return  new GetCarePlaneDetails();
     }
 
     public List<GetCarePlanByPatientResponse> getCarePlanByPatient(int uId)
@@ -120,6 +124,33 @@ public class CarePlanService {
         return responses;
     }
 
+	public List<GetCarePlanVersions> getCarePlanVersions(int apptId)
+	{
+		List<CarePlan> carePlanList = carePlanRepository.findByAppointments(HelpUtils.getAppointments(apptId));
+		carePlanList.sort(Comparator.comparing(CarePlan :: getLastUpdated, Comparator.reverseOrder()));
+		return CarePlanMapper.mapCarePlanVersions(carePlanList);
+	}
+
+	public GetCarePlanResponse getCarePlanById(int cId, Boolean bool)
+	{
+
+		List<CarePlanDetails> carePlanDetails = carePlanDetailsRepository.findByCarePlan(HelpUtils.getCarePlan(cId));
+		CarePlan carePlan = carePlanRepository.findById(cId).get();
+		List<Prescription> prescriptionList = new ArrayList<>();
+		if(bool)
+		{
+			prescriptionList = prescriptionRepository.findByDiagnosis(HelpUtils.getDiagnosis(carePlan.getDiagnosis().getDiagId()));
+		}
+		return CarePlanMapper.mapCarePlanResponse(carePlanDetails, carePlan, prescriptionList);
+
+	}
+
+	public GetCarePlaneDetails getCarePlaneDetailsById(int diagId)
+	{
+		List<Prescription> prescriptionList = prescriptionRepository.findByDiagnosis(HelpUtils.getDiagnosis(diagId));
+		return CarePlanMapper.getCarePlaneByPrescription(prescriptionList);
+
+	}
 
     public List<GetNotesResponse> getNotes(int uId)
     {
@@ -127,37 +158,50 @@ public class CarePlanService {
         return NotesMapper.entityToResponseMapping(notes);
     }
 
-
     public BasicResponse saveNotes(SaveNotesRequest request)
     {
         notesRepository.save(NotesMapper.requestToEntityMapper(request));
 		Appointments appt = HelpUtils.getAppointments(request.apptId);
-		saveCheckList(appt);
+		saveCheckList(appt, "NOTES");
         return new BasicResponse("Notes Saved Successfully");
     }
 
     public BasicResponse saveCarePlan(SaveCarePlanRequest request)
     {
-        carePlanRepository.saveAll(CarePlanMapper.toCarePlanEntity(request));
-		Appointments appt = HelpUtils.getAppointments(request.apptId);
-		saveCheckList(appt);
+		List<CarePlan> carePlanList = carePlanRepository.findByAppointments(HelpUtils.getAppointments(request.getApptId()));
+		CarePlan carePlan = carePlanRepository.save(CarePlanMapper.toCarePlanEntity(request, carePlanList));
+		carePlanDetailsRepository.saveAll(CarePlanMapper.toCarePlanDetailsEntity(request.getCarePlanDetails(), carePlan));
+		if(carePlanList.isEmpty()) {
+			Appointments appt = HelpUtils.getAppointments(request.apptId);
+			saveCheckList(appt, "ORDER");
+		}
         return new BasicResponse("CarePlan Saved Successfully");
     }
 
-	public void saveCheckList(Appointments appointments)
+	public void saveCheckList(Appointments appointments, String check)
 	{
 		CheckList checkList = new CheckList();
-		Optional<CheckList> check = checkListRepository.findByAppointments(appointments);
-		if(check.isEmpty())
+		Optional<CheckList> checkRecord = checkListRepository.findByAppointments(appointments);
+		if(checkRecord.isEmpty())
 		{
 			checkList.setAppointments(appointments);
-			checkList.orders = true;
+			if(check.equals("ORDER")) {
+				checkList.orders = true;
+			}
+			else if(check.equals("NOTES")) {
+				checkList.notes = true;
+			}
 			checkList.apptDate = appointments.getApptDate();
 		}
 		else
 		{
-			checkList = check.get();
-			checkList.orders = true;
+			checkList = checkRecord.get();
+			if(check.equals("ORDER")) {
+				checkList.orders = true;
+			}
+			else if(check.equals("NOTES")) {
+				checkList.notes = true;
+			}
 		}
 		checkListRepository.save(checkList);
 	}
@@ -165,8 +209,7 @@ public class CarePlanService {
 	public BasicResponse uploadResults(MultipartFile[] files, int patientId) {
 		
 		if(files.length == 0)
-			throw new IllegalStateException("No files to upload");
-		
+			throw new CustomException("No files to upload");
 		try {
 			String bucketName = String.format("%s", BucketName.PROFILE_IMAGE.getBucketName());
 			String rootPath = String.format("%s", Integer.toString(patientId));
@@ -175,7 +218,7 @@ public class CarePlanService {
 			return new BasicResponse("Files uploaded to s3 successfully");
 		}
 		catch(IOException e) {
-			throw new IllegalStateException("Failed to store file to s3", e); 
+			throw new CustomException(e.getLocalizedMessage());
 		}
 		
 	}
