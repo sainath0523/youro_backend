@@ -280,4 +280,19 @@ public class ProviderService {
         }
         return list1;
     }
+
+    public List<User> getUsersByDoctor(int uId)
+    {
+        List<User> users = new ArrayList<>();
+        List<Integer> userId = userRepository.getUserByDoctor(uId);
+          if(userId !=null && !userId.isEmpty())
+          {
+              for(int i : userId) {
+                  users.add(userRepository.findById(i).get());
+              }
+          }
+          return users;
+
+    }
+
 }
