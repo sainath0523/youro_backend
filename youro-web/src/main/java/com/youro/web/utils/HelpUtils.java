@@ -71,11 +71,12 @@ public class HelpUtils {
         {
 
             Date tempDate = sch.getSchStartTime();
-            addDetails(tempDate, sch.getDoctorId().userId);
+            //addDetails(tempDate, sch.getDoctorId().userId);
             while(tempDate.before(sch.getSchEndTime()))
             {
-                tempDate = addTime(tempDate);
                 addDetails(tempDate, sch.getDoctorId().userId);
+                tempDate = addTime(tempDate);
+
             }
         }
 
