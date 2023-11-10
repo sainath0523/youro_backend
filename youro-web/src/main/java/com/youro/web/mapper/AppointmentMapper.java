@@ -49,7 +49,7 @@ public class AppointmentMapper {
             res.diagId = app.getDiagnosis().getDiagId();           
             Diagnosis diag = diagnosisRepository.findById(res.diagId).get();
             res.diagName = diag.getName();
-            Map.Entry<Double, Date> symptomScoreEntry = getSymptomScore(res.diagId, app.apptStartTime, symptomScoreRepository);
+            Map.Entry<Double, Date> symptomScoreEntry = getSymptomScore(res.patientId, res.diagId, app.apptStartTime, symptomScoreRepository);
             if(symptomScoreEntry.getKey() !=-1) {
             	res.symptomScore = symptomScoreEntry.getKey();
             	res.dateOfGeneratedScore = outputFormat.format(symptomScoreEntry.getValue());    
@@ -77,8 +77,8 @@ public class AppointmentMapper {
         return resp;
     }
 
-    private static Map.Entry<Double, Date> getSymptomScore(int diagId, Date apptStartTime, SymptomScoreRepository symptomScoreRepository) {
-        List<SymptomScore> symptomScores = symptomScoreRepository.findByDiagId(diagId);
+    private static Map.Entry<Double, Date> getSymptomScore(int patientId, int diagId, Date apptStartTime, SymptomScoreRepository symptomScoreRepository) {
+        List<SymptomScore> symptomScores = symptomScoreRepository.findByPatientIdAndDiagId(patientId,diagId);
         Optional<SymptomScore> result = symptomScores.stream()
                 .filter(symptomScore -> symptomScore.getDateTime().before(apptStartTime))
                 .max(Comparator.comparing(SymptomScore::getDateTime));
