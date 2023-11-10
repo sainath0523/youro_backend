@@ -108,7 +108,7 @@ public class CarePlanService {
     public List<GetCarePlanByPatientResponse> getCarePlanByPatient(int uId)
     {
         List<GetCarePlanByPatientResponse> responses = new ArrayList<>();
-        List<Integer[]> carePlanIDs = carePlanRepository.findByUserId(uId);
+        List<Integer[]> carePlanIDs = carePlanRepository.findByUserIdVersions(uId);
         for(Integer[] res : carePlanIDs)
         {
             GetCarePlanByPatientResponse patientResponse = new GetCarePlanByPatientResponse();
@@ -133,7 +133,6 @@ public class CarePlanService {
 
 	public GetCarePlanResponse getCarePlanById(int cId, Boolean bool)
 	{
-
 		List<CarePlanDetails> carePlanDetails = carePlanDetailsRepository.findByCarePlan(HelpUtils.getCarePlan(cId));
 		CarePlan carePlan = carePlanRepository.findById(cId).get();
 		List<Prescription> prescriptionList = new ArrayList<>();
@@ -142,7 +141,26 @@ public class CarePlanService {
 			prescriptionList = prescriptionRepository.findByDiagnosis(HelpUtils.getDiagnosis(carePlan.getDiagnosis().getDiagId()));
 		}
 		return CarePlanMapper.mapCarePlanResponse(carePlanDetails, carePlan, prescriptionList);
+	}
 
+	public GetCarePlanResponse getCarePlanByPatient(Integer uId, Integer apptId)
+	{
+
+		if ((uId != null && apptId == null) || (apptId != null && uId == null)) {
+			List<CarePlan> carePlanList = new ArrayList<>();
+			if (apptId != null) {
+				carePlanList = carePlanRepository.findByAppointments(HelpUtils.getAppointments(apptId));
+				carePlanList.sort(Comparator.comparing(CarePlan::getLastUpdated, Comparator.reverseOrder()));
+				return getCarePlanById(carePlanList.get(0).getCarePlanId(), false);
+			} else {
+				int careplanID = carePlanRepository.findByUserId(uId);
+				return getCarePlanById(careplanID, false);
+			}
+		}
+		else
+		{
+			throw new CustomException("Only one Request Param is allowed");
+		}
 	}
 
 	public GetCarePlaneDetails getCarePlaneDetailsById(int diagId)

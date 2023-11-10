@@ -16,22 +16,16 @@ import com.youro.web.utils.HelpUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class AppointmentMapper {
 	
-	static SimpleDateFormat  timeFormat = new SimpleDateFormat("HH:mm:ss");
+	//static SimpleDateFormat  timeFormat = new SimpleDateFormat("HH:mm:ss");
     static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     static SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
     
-    public static GetAppointmentsResponse getAppointments(List<Appointments> response, UserType userType, UserRepository userRepository, DiagnosisRepository diagnosisRepository, SymptomScoreRepository symptomScoreRepository)
-    {
+    public static GetAppointmentsResponse getAppointments(List<Appointments> response, UserType userType, UserRepository userRepository, DiagnosisRepository diagnosisRepository, SymptomScoreRepository symptomScoreRepository, String timeZone) throws ParseException {
+        outputFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
         GetAppointmentsResponse resp = new GetAppointmentsResponse();
         List<AppointmentResponse> previous = new ArrayList<>();
         List<AppointmentResponse> upComing = new ArrayList<>();
@@ -42,9 +36,9 @@ public class AppointmentMapper {
             String patPrefix = app.getPatientId().getGender() == null ? "" : (app.getPatientId().getGender().toString().equals("MALE") )  ? "Mr. " : "Ms. ";
             String docPrefix = app.getDoctorId().getGender() == null ? "" : (app.getDoctorId().getGender().toString().equals("MALE") )  ? "Mr. " : "Ms. ";
             res.apptId = app.apptId;
-            res.apptDate =dateFormat.format(app.apptDate);
-            res.apptStartTime= timeFormat.format(app.apptStartTime) ;
-            res.apptEndTime = timeFormat.format(app.apptEndTime);
+            res.apptStartTime= outputFormat.format(app.apptStartTime) ;
+            res.apptDate =dateFormat.format(outputFormat.parse(res.apptStartTime));
+            res.apptEndTime = outputFormat.format(app.apptEndTime);
             res.link = app.link;
             res.doctorId = app.getDoctorId().userId;
             res.patientId = app.getPatientId().userId;

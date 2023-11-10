@@ -48,20 +48,19 @@ public class PatientService {
         return SymptomScoreMapper.convertEntityToResPojo(res);
     }
 
-    public GetAppointmentsResponse getAppointments(int uId, AppointmentStatus apptStatus) {
+    public GetAppointmentsResponse getAppointments(int uId, AppointmentStatus apptStatus, String timeZone) throws ParseException {
         List<Appointments> res = new ArrayList<>();
 
         User user = userRepository.findById(uId).get();
-
-
 
         if (apptStatus == null) {
             res.addAll(appointmentsRepository.findByUId(uId));
         } else {
             res.addAll(appointmentsRepository.findAppointments(uId, 1 ));
         }
-        return AppointmentMapper.getAppointments(res, user.userType, userRepository, diagnosisRepository, symptomScoreRepo);
+        return AppointmentMapper.getAppointments(res, user.userType, userRepository, diagnosisRepository, symptomScoreRepo, timeZone);
     }
+
 
 
     public List<DiagnosisResponse> getAllDiagnoses(){
