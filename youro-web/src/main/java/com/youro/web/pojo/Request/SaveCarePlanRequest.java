@@ -9,6 +9,8 @@ public class SaveCarePlanRequest {
     public int apptId;
     public int diagID;
 
+    public String followUp;
+
     public String notes;
 
     public int doctorId;

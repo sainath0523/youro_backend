@@ -150,11 +150,21 @@ public class CarePlanService {
 			List<CarePlan> carePlanList = new ArrayList<>();
 			if (apptId != null) {
 				carePlanList = carePlanRepository.findByAppointments(HelpUtils.getAppointments(apptId));
+				if(carePlanList.isEmpty())
+				{
+					throw new CustomException("No Care Plan Exist");
+				}
 				carePlanList.sort(Comparator.comparing(CarePlan::getLastUpdated, Comparator.reverseOrder()));
 				return getCarePlanById(carePlanList.get(0).getCarePlanId(), false);
 			} else {
-				int careplanID = carePlanRepository.findByUserId(uId);
-				return getCarePlanById(careplanID, false);
+				Integer careplanID = carePlanRepository.findByUserId(uId);
+				if(careplanID !=null) {
+					return getCarePlanById(careplanID, false);
+				}
+				else
+				{
+					throw new CustomException("Care Plan ID does not Exits");
+				}
 			}
 		}
 		else

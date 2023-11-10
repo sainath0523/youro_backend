@@ -13,6 +13,7 @@ public class GetCarePlanResponse {
     public String diagName;
 
     public String notes;
+    public String followUp;
 
     public Date lastModified;
     public GetCarePlaneDetails carePlan;
