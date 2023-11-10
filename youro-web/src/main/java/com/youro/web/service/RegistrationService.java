@@ -66,4 +66,12 @@ public class RegistrationService {
         }
     }
 
+
+	public BasicResponse verifyUser(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        user.get().setVerified(true);
+        userRepository.save(user.get());
+        return new BasicResponse("User verified: " + email);
+	}
+
 }

@@ -40,7 +40,12 @@ public class ProfilePictureController {
     public ResponseEntity<?> getImage(@PathVariable("id") int id){
 
     	byte[] image = ppService.getImage(id);
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(image);
+    	if(image !=null) {
+    		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(image);
+    	}
+    	else {
+    		return null;
+    	}
 
     }
     
