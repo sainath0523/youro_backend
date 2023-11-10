@@ -113,6 +113,10 @@ public class CarePlanMapper {
             carePlan.setCreateBy(carePlanList.get(0).getCreateBy());
             carePlan.setLastUpdatedBy(HelpUtils.getUser(saveCarePlanRequest.getDoctorId()));
         }
+        if(saveCarePlanRequest.followUp !=null)
+        {
+            carePlan.setFollowUp(saveCarePlanRequest.followUp);
+        }
         carePlan.setDiagnosis(diag);
         carePlan.setAppointments(appt);
         carePlan.setLastUpdated(new Date());
@@ -160,6 +164,10 @@ public class CarePlanMapper {
         res.diagName = carePlan.getDiagnosis().getName();
         res.lastModified = carePlan.getLastUpdated();
         res.notes = carePlan.getNotes();
+        if(carePlan.getFollowUp() != null)
+        {
+            res.followUp = carePlan.getFollowUp();
+        }
         for(CarePlanDetails detail: carePlanDetails)
         {
             PrescriptionDetails details = new PrescriptionDetails();

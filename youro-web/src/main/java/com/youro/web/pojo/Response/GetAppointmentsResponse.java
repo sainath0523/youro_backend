@@ -1,14 +1,13 @@
 package com.youro.web.pojo.Response;
 
-import com.youro.web.entity.AppointmentStatus;
-
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class GetAppointmentsResponse {
 
-    public List<AppointmentResponse> previousAppointments;
-    public List<AppointmentResponse> upComingAppointments;
+    public List<AppointmentResponse> previousAppointments = new ArrayList<>();
+    public List<AppointmentResponse> upComingAppointments = new ArrayList<>();
 
 
 }

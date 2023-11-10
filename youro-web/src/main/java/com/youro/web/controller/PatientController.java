@@ -28,8 +28,8 @@ public class PatientController {
 
     //@PreAuthorize("hasRole('PATIENT')")
     @GetMapping({"/appointments/{uId}"})
-    public GetAppointmentsResponse getUserAppointments(@PathVariable("uId") int uId, @RequestParam(name = "apptStatus", required = false) AppointmentStatus apptStatus) {
-        return patientService.getAppointments(uId, apptStatus);
+    public GetAppointmentsResponse getUserAppointments(@PathVariable("uId") int uId, @RequestParam(name = "apptStatus", required = false) AppointmentStatus apptStatus, @RequestParam(required = true, name ="timeZone") String timeZone) throws ParseException {
+        return patientService.getAppointments(uId, apptStatus, timeZone);
     }
 
     @GetMapping({"/getAllDiagnoses"})
@@ -48,8 +48,8 @@ public class PatientController {
         return patientService.saveSymptomScore(requestBody);
     }
     @GetMapping({"/getAvailableSlotsByDate"})
-    public List<GetCustomerAvailResponse> getAvailableSlotsByDate() throws ParseException {
-        return patientService.getAvailableSlotsByDate();
+    public List<GetCustomerAvailResponse> getAvailableSlotsByDate(@RequestParam(required = true, name="timeZone") String timeZone) throws ParseException {
+        return patientService.getAvailableSlotsByDate(timeZone);
     }
 
     @PostMapping({"/saveAppointment"})

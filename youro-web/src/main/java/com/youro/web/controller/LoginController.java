@@ -30,9 +30,8 @@ public class LoginController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginRequest loginRequest) {
         
 		User authenticatedUser = loginService.authenticate(loginRequest);
-		System.out.println(authenticatedUser.getEmail() + " : " + authenticatedUser.getUserType());
         String jwtToken = jwtService.generateToken(authenticatedUser);
-        LoginResponse loginResponse = new LoginResponse(jwtToken, authenticatedUser.getUserId(), authenticatedUser.getUserType().toString(), authenticatedUser.firstName + " " + authenticatedUser.lastName);
+        LoginResponse loginResponse = new LoginResponse(jwtToken, authenticatedUser.getUserId(), authenticatedUser.getUserType().toString(), authenticatedUser.firstName + " " + authenticatedUser.lastName, loginRequest.getUsername(), authenticatedUser.verified);
         
         return ResponseEntity.ok(loginResponse);
     }

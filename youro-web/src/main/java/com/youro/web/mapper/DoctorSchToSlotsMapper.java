@@ -7,10 +7,14 @@ import com.youro.web.utils.HelpUtils;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
 public class DoctorSchToSlotsMapper {
+
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    static SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
 
     public static List<AvailableSlotsByDateResponse> convertDoctorSchToSlots(List<DoctorSchedule> inp){
         List<AvailableSlotsByDateResponse> res = new ArrayList<>();
@@ -32,8 +36,8 @@ public class DoctorSchToSlotsMapper {
         {
             DoctorAvailabilityResponse.DoctorAvailability avail = new DoctorAvailabilityResponse.DoctorAvailability();
             avail.doctorId = sch.getDoctorId().getUserId();
-            avail.startTime = HelpUtils.convertDateTime(sch.schDate, sch.schStartTime);
-            avail.endTime = HelpUtils.convertDateTime(sch.schDate, sch.schEndTime);
+            avail.startTime = HelpUtils.convertDateTime(sch.schDate, sch.schStartTime, "");
+            avail.endTime = HelpUtils.convertDateTime(sch.schDate, sch.schEndTime, "");
             avail.status = "Available";
             resp.add(avail);
         }
@@ -49,8 +53,8 @@ public class DoctorSchToSlotsMapper {
             String patPrefix = app.getPatientId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
             String docPrefix = app.getDoctorId().getGender().toString().equals("MALE") ? "Mr. " : "Ms. ";
             res.apptId = app.apptId;
-            res.apptStartTime= HelpUtils.convertDateTime(app.apptDate, app.apptStartTime);
-            res.apptEndTime = HelpUtils.convertDateTime(app.apptDate, app.apptEndTime);
+            res.apptStartTime= HelpUtils.convertDateTime(app.apptDate, app.apptStartTime, "");
+            res.apptEndTime = HelpUtils.convertDateTime(app.apptDate, app.apptEndTime, "");
             res.link = app.link;
             res.doctorId = app.getDoctorId().userId;
             res.patientId = app.getPatientId().userId;
@@ -61,26 +65,42 @@ public class DoctorSchToSlotsMapper {
         return responses;
     }
 
+    public  static List<GetCustomerAvailResponse> getCustomerAvailResponse(Map<Date, List<SlotInfo>> response, String timeZone) throws ParseException {
 
-    public  static List<GetCustomerAvailResponse> getCustomerAvailResponse(Map<Date, List<SlotInfo>> response) throws ParseException {
+        inputFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
         List<GetCustomerAvailResponse> resp = new ArrayList<>();
-        for(Date date : response.keySet())
-        {
-            List<SlotRequest> slotInfo = new ArrayList<>();
-            GetCustomerAvailResponse res = new GetCustomerAvailResponse();
-            res.date = date;
-            res.noOfSlots = response.get(date).size();
+        Map<String, List<SlotRequest>> repo = new HashMap<>();
+        for (Date date : response.keySet()) {
             List<SlotInfo> list = new ArrayList<>(response.get(date));
-            list.sort(Comparator.comparing(SlotInfo :: getStartTime));
-            for(SlotInfo info : list)
-            {
+            list.sort(Comparator.comparing(SlotInfo::getStartTime));
+            for (SlotInfo info : list) {
                 SlotRequest slot_req = new SlotRequest();
-                slot_req.startTime = HelpUtils.convertDateTime(date, info.startTime);
+                slot_req.startTime = inputFormat.format(info.startTime);
+
+                String date1 = dateFormat.format(inputFormat.parse(slot_req.startTime));
+
                 slot_req.noOfDoctors = info.noOfDoctors;
                 slot_req.doctorIds = info.doctorIds;
-                slotInfo.add(slot_req);
+                List<SlotRequest> list1;
+                if(repo.containsKey(date1))
+                {
+                    list1 = repo.get(date1);
+                }else {
+                    list1 = new ArrayList<>();
+                }
+                list1.add(slot_req);
+                repo.put(date1, list1);
             }
-            res.slotInfo = slotInfo;
+        }
+        for(String date : repo.keySet())
+        {
+            GetCustomerAvailResponse res = new GetCustomerAvailResponse();
+            res.date = date;
+            res.setNoOfSlots(repo.get(date).size());
+            List<SlotRequest> list = new ArrayList<>(repo.get(date));
+            list.sort(Comparator.comparing(SlotRequest::getStartTime));
+            res.setSlotInfo(list);
             resp.add(res);
         }
         return resp;

@@ -35,6 +35,8 @@ public class CarePlan {
     @JoinColumn(name = "createdBy")
     public User createBy;
 
+    public String followUp;
+
     @ManyToOne
     @JoinColumn(name = "lastUpdatedBy")
     public User lastUpdatedBy;

@@ -52,15 +52,15 @@ public class CarePlanController {
         return carePlanService.getNotes(uId);
     }
 
-    @GetMapping("/getCarePlanDetails")
+ /*   @GetMapping("/getCarePlanDetails")
     public GetCarePlaneDetails getCarePlanDetails(@RequestParam(required = false, name = "apptId") Integer apptId, @RequestParam(required = false, name = "diagId") Integer diagId) {
         return carePlanService.getCarePlaneDetails(apptId, diagId);
-    }
+    }*/
 
-    @GetMapping("/getCarePlanDetailsByPatientID/{uID}")
+    /*@GetMapping("/getCarePlanDetailsByPatientID/{uID}")
     public List<GetCarePlanByPatientResponse> getCarePlanDetailsById(@PathVariable("uID") Integer uId) {
         return carePlanService.getCarePlanByPatient(uId);
-    }
+    }*/
 
     @GetMapping("/getCarePlanVersions/{apptID}")
     public List<GetCarePlanVersions> getCarePlanVersions(@PathVariable("apptID") Integer apptId) {
@@ -81,4 +81,11 @@ public class CarePlanController {
     public BasicResponse saveCarePlanDetails(@RequestBody @Valid SaveCarePlanRequest requestBody) {
         return carePlanService.saveCarePlan(requestBody);
     }
+
+    @GetMapping("/getLatestCarePlanByPatient")
+    public GetCarePlanResponse getLatestCarePlanByPatient(@RequestParam(required = false, name = "patientId") Integer uId, @RequestParam(required = false, name ="apptId") Integer apptId) {
+        return carePlanService.getCarePlanByPatient(uId, apptId);
+    }
+
+
 }

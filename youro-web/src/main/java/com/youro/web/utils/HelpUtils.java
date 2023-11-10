@@ -17,11 +17,19 @@ public class HelpUtils {
     public static Map<Date, SlotInfo> slotsInfo = new TreeMap<>();
 
 
-    public static String convertDateTime(Date date, Date time)
+    public static String convertDateTime(Date date, Date time, String timeZone)
     {
-        timeFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
-        outputFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
-        dateFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
+        if(timeZone.isEmpty()) {
+            timeFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
+            outputFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
+            dateFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().toZoneId()));
+        }
+        else
+        {
+            timeFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
+            outputFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
+            dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
+        }
         String formattedDate = "";
         try {
             // Parse the time and date strings
@@ -53,6 +61,7 @@ public class HelpUtils {
         return formattedDate;
     }
 
+
     public  static List<SlotInfo> getSlots(List<DoctorSchedule> doctorsSch) throws ParseException {
         //List<GetCustomerAvailResponse.SlotInfo> slots = new ArrayList<>();
 
@@ -62,11 +71,12 @@ public class HelpUtils {
         {
 
             Date tempDate = sch.getSchStartTime();
-            addDetails(tempDate, sch.getDoctorId().userId);
+            //addDetails(tempDate, sch.getDoctorId().userId);
             while(tempDate.before(sch.getSchEndTime()))
             {
-                tempDate = addTime(tempDate);
                 addDetails(tempDate, sch.getDoctorId().userId);
+                tempDate = addTime(tempDate);
+
             }
         }
 

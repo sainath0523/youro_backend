@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.TimeZone;
 
 @RestController
@@ -65,6 +66,11 @@ public class ProviderController {
     {
         System.out.println("Default TimeZone :" + TimeZone.getDefault());
         return providerService.getAvailability(docId);
+    }
+
+    @GetMapping("/getPatientsByDoctor/{docId}")
+    public List<User> getUsersByType(@PathVariable("docId") int uId) {
+        return providerService.getUsersByDoctor(uId);
     }
 
 }
