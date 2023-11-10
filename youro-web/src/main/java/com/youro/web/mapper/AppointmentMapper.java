@@ -45,13 +45,16 @@ public class AppointmentMapper {
             res.doctorName = docPrefix + app.getDoctorId().firstName + " " + app.getDoctorId().lastName;
             res.patientName = patPrefix + app.getPatientId().firstName + " " + app.getPatientId().lastName;
             res.status = app.getStatus();
+            
             res.diagId = app.getDiagnosis().getDiagId();           
             Diagnosis diag = diagnosisRepository.findById(res.diagId).get();
             res.diagName = diag.getName();
             Map.Entry<Double, Date> symptomScoreEntry = getSymptomScore(res.diagId, app.apptStartTime, symptomScoreRepository);
-            res.symptomScore = symptomScoreEntry.getKey();
-            res.dateOfGeneratedScore = dateFormat.format(symptomScoreEntry.getValue());       
-            
+            if(symptomScoreEntry.getKey() !=-1) {
+            	res.symptomScore = symptomScoreEntry.getKey();
+            	res.dateOfGeneratedScore = outputFormat.format(symptomScoreEntry.getValue());    
+            }
+
             User user = null;
             if(userType ==  UserType.PATIENT)
             {
@@ -81,10 +84,12 @@ public class AppointmentMapper {
                 .max(Comparator.comparing(SymptomScore::getDateTime));
 
         if (result.isPresent()) {
+        	System.out.println("result entry score: " + result.get().getSymptomScore());
+        	System.out.println("result entry date: " + result.get().getDateTime());
             return new AbstractMap.SimpleEntry<>(result.get().getSymptomScore(), result.get().getDateTime());
         } 
         else {
-            return new AbstractMap.SimpleEntry<>(null, null);
+            return new AbstractMap.SimpleEntry<>(-1.0, null);
         }
 
 	}
