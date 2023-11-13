@@ -1,78 +1,45 @@
 package com.youro.web.controller;
 
-import com.youro.web.pojo.Request.*;
-import com.youro.web.pojo.Response.*;
+import com.youro.web.entity.User;
+import com.youro.web.pojo.Request.AddAvailabilityRequest;
+import com.youro.web.pojo.Request.UpdateUserRequest;
+import com.youro.web.pojo.Response.BasicResponse;
+import com.youro.web.pojo.Response.DoctorAvailabilityResponse;
 import com.youro.web.service.ProviderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @RestController
-@RequestMapping("/youro/api/v1")
+@CrossOrigin(origins ="*")
+@RequestMapping("/youro/api/v1/")
 public class ProviderController {
 
     @Autowired
     ProviderService providerService;
 
-    @PostMapping("/saveCheckList")
-    public BasicResponse saveCheckList(@RequestBody @Valid SaveCheckListRequest requestBody) {
-        return new BasicResponse();
+    @GetMapping("/getUser/{userId}")
+    public User getProfile(@PathVariable("userId") int userId) {
+        return providerService.getProfile(userId);
     }
 
-    @GetMapping("/getCheckList/{uId}")
-    public List<GetCheckListResponse> getCheckList(@PathVariable("uId") int uId) {
-        return new ArrayList<GetCheckListResponse>();
-    }
-
-    @PostMapping("/uploadResults")
-    public List<UploadResultsResponse> uploadResults(@RequestParam("files") MultipartFile[] files) {
-        return new ArrayList<>();
-    }
-
-    @PostMapping("/updateResultsDetails")
-    public BasicResponse updateResultsDetails(@RequestBody @Valid UpdateResultDetailsRequest requestBody) {
-        return new BasicResponse();
-    }
-
-    @GetMapping("/getResults/{apptId}")
-    public List<byte[]> getResults(@PathVariable("apptId") int apptId) {
-        return new ArrayList<>();
-    }
-
-
-    @PostMapping("/saveNotes")
-    public BasicResponse saveNotes(@RequestBody @Valid SaveNotesRequest requestBody) {
-        return new BasicResponse();
-    }
-
-    @GetMapping("/getNotes/{uId}")
-    public List<GetNotesResponse> getNotes(@PathVariable("uId") int uId) {
-        return new ArrayList<>();
-    }
-
-    @GetMapping("/getCarePlanDetails/{apptId}")
-    public List<GetCarePlaneDetails> getCarePlanDetailsById(@PathVariable("apptId") int apptId) {
-        return new ArrayList<>();
-    }
-
-    @PostMapping("/saveCarePlanDetails")
-    public BasicResponse saveCarePlanDetails2311(@RequestBody @Valid SaveCarePlanRequest requestBody) {
-        return new BasicResponse();
+    @PutMapping("/provider/updateProfile")
+    public ResponseEntity<User> updateProfile(@RequestBody @Valid UpdateUserRequest registrationRequest)
+    {
+        System.out.println("In prov control update()");
+        User registeredUser =  providerService.updateProfile(registrationRequest);
+        return ResponseEntity.ok(registeredUser);
     }
 
     @PutMapping("/removeDoctorAvailability")
     public BasicResponse removeDoctorAvailability(@RequestBody AddAvailabilityRequest requestBody) throws ParseException {
-        providerService.removeAvailability(requestBody);
-        return new BasicResponse();
+       return providerService.removeAvailability(requestBody);
+
     }
 
     @PutMapping("/addDoctorAvailability")
@@ -81,8 +48,29 @@ public class ProviderController {
     }
 
     @PutMapping("/cancelAppointment/{apptId}/{docId}")
-    public BasicResponse cancelAppointment(@PathVariable("apptId") int id, @PathVariable("docId") int docId)
+        public BasicResponse cancelAppointment(@PathVariable("apptId") int id, @PathVariable("docId") int docId)
     {
+        System.out.println(id + " :: " + docId);
         return providerService.cancelAppointment(id, docId);
     }
+
+    @PutMapping("/updateAppointment/{apptId}")
+    public BasicResponse updateAppointments(@PathVariable("apptId") int id, @RequestParam(required = true, name = "link") String link)
+    {
+        //System.out.println(id + " :: " + docId);
+        return providerService.updateAppointment(id, link);
+    }
+
+    @GetMapping("/getAvailability/{docId}")
+    public DoctorAvailabilityResponse getAvailability(@PathVariable("docId") int docId)
+    {
+        System.out.println("Default TimeZone :" + TimeZone.getDefault());
+        return providerService.getAvailability(docId);
+    }
+
+    @GetMapping("/getPatientsByDoctor/{docId}")
+    public List<User> getUsersByType(@PathVariable("docId") int uId) {
+        return providerService.getUsersByDoctor(uId);
+    }
+
 }

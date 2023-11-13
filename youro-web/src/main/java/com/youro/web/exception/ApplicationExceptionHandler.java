@@ -34,5 +34,5 @@ public class ApplicationExceptionHandler {
         response.setErrorMessage(ex.getMessage());
 
         return new ResponseEntity<ExceptionResponse>(response, HttpStatus.BAD_REQUEST);
-    }
+    }   
 }

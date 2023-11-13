@@ -2,10 +2,7 @@ package com.youro.web.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -14,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CarePlan {
@@ -22,18 +20,9 @@ public class CarePlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int carePlanId;
 
-
-    public PrescriptionType presType;
     @ManyToOne
     @JoinColumn(name = "diagnosisId")
     private Diagnosis diagnosis;
-
-    @ManyToOne
-    @JoinColumn(name = "presId")
-    private Prescription presId;
-
-    @Column(length = 100)
-    public String dosage;
 
     @ManyToOne
     @JoinColumn(name = "apptId")
@@ -41,4 +30,18 @@ public class CarePlan {
 
     @Temporal(TemporalType.TIMESTAMP)
     public Date lastUpdated;
+
+    @ManyToOne
+    @JoinColumn(name = "createdBy")
+    public User createBy;
+
+    public String followUp;
+
+    @ManyToOne
+    @JoinColumn(name = "lastUpdatedBy")
+    public User lastUpdatedBy;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    public String notes;
 }

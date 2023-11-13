@@ -20,10 +20,7 @@ public class Questionnaires {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int qId;
 
-    public String ans;
     public String question;
-
-    public QuestionType qType;
 
     public int weight;
 

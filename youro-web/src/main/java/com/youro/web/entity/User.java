@@ -30,7 +30,7 @@ public class User implements UserDetails {
     @Column(unique = true, length = 30)
     public String email;
 
-    @Column(name="password", length = 100)
+    @Column(name="password", length = 60)
     public String password;
 
     public UserType userType;
@@ -93,14 +93,23 @@ public class User implements UserDetails {
 
     @Column(name="soft_delete")
     public Boolean softDelete;
+    
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userType.toString());
+//        return List.of(authority);
+//    }
+    
 
     @Lob
+    @Column(columnDefinition="LONGBLOB")
     @Basic(fetch = FetchType.LAZY)
     public byte[] profilePicture;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userType.toString());
+        String temp = userType==null ? "PATIENT" : userType.toString();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + temp);
         return List.of(authority);
     }
 

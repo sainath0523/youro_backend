@@ -1,8 +1,16 @@
 package com.youro.web.service;
 
-import com.youro.web.entity.User;
-import com.youro.web.entity.UserType;
+import com.youro.web.entity.*;
+import com.youro.web.exception.CustomException;
+import com.youro.web.mapper.PrescriptionMapper;
+import com.youro.web.pojo.Request.AddDiagnosisRequest;
+import com.youro.web.pojo.Request.AddPrescriptionRequest;
+import com.youro.web.pojo.Response.BasicResponse;
+import com.youro.web.pojo.Response.PrescriptionDetails;
+import com.youro.web.repository.DiagnosisRepository;
+import com.youro.web.repository.PrescriptionRepository;
 import com.youro.web.repository.UserRepository;
+import com.youro.web.utils.HelpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +22,65 @@ public class AdminService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    DiagnosisRepository diagnosisRepository;
+
+    @Autowired
+    PrescriptionRepository prescriptionRepository;
+
     public List<User> getUsersByType(UserType uType) {
         return userRepository.findByUserType(uType);
+    }
+
+    public BasicResponse addDiagnosis(AddDiagnosisRequest request)
+    {
+
+        BasicResponse response = new BasicResponse();
+        Diagnosis diagnosis = new Diagnosis();
+        diagnosis.name = request.name;
+        diagnosis.info = request.info;
+        diagnosisRepository.save(diagnosis);
+
+        response.message = "Added Successfully";
+
+        return response;
+    }
+
+    public BasicResponse addPrescription(AddPrescriptionRequest request)
+    {
+        for(int diagId : request.diagnosisId) {
+            Diagnosis diag = HelpUtils.getDiagnosis(diagId);
+            List<Prescription> list = prescriptionRepository.findByPresTypeAndDiagnosis(request.type, diag);
+            List<String> names = list.stream().map(Prescription::getName).toList();
+            if (names.contains(request.name)) {
+                throw new CustomException("Already exits in the records");
+            }
+            Prescription newPres = new Prescription();
+            newPres.setName(request.name);
+            newPres.setPresType(request.type);
+            newPres.setDiagnosis(diag);
+            prescriptionRepository.save(newPres);
+        }
+
+        return new BasicResponse("Added Successfully");
+    }
+
+    public List<Prescription> getAllPrescriptions(){
+        return prescriptionRepository.findAll();
+    }
+
+    public List<PrescriptionDetails> getPrescriptionDetailsByType(PrescriptionType type)
+    {
+        List<Prescription> list = prescriptionRepository.findByPresType(type);
+        return PrescriptionMapper.convertPrescription(list);
+    }
+
+    public BasicResponse deletePrescription(int id)
+    {
+        prescriptionRepository.deleteById(id);
+        BasicResponse resp = new BasicResponse();
+        resp.message = "Deleted Successfully";
+        return resp;
     }
 
 

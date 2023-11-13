@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 public class AddAvailabilityRequest {
 
-    public int dotId;
-    public String stateTime;
+    public int docId;
+    public String startTime;
     public String endTime;
 
 }

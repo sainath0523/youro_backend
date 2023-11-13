@@ -16,7 +16,7 @@ import com.youro.web.service.LoginService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/youro/api/v1/auth")
+@RequestMapping("/youro/api/v1/")
 public class LoginController {
 
     @Autowired
@@ -25,16 +25,14 @@ public class LoginController {
     @Autowired
     JwtService jwtService;
 
-    @PostMapping("/login")
+	
+	@PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginRequest loginRequest) {
-
-        System.out.println("In LoginController's authenticate()");
-        User authenticatedUser = loginService.authenticate(loginRequest);
-
+        
+		User authenticatedUser = loginService.authenticate(loginRequest);
         String jwtToken = jwtService.generateToken(authenticatedUser);
-
-        LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
-
+        LoginResponse loginResponse = new LoginResponse(jwtToken, authenticatedUser.getUserId(), authenticatedUser.getUserType().toString(), authenticatedUser.firstName + " " + authenticatedUser.lastName, loginRequest.getUsername(), authenticatedUser.verified);
+        
         return ResponseEntity.ok(loginResponse);
     }
 

@@ -12,13 +12,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+	
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -29,13 +32,22 @@ public class SecurityConfig {
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
+    
+    private static final String[] WHITE_LIST_URLS = {
+    		"/youro/api/v1/login",
+    		"/youro/api/v1/register",
+    		"/swagger-ui/**",
+    		"/api-docs/swagger-config",
+    		"/api-docs",
+            "/youro/api/v1/**"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf
                 .disable())
                 .authorizeHttpRequests()
-                .requestMatchers("/youro/api/v1/**")
+                .requestMatchers(WHITE_LIST_URLS)
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -49,17 +61,30 @@ public class SecurityConfig {
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    CorsFilter corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.setExposedHeaders(Collections.singletonList("*"));
+//        configuration.setAllowCredentials(true);
 
-        configuration.setAllowedOrigins(List.of("http://localhost:9092"));
-        configuration.setAllowedMethods(List.of("GET","POST"));
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+//        configuration.addAllowedMethod("POST");
+//        configuration.addAllowedMethod("PUT");
+//        configuration.addAllowedMethod("DELETE");
+//        configuration.setAllowCredentials(true);
+
+
+//        configuration.setAllowedOrigins(List.of("http://localhost:9092"));
+//        configuration.setAllowedMethods(List.of("GET","POST", "PUT"));
+//        configuration.setAllowedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**",configuration);
 
-        return source;
+//        return source;
+        return new CorsFilter(source);
+
     }
 }

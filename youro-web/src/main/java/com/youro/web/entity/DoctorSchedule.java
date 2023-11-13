@@ -19,23 +19,19 @@ public class DoctorSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int schId;
 
-
     @ManyToOne
     @JoinColumn(name = "doctorId")
     private User doctorId;
-
-    public DrSchdStatus status;
 
     @Column(name="date")
     @Temporal(TemporalType.DATE)
     public Date schDate;
 
     @Column(name="startTime")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date schStartTime;
 
     @Column(name="endTime")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date schEndTime;
-
 }

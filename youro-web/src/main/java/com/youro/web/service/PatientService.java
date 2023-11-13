@@ -1,34 +1,28 @@
 package com.youro.web.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.youro.web.entity.*;
-import com.youro.web.mapper.AppointmentMapper;
-import com.youro.web.mapper.DiagnosisMapper;
-import com.youro.web.mapper.QuestionnairesMapper;
-import com.youro.web.mapper.SymptomScoreMapper;
+import com.youro.web.mapper.*;
+import com.youro.web.pojo.Request.AddAvailabilityRequest;
+import com.youro.web.pojo.Request.SaveAppoitmentRequest;
 import com.youro.web.pojo.Request.SymptomScoreRequest;
 import com.youro.web.pojo.Response.*;
-import com.youro.web.repository.DiagnosisRepository;
-import com.youro.web.repository.QuestionnairesRepository;
+import com.youro.web.repository.*;
+import com.youro.web.utils.HelpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.youro.web.entity.AppointmentStatus;
-import com.youro.web.entity.Appointments;
-import com.youro.web.entity.SymptomScore;
-import com.youro.web.pojo.Response.GetAppointmentsReponse;
-import com.youro.web.pojo.Response.GetSymptomScoreResponse;
-
-import com.youro.web.repository.AppointmentsRepository;
-import com.youro.web.repository.SymptomScoreRepository;
+import java.text.ParseException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PatientService {
 
     @Autowired
     SymptomScoreRepository symptomScoreRepo;
+
+    @Autowired
+    ProviderService providerService;
 
     @Autowired
     AppointmentsRepository appointmentsRepository;
@@ -38,6 +32,14 @@ public class PatientService {
 
     @Autowired
     QuestionnairesRepository questionnairesRepository;
+    @Autowired
+    OptionsRepository optionsRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    DoctorScheduleRepository doctorScheduleRepository;
 	
 	public List<GetSymptomScoreResponse> getSymptomScore(int patientId){
 
@@ -46,16 +48,20 @@ public class PatientService {
         return SymptomScoreMapper.convertEntityToResPojo(res);
     }
 
-    public List<GetAppointmentsReponse> getAppointments(int uId, AppointmentStatus apptStatus) {
+    public GetAppointmentsResponse getAppointments(int uId, AppointmentStatus apptStatus, String timeZone) throws ParseException {
         List<Appointments> res = new ArrayList<>();
+
+        User user = userRepository.findById(uId).get();
+
         if (apptStatus == null) {
             res.addAll(appointmentsRepository.findByUId(uId));
-
         } else {
-            res.addAll(appointmentsRepository.findByStatus(uId, apptStatus));
+            res.addAll(appointmentsRepository.findAppointments(uId, 1 ));
         }
-        return AppointmentMapper.getAppointments(res);
+        return AppointmentMapper.getAppointments(res, user.userType, userRepository, diagnosisRepository, symptomScoreRepo, timeZone);
     }
+
+
 
     public List<DiagnosisResponse> getAllDiagnoses(){
         List<Diagnosis> res = diagnosisRepository.findAll();
@@ -63,19 +69,57 @@ public class PatientService {
     }
     public List<QuestionnairesResponse> getQuestionsByDiagId(int diagId){
         List<Questionnaires> res = questionnairesRepository.findByDiagnosisId(diagId);
-        return QuestionnairesMapper.convertQuestionnairesEntityToPojo(res);
+        List<Options> options =optionsRepository.findByQuestionnairesIn(res);
+        return QuestionnairesMapper.convertQuestionnairesEntityToPojo(res, options);
     }
 
-    public BasicResponse saveNewSymptomScore(SymptomScoreRequest req){
-        SymptomScore sC = SymptomScoreMapper.convertReqBodyToEntity(req);
-
-        System.out.println("===============================");
-        System.out.println("===============================");
-        System.out.println("===============================");
+    public SaveSymptomResponse saveSymptomScore(SymptomScoreRequest req){
+        SaveSymptomResponse response = new SaveSymptomResponse();
+        List<Integer> oIds = req.getQuestionData().stream()
+                .flatMap(qData -> qData.optionsData.stream())
+                .map(SymptomScoreRequest.optionsData::getOId)
+                .toList();
+        int score = optionsRepository.sumWeightsForOIds(oIds);
+        SymptomScore sC = SymptomScoreMapper.convertReqBodyToEntity(req, score);
         symptomScoreRepo.save(sC);
-        BasicResponse res = new BasicResponse();
+        response.score = score;
+        diagnosisRepository.findById(req.getDiagnosisId()).ifPresent(a -> response.diagName = a.getName());
+        return response;
+    }
 
-        res.message = "new symptom score saved";
+    public List<GetCustomerAvailResponse> getAvailableSlotsByDate(String timeZone) throws ParseException {
+        List<DoctorSchedule> output = doctorScheduleRepository.findDoctorAvailCustomer();
+       return getSlots(output, timeZone);
+    }
+
+    public List<GetCustomerAvailResponse> getSlots(List<DoctorSchedule> output, String timeZone) throws ParseException {
+         Map<Date, List<DoctorSchedule>> doctorsByStartDate = output.stream()
+            .collect(Collectors.groupingBy(DoctorSchedule::getSchDate));
+        Map<Date, List<SlotInfo>> result = getSlotInfo(doctorsByStartDate);
+        return DoctorSchToSlotsMapper.getCustomerAvailResponse(result, timeZone);
+    }
+
+    public Map<Date, List<SlotInfo>> getSlotInfo(Map<Date, List<DoctorSchedule>> doctorsByStartDate) throws ParseException {
+        Map<Date, List<SlotInfo>> res = new HashMap<>();
+        for(Date date : doctorsByStartDate.keySet())
+        {
+            res.put(date,HelpUtils.getSlots(doctorsByStartDate.get(date)));
+        }
         return res;
     }
+
+    public BasicResponse saveAppointment(SaveAppoitmentRequest saveAppoitmentRequest) throws ParseException {
+
+        BasicResponse resp = new BasicResponse();
+        AddAvailabilityRequest request = new AddAvailabilityRequest();
+        request.docId = saveAppoitmentRequest.docId;
+        request.startTime = saveAppoitmentRequest.startTime;
+        request.endTime = HelpUtils.addTime(saveAppoitmentRequest.startTime);
+        appointmentsRepository.save(AppointmentMapper.saveAppointments(saveAppoitmentRequest,request.endTime));
+        providerService.removeAvailability(request);
+        userRepository.findById(request.docId).ifPresent(a -> resp.message = a.getFirstName() + " " + a.getLastName());
+        return resp;
+    }
+
+
 }

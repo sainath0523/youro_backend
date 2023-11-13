@@ -1,18 +1,18 @@
 package com.youro.web.pojo.Request;
 
-import com.youro.web.pojo.Response.PrescriptionDetails;
+import com.youro.web.pojo.Response.GetCarePlaneDetails;
+import lombok.Getter;
 
-import java.util.ArrayList;
-
+@Getter
 public class SaveCarePlanRequest {
 
-    public String apptId;
-    public ArrayList<PrescriptionDetails> vitamins;
-    public ArrayList<PrescriptionDetails> medicines;
+    public int apptId;
+    public int diagID;
 
-    public ArrayList<PrescriptionDetails> lifeStyle;
+    public String followUp;
 
-    public ArrayList<PrescriptionDetails> labs;
+    public String notes;
 
-    public ArrayList<PrescriptionDetails> imaging;
+    public int doctorId;
+    public GetCarePlaneDetails carePlanDetails;
 }

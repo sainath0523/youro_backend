@@ -2,10 +2,7 @@ package com.youro.web.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -14,10 +11,10 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Appointments {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,18 +31,17 @@ public class Appointments {
     @Temporal(TemporalType.DATE)
     public Date apptDate;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date apptStartTime;
 
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     public Date apptEndTime;
-
 
     public String link;
 
     @ManyToOne
-    @JoinColumn(name = "followupId", referencedColumnName = "apptId")
-    public Appointments followupId;
+    @JoinColumn(name = "diagId")
+    public Diagnosis diagnosis;
 
     public AppointmentStatus status;
 }
