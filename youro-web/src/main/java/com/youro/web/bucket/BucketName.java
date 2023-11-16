@@ -1,7 +1,7 @@
 package com.youro.web.bucket;
 
 public enum BucketName {
-	PROFILE_IMAGE("careplan-results");
+	PROFILE_IMAGE("youro-files");
 	
 	private final String bucketName;
 

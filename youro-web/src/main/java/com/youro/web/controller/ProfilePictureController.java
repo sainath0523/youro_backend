@@ -27,34 +27,13 @@ public class ProfilePictureController {
 	
 	@Autowired
 	ProfilePictureService ppService;
-	
-	@PostMapping("/uploadDp")
-    public ResponseEntity<?> uploadImage(@ModelAttribute ProfilePictureRequest ppRequest) throws IOException {
-		
-		BasicResponse resp = ppService.uploadImage(ppRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(resp);
-        
-    }
-
-    @GetMapping("/getDp/{id}")
-    public ResponseEntity<?> getImage(@PathVariable("id") int id){
-
-    	byte[] image = ppService.getImage(id);
-    	if(image !=null) {
-    		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(image);
-    	}
-    	else {
-    		return null;
-    	}
-
-    }
     
-    @DeleteMapping("/removeDp/{id}")
-    public ResponseEntity<?> removeImage(@PathVariable("id") int id){
-
-    	BasicResponse resp = ppService.removeImage(id);
-        return ResponseEntity.status(HttpStatus.OK).body(resp);
-
-    }
+//    @DeleteMapping("/removeDp/{id}")
+//    public ResponseEntity<?> removeImage(@PathVariable("id") int id){
+//
+//    	BasicResponse resp = ppService.removeImage(id);
+//        return ResponseEntity.status(HttpStatus.OK).body(resp);
+//
+//    }
 
 }

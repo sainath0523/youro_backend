@@ -23,42 +23,42 @@ public class ProfilePictureService {
 	UserRepository userRepository;
 	
 
-	public BasicResponse uploadImage(ProfilePictureRequest ppRequest) throws IOException {
-		
-		Optional<User> user = userRepository.findById(ppRequest.getUserId());
-		if(!user.isEmpty()) {
-			MultipartFile file = ppRequest.getImageFile();
-			user.get().setProfilePicture(compressImage(file.getBytes()));
-			userRepository.save(user.get());
-			return new BasicResponse("uploaded successfully");	
-		}
-		else {
-			throw new CustomException("No user found with id: " + ppRequest.getUserId());	
-		}
-	}
+//	public BasicResponse uploadImage(ProfilePictureRequest ppRequest) throws IOException {
+//		
+//		Optional<User> user = userRepository.findById(ppRequest.getUserId());
+//		if(!user.isEmpty()) {
+//			MultipartFile file = ppRequest.getImageFile();
+//			user.get().setProfilePicture(compressImage(file.getBytes()));
+//			userRepository.save(user.get());
+//			return new BasicResponse("uploaded successfully");	
+//		}
+//		else {
+//			throw new CustomException("No user found with id: " + ppRequest.getUserId());	
+//		}
+//	}
 	
-	public byte[] getImage(int id) {
-		Optional<User> user = userRepository.findById(id);
-		if(!user.isEmpty()) {
-			byte[] image = decompressImage(user.get().getProfilePicture());
-	        return image;
-		}
-		else {
-			throw new CustomException("No user found with id: " + id);
-		}
-	}
+//	public byte[] getImage(int id) {
+//		Optional<User> user = userRepository.findById(id);
+//		if(!user.isEmpty()) {
+//			byte[] image = decompressImage(user.get().getProfilePicture());
+//	        return image;
+//		}
+//		else {
+//			throw new CustomException("No user found with id: " + id);
+//		}
+//	}
 	
-	public BasicResponse removeImage(int id) {
-		Optional<User> user = userRepository.findById(id);
-		if(!user.isEmpty()) {
-			user.get().setProfilePicture(null);
-			userRepository.save(user.get());
-			return new BasicResponse("Removed successfully");	
-		}
-		else {
-			throw new CustomException("No user found with id: " + id);	
-		}
-	}
+//	public BasicResponse removeImage(int id) {
+//		Optional<User> user = userRepository.findById(id);
+//		if(!user.isEmpty()) {
+//			user.get().setProfilePicture(null);
+//			userRepository.save(user.get());
+//			return new BasicResponse("Removed successfully");	
+//		}
+//		else {
+//			throw new CustomException("No user found with id: " + id);	
+//		}
+//	}
 
 	public static byte[] compressImage(byte[] data) {
 

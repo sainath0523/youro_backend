@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class PatientController {
 
     //@PreAuthorize("hasRole('PATIENT')")
     @GetMapping({"/appointments/{uId}"})
-    public GetAppointmentsResponse getUserAppointments(@PathVariable("uId") int uId, @RequestParam(name = "apptStatus", required = false) AppointmentStatus apptStatus, @RequestParam(required = true, name ="timeZone") String timeZone) throws ParseException {
+    public GetAppointmentsResponse getUserAppointments(@PathVariable("uId") int uId, @RequestParam(name = "apptStatus", required = false) AppointmentStatus apptStatus, @RequestParam(required = true, name ="timeZone") String timeZone) throws ParseException, IOException {
         return patientService.getAppointments(uId, apptStatus, timeZone);
     }
 

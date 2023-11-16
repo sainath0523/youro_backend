@@ -100,11 +100,7 @@ public class User implements UserDetails {
 //        return List.of(authority);
 //    }
     
-
-    @Lob
-    @Column(columnDefinition="LONGBLOB")
-    @Basic(fetch = FetchType.LAZY)
-    public byte[] profilePicture;
+    public String profileUrl;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
