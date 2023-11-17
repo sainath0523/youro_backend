@@ -68,6 +68,7 @@ public class AmazonS3Service {
 			System.out.println("succesfully uploaded files");			
 		}
 		catch(AmazonServiceException e){
+			System.out.println(e);
 			throw new CustomException("Failed to upload files to S3");
 		}
 	}
