@@ -4,6 +4,7 @@ import com.youro.web.entity.AppointmentStatus;
 import com.youro.web.entity.Appointments;
 import com.youro.web.entity.DoctorSchedule;
 import com.youro.web.entity.User;
+import com.youro.web.entity.UserType;
 import com.youro.web.exception.CustomException;
 import com.youro.web.mapper.DoctorSchToSlotsMapper;
 import com.youro.web.mapper.UserMapper;
@@ -16,6 +17,8 @@ import com.youro.web.repository.DoctorScheduleRepository;
 import com.youro.web.repository.UserRepository;
 import com.youro.web.utils.HelpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,17 +28,24 @@ import java.util.*;
 
 @Service
 public class ProviderService {
+	
     @Autowired
     UserRepository userRepository;
+    
     @Autowired
     DoctorScheduleRepository drScheduleRepo;
+    
     @Autowired
     AppointmentsRepository appointmentsRepository;
-
-    SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
-
+    
+    @Autowired
+    JavaMailSender javaMailSender;
+    
     @Autowired
     PasswordEncoder passwordEncoder;
+    
+    SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
+
 
     public User getProfile(int id){
         Optional<User> res = userRepository.findById(id);
@@ -216,23 +226,68 @@ public class ProviderService {
         return resp;
     }
 
-    public BasicResponse cancelAppointment(int apptId, int docId) throws CustomException
+    public BasicResponse cancelAppointment(int apptId, int uId) throws CustomException
     {
         BasicResponse resp = new BasicResponse();
         try {
+        	
+        	Optional<User> user = userRepository.findById(uId);
+            
+            if (user.isEmpty()) {
+                throw new CustomException("No user found with id: " + uId);
+            }
+            
             Optional<Appointments> appointments = appointmentsRepository.findById(apptId);
 
             if (appointments.isEmpty()) {
                 throw new CustomException("Appointment not present");
             }
+
             Appointments appt = appointments.get();
+            User userToCancel = user.get();
+            int docId = appt.getDoctorId().getUserId();
+            
+            int userIdToBeNotified;
+            if(userToCancel.userType ==  UserType.PATIENT)
+            {
+            	userIdToBeNotified = appt.getDoctorId().getUserId();
+            }
+            else {
+            	userIdToBeNotified = appt.getPatientId().getUserId();
+            }
+            
+            User userToBeNotified = userRepository.findById(userIdToBeNotified).get();
+            
+            String msgBodyConfirmation = "Hi, \nWe are writing to inform you that the appointment scheduled on " 
+        			+ appt.getApptDate() + " with "
+        			+ userToBeNotified.getFirstName() + " " + userToBeNotified.getLastName() + "has been cancelled successfully. \n\nThanks, \nYouro Team";
+            String msgSubjConfirmation = "Confirmation :: Appointment Cancellation";
+            
+            String msgBodyToNotify = "Hi, \nWe are writing to inform you that the appointment scheduled on " 
+        			+ appt.getApptDate() + " with "
+        			+ userToCancel.getFirstName() + " " + userToCancel.getLastName() + "has been cancelled. Please plan a schedule for another time.  \n\nThanks, \nYouro Team";
+            String msgSubjToNotify = "Important! Appointment Cancellation Alert";
+            
+            SimpleMailMessage mes = new SimpleMailMessage();
+            // Mail confirming cancellation
+            mes.setTo(userToCancel.getEmail());
+    	    mes.setSubject(msgSubjConfirmation);
+    	    mes.setText(msgBodyConfirmation);
+    	    javaMailSender.send(mes);
+    	    
+    	    // Mail notifying cancellation
+            mes.setTo(userToBeNotified.getEmail());
+    	    mes.setSubject(msgSubjToNotify);
+    	    mes.setText(msgBodyToNotify);
+    	    javaMailSender.send(mes);
+    	    
             DoctorSchedule doctorSchedule = new DoctorSchedule();
             doctorSchedule.setSchDate(appt.getApptDate());
             doctorSchedule.setSchEndTime(appt.getApptEndTime());
             doctorSchedule.setSchStartTime(appt.getApptStartTime());
-            User user = new User();
-            user.setUserId(docId);
-            doctorSchedule.setDoctorId(user);
+            User temp = new User();
+            temp.setUserId(docId);
+            doctorSchedule.setDoctorId(temp);
             //String scheDate  = outputFormat.format(doctorSchedule.schDate);
             List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(HelpUtils.getUser(docId), doctorSchedule.schDate);
             drList.add(doctorSchedule);

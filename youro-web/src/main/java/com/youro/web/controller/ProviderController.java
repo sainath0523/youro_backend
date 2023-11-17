@@ -46,12 +46,12 @@ public class ProviderController {
     public BasicResponse addDoctorAvailability(@RequestBody AddAvailabilityRequest request)  {
         return providerService.addAvailability(request);
     }
-
-    @PutMapping("/cancelAppointment/{apptId}/{docId}")
-        public BasicResponse cancelAppointment(@PathVariable("apptId") int id, @PathVariable("docId") int docId)
+ 
+    @PutMapping("/cancelAppointment/{apptId}/{uId}")
+    public BasicResponse cancelAppointment(@PathVariable("apptId") int apptId, @PathVariable("uId") int uId)
     {
-        System.out.println(id + " :: " + docId);
-        return providerService.cancelAppointment(id, docId);
+        System.out.println(apptId + " :: " + uId);
+        return providerService.cancelAppointment(apptId, uId);
     }
 
     @PutMapping("/updateAppointment/{apptId}")
