@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "SELECT EXISTS (SELECT 1 FROM user as usr WHERE usr.email = ?1) AS value_exists;", nativeQuery = true)
     int checkIfEmailExists(String email);
 
-    @Query(value = "SELECT c.user_id  FROM user c JOIN appointment a ON a.patient_id = c.user_id  WHERE a.doctor_id = ?1 ;", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT(c.user_id)  FROM user c JOIN appointment a ON a.patient_id = c.user_id  WHERE a.doctor_id = ?1 ;", nativeQuery = true)
     List<Integer> getUserByDoctor(int id);
 
 }
