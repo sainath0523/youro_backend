@@ -11,6 +11,7 @@ import com.youro.web.utils.HelpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,6 +41,9 @@ public class PatientService {
 
     @Autowired
     DoctorScheduleRepository doctorScheduleRepository;
+    
+    @Autowired
+    AmazonS3Service s3Service;
 	
 	public List<GetSymptomScoreResponse> getSymptomScore(int patientId){
 
@@ -48,7 +52,7 @@ public class PatientService {
         return SymptomScoreMapper.convertEntityToResPojo(res);
     }
 
-    public GetAppointmentsResponse getAppointments(int uId, AppointmentStatus apptStatus, String timeZone) throws ParseException {
+    public GetAppointmentsResponse getAppointments(int uId, AppointmentStatus apptStatus, String timeZone) throws ParseException, IOException {
         List<Appointments> res = new ArrayList<>();
 
         User user = userRepository.findById(uId).get();
@@ -58,7 +62,7 @@ public class PatientService {
         } else {
             res.addAll(appointmentsRepository.findAppointments(uId, 1 ));
         }
-        return AppointmentMapper.getAppointments(res, user.userType, userRepository, diagnosisRepository, symptomScoreRepo, timeZone);
+        return AppointmentMapper.getAppointments(res, user.userType, userRepository, diagnosisRepository, symptomScoreRepo, timeZone, s3Service);
     }
 
 

@@ -12,8 +12,10 @@ import com.youro.web.pojo.Response.GetAppointmentsResponse;
 import com.youro.web.repository.DiagnosisRepository;
 import com.youro.web.repository.SymptomScoreRepository;
 import com.youro.web.repository.UserRepository;
+import com.youro.web.service.AmazonS3Service;
 import com.youro.web.utils.HelpUtils;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -24,7 +26,7 @@ public class AppointmentMapper {
     static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     static SimpleDateFormat outputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
     
-    public static GetAppointmentsResponse getAppointments(List<Appointments> response, UserType userType, UserRepository userRepository, DiagnosisRepository diagnosisRepository, SymptomScoreRepository symptomScoreRepository, String timeZone) throws ParseException {
+    public static GetAppointmentsResponse getAppointments(List<Appointments> response, UserType userType, UserRepository userRepository, DiagnosisRepository diagnosisRepository, SymptomScoreRepository symptomScoreRepository, String timeZone, AmazonS3Service s3Service) throws ParseException, IOException {
         outputFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
         GetAppointmentsResponse resp = new GetAppointmentsResponse();
         List<AppointmentResponse> previous = new ArrayList<>();
@@ -63,7 +65,7 @@ public class AppointmentMapper {
             else {
                 user = userRepository.findById(res.doctorId).get();
             }
-            res.picture = user.profilePicture;
+            res.picture = s3Service.getImage(user.getUserId());
             if(app.apptDate.before(date)) {
                 previous.add(res);
             }
