@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,8 +43,7 @@ public class AmazonS3Service {
 	public BasicResponse uploadResults(MultipartFile[] files, int patientId) {
 
 		if(files.length == 0)
-			throw new IllegalStateException("No files to upload");
-
+			throw new CustomException("No files to upload");
 		try {
 			String resultsFolder = "results-files";
 			String bucketName = String.format("%s", BucketName.PROFILE_IMAGE.getBucketName());
@@ -53,12 +53,10 @@ public class AmazonS3Service {
 			return new BasicResponse("Files uploaded to s3 successfully");
 		}
 		catch(IOException e) {
-			throw new IllegalStateException("Failed to store file to s3", e); 
+			throw new CustomException(e.getLocalizedMessage());
 		}
 
-	}
-	
-	
+	}	
 
 	public void save(String bucketName, String rootPath, MultipartFile[] files) throws IOException {
 		try {
@@ -70,6 +68,7 @@ public class AmazonS3Service {
 			System.out.println("succesfully uploaded files");			
 		}
 		catch(AmazonServiceException e){
+			System.out.println(e);
 			throw new CustomException("Failed to upload files to S3");
 		}
 	}
@@ -86,14 +85,16 @@ public class AmazonS3Service {
 			Results res = new Results();
 			res.setPatientId(HelpUtils.getUser(patientId));
 			res.setResults_url(results_url);
+            res.setLastUpdated(new Date());
 			resultsRepository.save(res);		
 		}
 		else {
 			Results res = results.get();
             res.results_url = results_url;
+            res.setLastUpdated(new Date());
             resultsRepository.save(res);
 		}
-
+				
 	}
 	
 	public static File convertFile(MultipartFile file) throws IOException {
@@ -117,7 +118,7 @@ public class AmazonS3Service {
 		String results_url = results.get().getResults_url();	
 		return getResultsFromS3(results_url);
 	}
-	
+
 	private List<byte[]> getResultsFromS3(String results_url) {
 		try {
 			String[] parts = results_url.split("/");
@@ -150,7 +151,7 @@ public class AmazonS3Service {
 		s3.deleteObject(bucketName, filePath);		
         System.out.println("File deleted from s3 successfully: " + filename);
 	}
-	
+
 	public BasicResponse uploadImage(int userId, MultipartFile mFile) throws IOException {
 		Optional<User> temp = userRepository.findById(userId);
 		if(!temp.isEmpty()) {
@@ -176,7 +177,7 @@ public class AmazonS3Service {
 			throw new CustomException("No user found with id: " + userId);	
 		}
 	}
-	
+
 	public byte[] getImage(int id) throws IOException {
 		Optional<User> user = userRepository.findByUserId(id);
 		if(user.isEmpty()) {
@@ -213,5 +214,4 @@ public class AmazonS3Service {
 		else
 			return null;
 	}
-	
 }

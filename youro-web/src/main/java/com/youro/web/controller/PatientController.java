@@ -33,6 +33,11 @@ public class PatientController {
         return patientService.getAppointments(uId, apptStatus, timeZone);
     }
 
+    @GetMapping({"/getDiagnosisByCustomer/{uId}"})
+    public List<GetDiagnosisByCustomerResponse> getDiagnosisByCustomerResponses(@PathVariable("uId") int uId) {
+        return patientService.getDiagnosisByCustomer(uId);
+    }
+
     @GetMapping({"/getAllDiagnoses"})
     public List<DiagnosisResponse> getAllDiagnoses()  {
         return patientService.getAllDiagnoses();

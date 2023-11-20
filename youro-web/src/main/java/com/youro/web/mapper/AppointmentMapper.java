@@ -60,10 +60,10 @@ public class AppointmentMapper {
             User user = null;
             if(userType ==  UserType.PATIENT)
             {
-                user = userRepository.findById(res.patientId).get();
+                user = userRepository.findById(res.doctorId).get();
             }
             else {
-                user = userRepository.findById(res.doctorId).get();
+                user = userRepository.findById(res.patientId).get();
             }
             res.picture = s3Service.getImage(user.getUserId());
             if(app.apptDate.before(date)) {

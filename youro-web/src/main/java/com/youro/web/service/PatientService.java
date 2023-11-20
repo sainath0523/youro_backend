@@ -65,6 +65,19 @@ public class PatientService {
         return AppointmentMapper.getAppointments(res, user.userType, userRepository, diagnosisRepository, symptomScoreRepo, timeZone, s3Service);
     }
 
+    public List<GetDiagnosisByCustomerResponse> getDiagnosisByCustomer(int uId)
+    {
+        List<Integer> diagIDs = symptomScoreRepo.findByPatientIdDistinct(uId);
+        List<GetDiagnosisByCustomerResponse> result = new ArrayList<>();
+        diagIDs.forEach(id -> {
+            GetDiagnosisByCustomerResponse resp = new GetDiagnosisByCustomerResponse();
+            resp.diagId = id;
+            resp.diagName = diagnosisRepository.findById(id).get().getName();
+            result.add(resp);
+        });
+        return result;
+    }
+
 
 
     public List<DiagnosisResponse> getAllDiagnoses(){
