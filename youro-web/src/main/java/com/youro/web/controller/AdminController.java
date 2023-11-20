@@ -6,6 +6,7 @@ import com.youro.web.pojo.Request.AddPrescriptionRequest;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.GetCarePlaneDetails;
 import com.youro.web.pojo.Response.PrescriptionDetails;
+import com.youro.web.pojo.Response.QuestionnairesResponse;
 import com.youro.web.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,11 @@ public class AdminController {
     @GetMapping("/getAllUsers/{type}")
     public List<User> getUsersByType(@PathVariable("type") UserType uType, @RequestParam(name = "subscription", required = false) SubscriptionStatus status, @RequestParam(name = "drStatus", required = false) DoctorStatus drStatus) {
         return adminService.getUsersByType(uType);
+    }
+
+    @GetMapping({"/getAllQuestionnaires"})
+    public List<QuestionnairesResponse> getAllQuestionnaires()  {
+        return adminService.getAllQuestionnaires();
     }
 
 

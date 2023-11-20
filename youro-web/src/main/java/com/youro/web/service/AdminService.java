@@ -3,13 +3,13 @@ package com.youro.web.service;
 import com.youro.web.entity.*;
 import com.youro.web.exception.CustomException;
 import com.youro.web.mapper.PrescriptionMapper;
+import com.youro.web.mapper.QuestionnairesMapper;
 import com.youro.web.pojo.Request.AddDiagnosisRequest;
 import com.youro.web.pojo.Request.AddPrescriptionRequest;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.PrescriptionDetails;
-import com.youro.web.repository.DiagnosisRepository;
-import com.youro.web.repository.PrescriptionRepository;
-import com.youro.web.repository.UserRepository;
+import com.youro.web.pojo.Response.QuestionnairesResponse;
+import com.youro.web.repository.*;
 import com.youro.web.utils.HelpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,12 @@ public class AdminService {
 
     @Autowired
     PrescriptionRepository prescriptionRepository;
+
+    @Autowired
+    QuestionnairesRepository questionnairesRepository;
+
+    @Autowired
+    OptionsRepository optionsRepository;
 
     public List<User> getUsersByType(UserType uType) {
         return userRepository.findByUserType(uType);
@@ -82,6 +88,13 @@ public class AdminService {
         resp.message = "Deleted Successfully";
         return resp;
     }
+
+    public List<QuestionnairesResponse> getAllQuestionnaires(){
+        List<Questionnaires> res = questionnairesRepository.findAll();
+        List<Options> options =optionsRepository.findByQuestionnairesIn(res);
+        return QuestionnairesMapper.convertQuestionnairesEntityToPojo(res, options);
+    }
+
 
 
 }
