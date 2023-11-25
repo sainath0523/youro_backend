@@ -1,10 +1,6 @@
 package com.youro.web.service;
 
-import com.youro.web.entity.AppointmentStatus;
-import com.youro.web.entity.Appointments;
-import com.youro.web.entity.DoctorSchedule;
-import com.youro.web.entity.User;
-import com.youro.web.entity.UserType;
+import com.youro.web.entity.*;
 import com.youro.web.exception.CustomException;
 import com.youro.web.mapper.DoctorSchToSlotsMapper;
 import com.youro.web.mapper.UserMapper;
@@ -40,6 +36,9 @@ public class ProviderService {
     
     @Autowired
     JavaMailSender javaMailSender;
+
+    @Autowired
+    NotificationService notificationService;
     
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -251,6 +250,7 @@ public class ProviderService {
             if(userToCancel.userType ==  UserType.PATIENT)
             {
             	userIdToBeNotified = appt.getDoctorId().getUserId();
+
             }
             else {
             	userIdToBeNotified = appt.getPatientId().getUserId();
@@ -294,6 +294,7 @@ public class ProviderService {
             saveDoctorSchedule(drList);
             appt.status = AppointmentStatus.CANCELED;
             appointmentsRepository.save(appt);
+            notificationService.saveApptNotification(user.get(),appt,"CANCEL");
             resp.message = "Canceled Appointment";
         }catch (Exception e)
         {

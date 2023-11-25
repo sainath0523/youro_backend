@@ -1,15 +1,10 @@
 package com.youro.web.entity;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "checkList")
@@ -40,9 +35,6 @@ public class CheckList {
     @ManyToOne
     @JoinColumn(name = "patientId")
     private User patientId;
-    
-    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
-    public Boolean followUp;
     
     public Boolean notes;
     public Boolean orders;
