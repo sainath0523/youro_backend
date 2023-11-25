@@ -7,29 +7,25 @@ import lombok.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "chat")
+@Table(name = "notification")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Chat {
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int chatId;
+    public int notId;
+
+    public String message;
+
     @ManyToOne
-    @JoinColumn(name = "from_id")
-    private User fromId;
-    @ManyToOne
-    @JoinColumn(name = "to_id")
-    private User toId;
+    @JoinColumn(name = "userId")
+    public User userId;
 
     @Temporal(TemporalType.TIMESTAMP)
     public Date dateTime;
-    @Lob
-    public String message;
-
-    public Boolean seen;
 }

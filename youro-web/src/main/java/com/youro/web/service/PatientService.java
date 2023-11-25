@@ -26,6 +26,10 @@ public class PatientService {
     ProviderService providerService;
 
     @Autowired
+    NotificationService notificationService;
+
+
+    @Autowired
     AppointmentsRepository appointmentsRepository;
 
     @Autowired
@@ -132,7 +136,9 @@ public class PatientService {
         request.docId = saveAppoitmentRequest.docId;
         request.startTime = saveAppoitmentRequest.startTime;
         request.endTime = HelpUtils.addTime(saveAppoitmentRequest.startTime);
-        appointmentsRepository.save(AppointmentMapper.saveAppointments(saveAppoitmentRequest,request.endTime));
+        Appointments appt = AppointmentMapper.saveAppointments(saveAppoitmentRequest,request.endTime);
+        appointmentsRepository.save(appt);
+        notificationService.saveApptNotification(appt.getDoctorId(),appt, "BOOKED");
         providerService.removeAvailability(request);
         userRepository.findById(request.docId).ifPresent(a -> resp.message = a.getFirstName() + " " + a.getLastName());
         return resp;

@@ -1,13 +1,5 @@
 package com.youro.web.service;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.amazonaws.util.IOUtils;
-import com.youro.web.bucket.BucketName;
 import com.youro.web.entity.*;
 import com.youro.web.exception.CustomException;
 import com.youro.web.mapper.CarePlanMapper;
@@ -20,22 +12,18 @@ import com.youro.web.repository.*;
 import com.youro.web.utils.HelpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class CarePlanService {
 	
 	@Autowired
-	UserRepository userRepository;
-	
-	@Autowired
-	ResultsRepository resultsRepository;
+	NotificationService notificationService;
 	
 	@Autowired
 	CheckListRepository checkListRepository;
@@ -195,9 +183,14 @@ public class CarePlanService {
 		List<CarePlan> carePlanList = carePlanRepository.findByAppointments(HelpUtils.getAppointments(request.getApptId()));
 		CarePlan carePlan = carePlanRepository.save(CarePlanMapper.toCarePlanEntity(request, carePlanList));
 		carePlanDetailsRepository.saveAll(CarePlanMapper.toCarePlanDetailsEntity(request.getCarePlanDetails(), carePlan));
+		Appointments appt = HelpUtils.getAppointments(request.apptId);
 		if(carePlanList.isEmpty()) {
-			Appointments appt = HelpUtils.getAppointments(request.apptId);
 			saveCheckList(appt, "ORDER");
+			notificationService.saveCarePlanNotification(appt,carePlan, "NEW");
+
+		}else
+		{
+			notificationService.saveCarePlanNotification(appt,carePlan, "EDIT");
 		}
         return new BasicResponse("CarePlan Saved Successfully");
     }
@@ -209,12 +202,17 @@ public class CarePlanService {
 		if(checkRecord.isEmpty())
 		{
 			checkList.setAppointments(appointments);
+			Appointments appt = appointmentsRepository.findById(appointments.getApptId()).get();
 			if(check.equals("ORDER")) {
 				checkList.orders = true;
+				checkList.notes = false;
 			}
 			else if(check.equals("NOTES")) {
 				checkList.notes = true;
+				checkList.orders = false;
 			}
+			checkList.setPatientId(appt.getPatientId());
+			checkList.setDoctorId(appt.getDoctorId());
 			checkList.apptDate = appointments.getApptDate();
 		}
 		else

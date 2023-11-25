@@ -92,6 +92,14 @@ public class HelpUtils {
         return calendar.getTime();
 
     }
+    public static Date addTime(Date date, int sec)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.SECOND, sec);
+        return calendar.getTime();
+
+    }
 
     public static String addTime(String date) throws ParseException {
         Date formated_date = addTime(outputFormat.parse(date));

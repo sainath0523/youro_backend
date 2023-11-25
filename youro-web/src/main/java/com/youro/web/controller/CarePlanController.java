@@ -1,14 +1,12 @@
 package com.youro.web.controller;
 
 import com.youro.web.pojo.Request.SaveCarePlanRequest;
-import com.youro.web.pojo.Request.SaveCheckListRequest;
 import com.youro.web.pojo.Request.SaveNotesRequest;
 import com.youro.web.pojo.Response.*;
 import com.youro.web.service.CarePlanService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,10 +19,10 @@ public class CarePlanController {
 	@Autowired
     CarePlanService carePlanService;
 
-    @PostMapping("/saveCheckList")
+   /* @PostMapping("/saveCheckList")
     public BasicResponse saveCheckList(@RequestBody @Valid SaveCheckListRequest requestBody) {
         return new BasicResponse();
-    }
+    }*/
 
     @GetMapping("/getCheckList/{doctorId}")
     public List<GetCheckListResponse> getCheckList(@PathVariable("doctorId") int doctorId) {   	
@@ -40,16 +38,6 @@ public class CarePlanController {
     public List<GetNotesResponse> getNotes(@PathVariable("uId") int uId) {
         return carePlanService.getNotes(uId);
     }
-
- /*   @GetMapping("/getCarePlanDetails")
-    public GetCarePlaneDetails getCarePlanDetails(@RequestParam(required = false, name = "apptId") Integer apptId, @RequestParam(required = false, name = "diagId") Integer diagId) {
-        return carePlanService.getCarePlaneDetails(apptId, diagId);
-    }*/
-
-    /*@GetMapping("/getCarePlanDetailsByPatientID/{uID}")
-    public List<GetCarePlanByPatientResponse> getCarePlanDetailsById(@PathVariable("uID") Integer uId) {
-        return carePlanService.getCarePlanByPatient(uId);
-    }*/
 
     @GetMapping("/getCarePlanVersions/{apptID}")
     public List<GetCarePlanVersions> getCarePlanVersions(@PathVariable("apptID") Integer apptId) {

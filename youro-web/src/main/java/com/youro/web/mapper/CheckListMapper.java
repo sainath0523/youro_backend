@@ -1,12 +1,12 @@
 package com.youro.web.mapper;
 
+import com.youro.web.entity.CheckList;
+import com.youro.web.pojo.Response.GetCheckListResponse;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import com.youro.web.entity.CheckList;
-import com.youro.web.pojo.Response.GetCheckListResponse;
 
 public class CheckListMapper {
 
@@ -16,13 +16,14 @@ public class CheckListMapper {
         
 		for(CheckList checklist : checklists)
         {
-        	GetCheckListResponse res = new GetCheckListResponse();
-            res.apptDate = checklist.getApptDate();
-            res.patientName = checklist.getPatientId().getFirstName() + " " + checklist.getPatientId().getLastName();
-            res.followUp = checklist.getFollowUp();
-            res.notes = checklist.getNotes();
-            res.orders = checklist.getOrders();           
-            resp.add(res);
+            if(!checklist.notes || !checklist.orders) {
+                GetCheckListResponse res = new GetCheckListResponse();
+                res.apptDate = checklist.getApptDate();
+                res.patientName = checklist.getPatientId().getFirstName() + " " + checklist.getPatientId().getLastName();
+                res.notes = checklist.getNotes();
+                res.orders = checklist.getOrders();
+                resp.add(res);
+            }
         }
         
         Collections.sort(resp, new Comparator<GetCheckListResponse>() {
