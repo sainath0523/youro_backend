@@ -5,6 +5,7 @@ import com.youro.web.pojo.Request.UpdateChatRequest;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.ChatHistoryResponse;
 import com.youro.web.pojo.Response.ChatResponse;
+import com.youro.web.pojo.Response.ChatUser;
 import com.youro.web.service.ChatService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,12 @@ public class ChatController {
     public List<ChatHistoryResponse> updateChat(@PathVariable(name = "uId") Integer uId)
     {
         return chatService.getChatHistory(uId);
+    }
+    
+    @GetMapping("/getChatUsers/{uId}")
+    public List<ChatUser> getChatUsers(@PathVariable(name = "uId") Integer uId)
+    {
+        return chatService.getChatUsers(uId);
     }
 
 }

@@ -1,6 +1,9 @@
 package com.youro.web.service;
 
+import com.youro.web.entity.Appointments;
 import com.youro.web.entity.Chat;
+import com.youro.web.entity.User;
+import com.youro.web.entity.UserType;
 import com.youro.web.exception.CustomException;
 import com.youro.web.mapper.ChatMapper;
 import com.youro.web.pojo.Request.SaveChatRequest;
@@ -8,6 +11,8 @@ import com.youro.web.pojo.Request.UpdateChatRequest;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.ChatHistoryResponse;
 import com.youro.web.pojo.Response.ChatResponse;
+import com.youro.web.pojo.Response.ChatUser;
+import com.youro.web.repository.AppointmentsRepository;
 import com.youro.web.repository.ChatRepository;
 import com.youro.web.repository.UserRepository;
 import com.youro.web.utils.HelpUtils;
@@ -20,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChatService {
@@ -32,6 +38,9 @@ public class ChatService {
 
     @Autowired
     AmazonS3Service amazonS3Service;
+    
+    @Autowired
+    AppointmentsRepository appointmentsRepository;
 
     static SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
 
@@ -94,5 +103,36 @@ public class ChatService {
             throw new CustomException(e.getLocalizedMessage());
         }
     }
+	public List<ChatUser> getChatUsers(Integer userId) {
+        List<ChatUser> chatUsers = new ArrayList<>();
+
+        List<Appointments> res = new ArrayList<>();
+        res.addAll(appointmentsRepository.findByUId(userId));
+        
+        Optional<User> user = userRepository.findById(userId);
+        
+        if(user.get().userType == UserType.PATIENT) {      
+        	for(Appointments appt : res) {
+        		int docId = appt.getDoctorId().userId;
+                User doc = userRepository.findById(docId).get();
+                String fullName = doc.firstName + " " + doc.lastName;
+                String email = doc.email;
+                
+                chatUsers.add(new ChatUser(docId, fullName, email));
+            }     
+		}
+        
+        else if(user.get().userType == UserType.PROVIDER) {            
+        	for(Appointments appt : res) {
+        		int patId = appt.getPatientId().userId;
+                User pat = userRepository.findById(patId).get();
+                String fullName = pat.firstName + " " + pat.lastName;
+                String email = pat.email;
+                
+                chatUsers.add(new ChatUser(patId, fullName, email));
+            }    
+		}
+		return chatUsers;
+	}
 
 }
