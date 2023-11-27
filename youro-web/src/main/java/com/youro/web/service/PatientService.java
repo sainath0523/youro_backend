@@ -96,11 +96,16 @@ public class PatientService {
 
     public SaveSymptomResponse saveSymptomScore(SymptomScoreRequest req){
         SaveSymptomResponse response = new SaveSymptomResponse();
+        List<Integer> qIds = req.getQuestionData().stream().map(SymptomScoreRequest.questionData :: getQId).toList();
         List<Integer> oIds = req.getQuestionData().stream()
                 .flatMap(qData -> qData.optionsData.stream())
                 .map(SymptomScoreRequest.optionsData::getOId)
                 .toList();
-        int score = optionsRepository.sumWeightsForOIds(oIds);
+        int totalScore = questionnairesRepository.sumWeightsForQIds(qIds);
+        int actualScore = optionsRepository.sumWeightsForOIds(oIds);
+        double score = ((double) actualScore / (double) totalScore) * 100;
+        double powerOfTen = Math.pow(10, 2);
+        score=  Math.round(score * powerOfTen) / powerOfTen;
         SymptomScore sC = SymptomScoreMapper.convertReqBodyToEntity(req, score);
         symptomScoreRepo.save(sC);
         response.score = score;

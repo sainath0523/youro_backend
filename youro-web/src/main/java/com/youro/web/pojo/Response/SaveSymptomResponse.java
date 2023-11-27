@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class SaveSymptomResponse {
 
-    public int score;
+    public double score;
     public String diagName;
 }

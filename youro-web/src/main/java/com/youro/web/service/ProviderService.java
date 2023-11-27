@@ -12,6 +12,7 @@ import com.youro.web.repository.AppointmentsRepository;
 import com.youro.web.repository.DoctorScheduleRepository;
 import com.youro.web.repository.UserRepository;
 import com.youro.web.utils.HelpUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -71,105 +72,147 @@ public class ProviderService {
         }
         return res;
     }
-   
+
+    @Transactional
     public BasicResponse removeAvailability(AddAvailabilityRequest request) throws ParseException {
 
         try {
             Date startDate = inputFormat.parse(request.startTime);
             Date startTime = inputFormat.parse(request.startTime);
             Date endTime = inputFormat.parse(request.endTime);
-            //String scheDate  = outputFormat.format(startDate);
-            List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(HelpUtils.getUser(request.docId), startDate);
-            List<DoctorSchedule> list = new ArrayList<>();
-            DoctorSchedule sche = new DoctorSchedule();
-            sche.setSchDate(startDate);
-            sche.setSchEndTime(endTime);
-            sche.setSchStartTime(startTime);
-            User user = new User();
-            user.setUserId(request.docId);
-            sche.setDoctorId(user);
 
-            for(DoctorSchedule sch : drList) {
-                boolean flag = true;
-                if (sche.getSchStartTime().compareTo(sch.getSchStartTime()) >= 0 && sche.getSchStartTime().compareTo(sch.getSchEndTime()) <= 0) {
+            drScheduleRepo.getDoctor(request.docId, startTime, endTime);
+            List<DoctorSchedule> schduleList = drScheduleRepo.getDoctorList(request.docId, startTime, endTime);
+
+            if(!schduleList.isEmpty())
+            {
+                if(schduleList.size() == 1)
+                {
+                    DoctorSchedule sche = schduleList.get(0);
+
+                    if(sche.getSchStartTime().compareTo(startTime) == 0)
+                    {
+                        sche.setSchStartTime(endTime);
+                    }
+                    else if (sche.getSchEndTime().compareTo(endTime) == 0)
+                    {
+                        sche.setSchEndTime(startTime);
+                    }
+                    else
+                    {
+                        DoctorSchedule newSch = new DoctorSchedule();
+                        newSch.setSchEndTime(sche.getSchEndTime());
+                        sche.setSchEndTime(startTime);
+                        drScheduleRepo.save(sche);
+                        newSch.setSchStartTime(endTime);
+                        newSch.setDoctorId(sche.getDoctorId());
+                        newSch.setSchDate(sche.getSchDate());
+                        drScheduleRepo.save(newSch);
+                    }
+                    sche.setSchDate(startDate);
+                    sche.setSchEndTime(endTime);
+                    sche.setSchStartTime(startTime);
+                    drScheduleRepo.save(sche);
+                }
+                else
+                {
+                    schduleList.sort(Comparator.comparing(DoctorSchedule::getSchStartTime).thenComparing(DoctorSchedule::getSchEndTime));
+                    DoctorSchedule sche = schduleList.get(0);
+                    sche.setSchDate(startDate);
+                    sche.setSchEndTime(startTime);
+                    drScheduleRepo.save(sche);
+
+                    sche = schduleList.get(1);
+                    sche.setSchDate(startDate);
+                    sche.setSchStartTime(endTime);
+                    drScheduleRepo.save(sche);
+
+                }
+            }
+
+            //String scheDate  = outputFormat.format(startDate);
+            /*int iop = 0;
+            if (iop == 1) {
+                List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(HelpUtils.getUser(request.docId), startDate);
+                List<DoctorSchedule> list = new ArrayList<>();
+                DoctorSchedule sche = new DoctorSchedule();
+                sche.setSchDate(startDate);
+                sche.setSchEndTime(endTime);
+                sche.setSchStartTime(startTime);
+                User user = new User();
+                user.setUserId(request.docId);
+                sche.setDoctorId(user);
+
+                for (DoctorSchedule sch : drList) {
+                    boolean flag = true;
+                    if (sche.getSchStartTime().compareTo(sch.getSchStartTime()) >= 0 && sche.getSchStartTime().compareTo(sch.getSchEndTime()) <= 0) {
                         list.add(sch);
                         flag = false;
-                }
-                if (sche.getSchEndTime().compareTo(sch.getSchStartTime()) >= 0 && sche.getSchEndTime().compareTo(sch.getSchEndTime()) <= 0) {
-                    if(flag) {
-                        list.add(sch);
                     }
-                }
-            }
-
-            if(list.size() ==1)
-            {
-               if(sche.getSchStartTime().compareTo(list.get(0).schStartTime) == 0 )
-               {
-                   if(sche.getSchEndTime().compareTo(list.get(0).schEndTime) == 0) {
-                       drScheduleRepo.deleteById(list.get(0).getSchId());
-                   }
-                   else
-                   {
-                       sche.setSchStartTime(sche.schEndTime);
-                       sche.setSchEndTime(list.get(0).getSchEndTime());
-                       sche.setSchId(list.get(0).schId);
-                       drScheduleRepo.save(sche);
-
-                   }
-               }
-               else
-               {
-                   if(sche.getSchEndTime().compareTo(list.get(0).schEndTime) == 0) {
-                       sche.setSchEndTime(sche.schStartTime);
-                       sche.setSchStartTime(list.get(0).schStartTime);
-                   }
-                   else
-                   {
-                       DoctorSchedule shcp = new DoctorSchedule();
-                       shcp.setSchStartTime(list.get(0).schStartTime);
-                       shcp.setSchEndTime(sche.schStartTime);
-                       shcp.setDoctorId(sche.getDoctorId());
-                       shcp.setSchDate(startDate);
-                       drScheduleRepo.save(shcp);
-                       sche.setSchStartTime(sche.schEndTime);
-                       sche.setSchEndTime(list.get(0).schEndTime);
-                   }
-                   sche.setSchId(list.get(0).schId);
-                   drScheduleRepo.save(sche);
-               }
-            }
-            else
-            {
-               List<Integer> rem_List=  list.stream().map(DoctorSchedule :: getSchId).toList();
-                drList.sort(Comparator.comparing(DoctorSchedule::getSchStartTime).thenComparing(DoctorSchedule::getSchEndTime));
-
-                for(int i = 0; i< drList.size() ; i++)
-                {
-                    if(rem_List.contains(drList.get(i).getSchId()))
-                    {
-                        sche.setSchStartTime(drList.get(i).schStartTime);
-                        sche.setSchEndTime(startTime);
-                        sche.setSchId(drList.get(i).getSchId());
-                        drScheduleRepo.save(sche);
-                        i++;
-                        while(!rem_List.contains(drList.get(i).getSchId()))
-                        {
-                            drScheduleRepo.deleteById(drList.get(i).getSchId());
-                            i++;
+                    if (sche.getSchEndTime().compareTo(sch.getSchStartTime()) >= 0 && sche.getSchEndTime().compareTo(sch.getSchEndTime()) <= 0) {
+                        if (flag) {
+                            list.add(sch);
                         }
-                        sche.setSchStartTime(endTime);
-                        sche.setSchEndTime(drList.get(i).schEndTime);
-                        sche.setSchId(drList.get(i).getSchId());
-                        drScheduleRepo.save(sche);
                     }
                 }
 
+                if (list.size() == 1) {
+                    if (sche.getSchStartTime().compareTo(list.get(0).schStartTime) == 0) {
+                        if (sche.getSchEndTime().compareTo(list.get(0).schEndTime) == 0) {
+                            drScheduleRepo.deleteById(list.get(0).getSchId());
+                        } else {
+                            sche.setSchStartTime(sche.schEndTime);
+                            sche.setSchEndTime(list.get(0).getSchEndTime());
+                            sche.setSchId(list.get(0).schId);
+                            drScheduleRepo.save(sche);
+
+                        }
+                    } else {
+                        if (sche.getSchEndTime().compareTo(list.get(0).schEndTime) == 0) {
+                            sche.setSchEndTime(sche.schStartTime);
+                            sche.setSchStartTime(list.get(0).schStartTime);
+                        } else {
+                            DoctorSchedule shcp = new DoctorSchedule();
+                            shcp.setSchStartTime(list.get(0).schStartTime);
+                            shcp.setSchEndTime(sche.schStartTime);
+                            shcp.setDoctorId(sche.getDoctorId());
+                            shcp.setSchDate(startDate);
+                            drScheduleRepo.save(shcp);
+                            sche.setSchStartTime(sche.schEndTime);
+                            sche.setSchEndTime(list.get(0).schEndTime);
+                        }
+                        sche.setSchId(list.get(0).schId);
+                        drScheduleRepo.save(sche);
+                    }
+                } else {
+                    List<Integer> rem_List = list.stream().map(DoctorSchedule::getSchId).toList();
+                    drList.sort(Comparator.comparing(DoctorSchedule::getSchStartTime).thenComparing(DoctorSchedule::getSchEndTime));
+
+                    for (int i = 0; i < drList.size(); i++) {
+                        if (rem_List.contains(drList.get(i).getSchId())) {
+                            sche.setSchStartTime(drList.get(i).schStartTime);
+                            sche.setSchEndTime(startTime);
+                            sche.setSchId(drList.get(i).getSchId());
+                            drScheduleRepo.save(sche);
+                            i++;
+                            while (!rem_List.contains(drList.get(i).getSchId())) {
+                                drScheduleRepo.deleteById(drList.get(i).getSchId());
+                                i++;
+                            }
+                            sche.setSchStartTime(endTime);
+                            sche.setSchEndTime(drList.get(i).schEndTime);
+                            sche.setSchId(drList.get(i).getSchId());
+                            drScheduleRepo.save(sche);
+                        }
+                    }
+
+                }
+            }*/
+            }catch(Exception e)
+            {
+                throw new CustomException(e.getLocalizedMessage());
             }
-        }catch (Exception e)
-        {
-            throw new CustomException(e.getLocalizedMessage());
-        }
+
         return  new BasicResponse("Removed Successfully");
     }
 

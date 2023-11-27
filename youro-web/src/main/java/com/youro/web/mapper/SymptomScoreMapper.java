@@ -3,17 +3,14 @@ package com.youro.web.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.youro.web.entity.Diagnosis;
 import com.youro.web.entity.SymptomScore;
-import com.youro.web.entity.User;
 import com.youro.web.pojo.Request.SymptomScoreRequest;
 import com.youro.web.pojo.Response.GetSymptomScoreResponse;
 import com.youro.web.utils.HelpUtils;
-import jdk.jshell.Diag;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public  class SymptomScoreMapper {
@@ -37,7 +34,7 @@ public  class SymptomScoreMapper {
 
         }
 
-        public static SymptomScore convertReqBodyToEntity(SymptomScoreRequest reqBody, int score){
+        public static SymptomScore convertReqBodyToEntity(SymptomScoreRequest reqBody, double score){
             SymptomScore res = new SymptomScore();
             Diagnosis diagnosis = new Diagnosis();
             diagnosis.setDiagId(reqBody.getDiagnosisId());

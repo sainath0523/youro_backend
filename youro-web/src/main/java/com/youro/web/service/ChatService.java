@@ -58,6 +58,8 @@ public class ChatService {
             for(Chat chat2 : chat)
             {
                 ChatResponse resp = new ChatResponse();
+                resp.fromId = chat2.getFromId().getUserId();
+                resp.toId = chat2.getToId().getUserId();
                 resp.message = chat2.message;
                 resp.time = inputFormat.format(chat2.dateTime);
                 response.add(resp);

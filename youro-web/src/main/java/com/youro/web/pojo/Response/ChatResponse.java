@@ -8,5 +8,7 @@ import lombok.Setter;
 public class ChatResponse {
 
     public String message;
+    public int fromId;
+    public int toId;
     public String time;
 }
