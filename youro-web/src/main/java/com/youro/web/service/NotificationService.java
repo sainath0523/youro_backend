@@ -44,6 +44,17 @@ public class NotificationService {
         }
     }
 
+    @Transactional
+   	public BasicResponse deleteAllNotifications(int userId) {
+    	try {
+            notificationRepository.deleteByUser(userId);
+            return new BasicResponse("Deleted Successfully");
+        }catch (Exception e)
+        {
+            throw new CustomException(e.getLocalizedMessage());
+        }
+   	}
+    
     public void saveCarePlanNotification(Appointments appt, CarePlan carePlan, String type)
     {
         Notification notification = new Notification();
@@ -92,4 +103,5 @@ public class NotificationService {
         notification.setDateTime(new Date());
         notificationRepository.save(notification);
     }
+   
 }

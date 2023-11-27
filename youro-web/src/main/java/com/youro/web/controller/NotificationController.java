@@ -26,4 +26,10 @@ public class NotificationController {
     {
         return notificationService.deleteNotifications(notId);
     }
+    
+    @DeleteMapping("/deleteAllNotifications/{userId}")
+    public BasicResponse deleteAllNotification(@PathVariable(name = "userId") Integer userId)
+    {
+        return notificationService.deleteAllNotifications(userId);
+    }
 }
