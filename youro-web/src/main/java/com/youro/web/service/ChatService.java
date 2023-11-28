@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -103,13 +104,15 @@ public class ChatService {
             throw new CustomException(e.getLocalizedMessage());
         }
     }
-	public List<ChatUser> getChatUsers(Integer userId) {
+
+	public List<ChatUser> getChatUsers(Integer userId) throws IOException {
         List<ChatUser> chatUsers = new ArrayList<>();
 
         List<Appointments> res = new ArrayList<>();
         res.addAll(appointmentsRepository.findByUId(userId));
         
         Optional<User> user = userRepository.findById(userId);
+        List<Integer> userList = new ArrayList<>();
         
         if(user.get().userType == UserType.PATIENT) {      
         	for(Appointments appt : res) {
@@ -117,9 +120,14 @@ public class ChatService {
                 User doc = userRepository.findById(docId).get();
                 String fullName = doc.firstName + " " + doc.lastName;
                 String email = doc.email;
-                
-                chatUsers.add(new ChatUser(docId, fullName, email));
-            }     
+                byte[] image = amazonS3Service.getImage(docId);
+
+               if(!userList.contains(docId)) {
+                    ChatUser chatUser = new ChatUser(docId, fullName, email, image);
+                    chatUsers.add(chatUser);
+                    userList.add(docId);
+               } 
+        	}
 		}
         
         else if(user.get().userType == UserType.PROVIDER) {            
@@ -127,12 +135,17 @@ public class ChatService {
         		int patId = appt.getPatientId().userId;
                 User pat = userRepository.findById(patId).get();
                 String fullName = pat.firstName + " " + pat.lastName;
-                String email = pat.email;
-                
-                chatUsers.add(new ChatUser(patId, fullName, email));
+                String email = pat.email;   
+                byte[] image = amazonS3Service.getImage(patId);
+                if(!userList.contains(patId)) {
+                    ChatUser chatUser = new ChatUser(patId, fullName, email, image);
+                    chatUsers.add(chatUser);
+                    userList.add(patId);
+               }           
             }    
 		}
 		return chatUsers;
 	}
+
 
 }

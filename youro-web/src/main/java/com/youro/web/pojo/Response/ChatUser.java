@@ -11,4 +11,5 @@ public class ChatUser {
 	int userId;
 	String fullName;
 	String userEmail;
+	byte[] image;
 }
