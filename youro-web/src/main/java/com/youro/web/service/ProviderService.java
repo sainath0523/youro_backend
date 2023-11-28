@@ -80,16 +80,16 @@ public class ProviderService {
             Date startDate = inputFormat.parse(request.startTime);
             Date startTime = inputFormat.parse(request.startTime);
             Date endTime = inputFormat.parse(request.endTime);
-
+            
             drScheduleRepo.getDoctor(request.docId, startTime, endTime);
             List<DoctorSchedule> schduleList = drScheduleRepo.getDoctorList(request.docId, startTime, endTime);
-
+            
             if(!schduleList.isEmpty())
             {
-                if(schduleList.size() == 1)
+            	if(schduleList.size() == 1)
                 {
                     DoctorSchedule sche = schduleList.get(0);
-
+                    
                     if(sche.getSchStartTime().compareTo(startTime) == 0)
                     {
                         sche.setSchStartTime(endTime);
@@ -102,6 +102,7 @@ public class ProviderService {
                     {
                         DoctorSchedule newSch = new DoctorSchedule();
                         newSch.setSchEndTime(sche.getSchEndTime());
+
                         sche.setSchEndTime(startTime);
                         drScheduleRepo.save(sche);
                         newSch.setSchStartTime(endTime);
@@ -109,10 +110,6 @@ public class ProviderService {
                         newSch.setSchDate(sche.getSchDate());
                         drScheduleRepo.save(newSch);
                     }
-                    sche.setSchDate(startDate);
-                    sche.setSchEndTime(endTime);
-                    sche.setSchStartTime(startTime);
-                    drScheduleRepo.save(sche);
                 }
                 else
                 {
