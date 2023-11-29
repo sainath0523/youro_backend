@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.youro.web.pojo.Response.ResultsResponse;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.service.AmazonS3Service;
 
@@ -29,18 +30,18 @@ public class AmazonS3Controller {
 	 AmazonS3Service s3Service;
 	
 	 @PostMapping("/uploadResults")
-	 public List<byte[]> uploadResults(@RequestParam("files") MultipartFile[] files, @RequestParam("patientId") int patientId) {
+	 public List<ResultsResponse> uploadResults(@RequestParam("files") MultipartFile[] files, @RequestParam("patientId") int patientId) {
 		s3Service.uploadResults(files, patientId);
 	   	return s3Service.getResults(patientId);
 	 }
 	    
 	 @GetMapping("/getResults/{patientId}")
-	 public List<byte[]> getResults(@PathVariable("patientId") int patientId) {
+	 public List<ResultsResponse> getResults(@PathVariable("patientId") int patientId) {
 	    return s3Service.getResults(patientId);
 	 }
 	 
 	 @DeleteMapping("/deleteResults")
-	 public List<byte[]> deleteResults(@RequestParam("filename") String filename, @RequestParam("patientId") int patientId) {
+	 public List<ResultsResponse> deleteResults(@RequestParam("filename") String filename, @RequestParam("patientId") int patientId) {
 		s3Service.deleteResults(filename, patientId);
 	   	return s3Service.getResults(patientId);
 	 }

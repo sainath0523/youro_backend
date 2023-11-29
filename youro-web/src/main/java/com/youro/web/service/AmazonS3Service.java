@@ -19,12 +19,15 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import org.apache.commons.lang3.StringUtils;
+
 import com.amazonaws.util.IOUtils;
 import com.youro.web.bucket.BucketName;
 import com.youro.web.entity.Results;
 import com.youro.web.entity.User;
 import com.youro.web.exception.CustomException;
 import com.youro.web.pojo.Response.BasicResponse;
+import com.youro.web.pojo.Response.ResultsResponse;
 import com.youro.web.repository.ResultsRepository;
 import com.youro.web.repository.UserRepository;
 import com.youro.web.utils.HelpUtils;
@@ -90,7 +93,6 @@ public class AmazonS3Service {
 		}
 		else {
 			Results res = results.get();
-            res.results_url = results_url;
             res.setLastUpdated(new Date());
             resultsRepository.save(res);
 		}
@@ -106,7 +108,7 @@ public class AmazonS3Service {
 		return convFile;
 	}
 
-	public List<byte[]> getResults(int patientId) {
+	public List<ResultsResponse> getResults(int patientId) {
 		Optional<User> user = userRepository.findByUserId(patientId);
 		if(user.isEmpty()) {
             throw new CustomException("No user found with id: " + patientId);
@@ -119,22 +121,27 @@ public class AmazonS3Service {
 		return getResultsFromS3(results_url);
 	}
 
-	private List<byte[]> getResultsFromS3(String results_url) {
+	private List<ResultsResponse> getResultsFromS3(String results_url) {
 		try {
 			String[] parts = results_url.split("/");
 			String bucketName = parts[0];
 		    String rootPath = parts[1] + "/" + parts[2] + "/";
 		    System.out.println("result files :: rootpath: "+ rootPath);
-
-	        List<byte[]> resultList = new ArrayList<>();
+		    
+	        List<ResultsResponse> resultList = new ArrayList<>();
 	        ObjectListing objectListing = s3.listObjects(bucketName, rootPath);
 	        List<S3ObjectSummary> objectSummaries = objectListing.getObjectSummaries();
 
 	        for (S3ObjectSummary objectSummary : objectSummaries) {
 	            S3Object obj = s3.getObject(bucketName, objectSummary.getKey());
+	            String fileName = StringUtils.substringAfterLast(objectSummary.getKey(), "/");
+	            System.out.println("obj:: " + obj);
+	            System.out.println("filename:: " + fileName);
+
 	            S3ObjectInputStream inputStream = obj.getObjectContent();
 	            byte[] data = IOUtils.toByteArray(inputStream);
-                resultList.add(data);
+			    ResultsResponse resultsResponse = new ResultsResponse(fileName, data);
+                resultList.add(resultsResponse);
 	        }
 	        return resultList;			
 		}
@@ -142,6 +149,8 @@ public class AmazonS3Service {
 			throw new CustomException("Failed to get files from S3");
 		}
 	}
+	
+
 	
 	public void deleteResults(String filename, int patientId) {
 		String resultsFolder = "results-files";
