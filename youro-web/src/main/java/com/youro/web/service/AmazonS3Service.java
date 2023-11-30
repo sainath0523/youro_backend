@@ -217,7 +217,8 @@ public class AmazonS3Service {
 			        return data;
 				}
 				catch(AmazonServiceException | IOException e) {
-					throw new CustomException("Failed to get dp from S3");
+					System.out.println("Failed to get dp from S3");
+					return null;
 				}
 		}
 		else
