@@ -31,6 +31,8 @@ public class AppointmentMapper {
         GetAppointmentsResponse resp = new GetAppointmentsResponse();
         List<AppointmentResponse> previous = new ArrayList<>();
         List<AppointmentResponse> upComing = new ArrayList<>();
+        List<AppointmentResponse> canceledPrevious = new ArrayList<>();
+        List<AppointmentResponse> canceledUpComing = new ArrayList<>();
         Date date = new Date();
         for(Appointments app : response)
         {
@@ -67,15 +69,32 @@ public class AppointmentMapper {
             }
             res.picture = s3Service.getImage(user.getUserId());
             if(app.apptDate.before(date)) {
-                previous.add(res);
+                if(app.status.equals(AppointmentStatus.CANCELED))
+                {
+                    canceledPrevious.add(res);
+                }
+                else
+                {
+                    previous.add(res);
+                }
             }
             else
             {
-                upComing.add(res);
+                if(app.status.equals(AppointmentStatus.CANCELED))
+                {
+                    canceledUpComing.add(res);
+                }
+                else
+                {
+                    upComing.add(res);
+                }
             }
         }
-        resp.previousAppointments = previous;
-        resp.upComingAppointments = upComing;
+        resp.previousAppointments.addAll(previous);
+        resp.previousAppointments.addAll(canceledPrevious);
+        resp.upComingAppointments.addAll(upComing);
+        resp.upComingAppointments.addAll(canceledUpComing);
+
         return resp;
     }
 

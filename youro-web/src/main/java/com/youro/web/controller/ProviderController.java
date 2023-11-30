@@ -51,7 +51,7 @@ public class ProviderController {
     public BasicResponse cancelAppointment(@PathVariable("apptId") int apptId, @PathVariable("uId") int uId)
     {
         System.out.println(apptId + " :: " + uId);
-        return providerService.cancelAppointment(apptId, uId);
+        return providerService.cancelAppointment(apptId, uId, true);
     }
 
     @PutMapping("/updateAppointment/{apptId}")

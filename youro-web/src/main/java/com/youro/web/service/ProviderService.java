@@ -80,10 +80,11 @@ public class ProviderService {
             Date startDate = inputFormat.parse(request.startTime);
             Date startTime = inputFormat.parse(request.startTime);
             Date endTime = inputFormat.parse(request.endTime);
-            
+            List<Appointments>  appointments = appointmentsRepository.getDeleteAppointments(request.docId, startTime, endTime);
+            appointments.forEach(l -> cancelAppointment(l.getApptId(), l.getDoctorId().getUserId(), false));
             drScheduleRepo.getDoctor(request.docId, startTime, endTime);
             List<DoctorSchedule> schduleList = drScheduleRepo.getDoctorList(request.docId, startTime, endTime);
-            
+
             if(!schduleList.isEmpty())
             {
             	if(schduleList.size() == 1)
@@ -265,7 +266,7 @@ public class ProviderService {
         return resp;
     }
 
-    public BasicResponse cancelAppointment(int apptId, int uId) throws CustomException
+    public BasicResponse cancelAppointment(int apptId, int uId, boolean flag) throws CustomException
     {
         BasicResponse resp = new BasicResponse();
         try {
@@ -320,18 +321,19 @@ public class ProviderService {
     	    mes.setSubject(msgSubjToNotify);
     	    mes.setText(msgBodyToNotify);
     	    javaMailSender.send(mes);
-    	    
-            DoctorSchedule doctorSchedule = new DoctorSchedule();
-            doctorSchedule.setSchDate(appt.getApptDate());
-            doctorSchedule.setSchEndTime(appt.getApptEndTime());
-            doctorSchedule.setSchStartTime(appt.getApptStartTime());
-            User temp = new User();
-            temp.setUserId(docId);
-            doctorSchedule.setDoctorId(temp);
-            //String scheDate  = outputFormat.format(doctorSchedule.schDate);
-            List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(HelpUtils.getUser(docId), doctorSchedule.schDate);
-            drList.add(doctorSchedule);
-            saveDoctorSchedule(drList);
+    	    if(flag) {
+                DoctorSchedule doctorSchedule = new DoctorSchedule();
+                doctorSchedule.setSchDate(appt.getApptDate());
+                doctorSchedule.setSchEndTime(appt.getApptEndTime());
+                doctorSchedule.setSchStartTime(appt.getApptStartTime());
+                User temp = new User();
+                temp.setUserId(docId);
+                doctorSchedule.setDoctorId(temp);
+                //String scheDate  = outputFormat.format(doctorSchedule.schDate);
+                List<DoctorSchedule> drList = drScheduleRepo.findByDoctorIdAndSchDate(HelpUtils.getUser(docId), doctorSchedule.schDate);
+                drList.add(doctorSchedule);
+                saveDoctorSchedule(drList);
+            }
             appt.status = AppointmentStatus.CANCELED;
             appointmentsRepository.save(appt);
             notificationService.saveApptNotification(user.get(),appt,"CANCEL");

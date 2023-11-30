@@ -1,6 +1,7 @@
 package com.youro.web.service;
 
 import com.youro.web.entity.*;
+import com.youro.web.exception.CustomException;
 import com.youro.web.mapper.*;
 import com.youro.web.pojo.Request.AddAvailabilityRequest;
 import com.youro.web.pojo.Request.SaveAppoitmentRequest;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,12 +46,18 @@ public class PatientService {
     UserRepository userRepository;
 
     @Autowired
+    CarePlanRepository carePlanRepository;
+
+    @Autowired
     DoctorScheduleRepository doctorScheduleRepository;
     
     @Autowired
     AmazonS3Service s3Service;
-	
-	public List<GetSymptomScoreResponse> getSymptomScore(int patientId){
+
+    SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)");
+
+
+    public List<GetSymptomScoreResponse> getSymptomScore(int patientId){
 
         List<SymptomScore> res = symptomScoreRepo.findByPatientId(patientId);
 
@@ -66,6 +74,10 @@ public class PatientService {
         } else {
             res.addAll(appointmentsRepository.findAppointments(uId, 1 ));
         }
+        List<Integer> apptIds = carePlanRepository.findDistinctAppointments();
+        res.parallelStream().filter(appt -> apptIds.contains(appt.apptId)).forEach(appointments -> {
+            appointments.status = AppointmentStatus.COMPLETED;
+        });
         return AppointmentMapper.getAppointments(res, user.userType, userRepository, diagnosisRepository, symptomScoreRepo, timeZone, s3Service);
     }
 
@@ -135,17 +147,27 @@ public class PatientService {
     }
 
     public BasicResponse saveAppointment(SaveAppoitmentRequest saveAppoitmentRequest) throws ParseException {
-
         BasicResponse resp = new BasicResponse();
+        Date startTime = inputFormat.parse(saveAppoitmentRequest.startTime);
+        if(appointmentsRepository.hasCustomerConflict(startTime, saveAppoitmentRequest.patId) !=null)
+        {
+            throw new CustomException("An existing appointment already available for given slot");
+        }
+        List<Integer> doctorIds = doctorScheduleRepository.getAvailableDoctors(startTime);
+
+        if(doctorIds.isEmpty()){
+            throw new CustomException("All the slots for given time has been booked. Please book different time slot");
+        }
+        int docId = doctorIds.stream().findAny().get();
         AddAvailabilityRequest request = new AddAvailabilityRequest();
-        request.docId = saveAppoitmentRequest.docId;
+        request.docId = docId;
         request.startTime = saveAppoitmentRequest.startTime;
         request.endTime = HelpUtils.addTime(saveAppoitmentRequest.startTime);
         Appointments appt = AppointmentMapper.saveAppointments(saveAppoitmentRequest,request.endTime);
+        providerService.removeAvailability(request);
         appointmentsRepository.save(appt);
         notificationService.saveApptNotification(appt.getDoctorId(),appt, "BOOKED");
-        providerService.removeAvailability(request);
-        userRepository.findById(request.docId).ifPresent(a -> resp.message = a.getFirstName() + " " + a.getLastName());
+        userRepository.findById(docId).ifPresent(a -> resp.message = a.getFirstName() + " " + a.getLastName());
         return resp;
     }
 

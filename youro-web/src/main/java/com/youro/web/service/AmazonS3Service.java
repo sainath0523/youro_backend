@@ -1,26 +1,11 @@
 package com.youro.web.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
-import org.apache.commons.lang3.StringUtils;
-
 import com.amazonaws.util.IOUtils;
 import com.youro.web.bucket.BucketName;
 import com.youro.web.entity.Results;
@@ -31,6 +16,16 @@ import com.youro.web.pojo.Response.ResultsResponse;
 import com.youro.web.repository.ResultsRepository;
 import com.youro.web.repository.UserRepository;
 import com.youro.web.utils.HelpUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class AmazonS3Service {
@@ -163,7 +158,7 @@ public class AmazonS3Service {
 
 	public BasicResponse uploadImage(int userId, MultipartFile mFile) throws IOException {
 		Optional<User> temp = userRepository.findById(userId);
-		if(!temp.isEmpty()) {
+		if(temp.isPresent()) {
 			String profilePicFolder = "profile-picture";
 			String bucketName = String.format("%s", BucketName.PROFILE_IMAGE.getBucketName());
 			String rootPath = String.format("%s/%s", Integer.toString(userId), profilePicFolder);
@@ -187,6 +182,7 @@ public class AmazonS3Service {
 		}
 	}
 
+	@Cacheable(value = "profilePictures")
 	public byte[] getImage(int id) throws IOException {
 		Optional<User> user = userRepository.findByUserId(id);
 		if(user.isEmpty()) {

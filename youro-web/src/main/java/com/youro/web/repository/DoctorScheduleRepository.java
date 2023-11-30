@@ -30,11 +30,15 @@ public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, 
      @Query(value = "DELETE from doctor_schedule WHERE doctor_id = :doctor AND start_time >= :startTime AND end_time <= :endTime ", nativeQuery = true)
      void getDoctor(@Param("doctor") Integer doctor, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
+     @Query(value = "SELECT d.doctor_id FROM doctor_schedule d WHERE :givenStartTime BETWEEN d.start_time AND d.end_time ", nativeQuery = true)
+     List<Integer> getAvailableDoctors(
+             @Param("givenStartTime") Date givenStartTime
+     );
 
-     @Query(value = "select * from  doctor_schedule WHERE doctor_id = :doctor AND (:startTime BETWEEN start_time AND end_time\n" +
-             "    OR :endTime BETWEEN start_time AND end_time\n" +
-             "    OR start_time BETWEEN :startTime AND :endTime\n" +
-             "    OR end_time BETWEEN :startTime AND :endTime)", nativeQuery = true)
+     @Query(value = "select * from  doctor_schedule WHERE doctor_id = :doctor AND (:startTime > start_time AND :startTime < end_time\n" +
+             "    OR :endTime > start_time AND :endTime < end_time\n" +
+             "    OR start_time > :startTime AND start_time < :endTime\n" +
+             "    OR end_time > :startTime AND end_time < :endTime)", nativeQuery = true)
      List<DoctorSchedule> getDoctorList(@Param("doctor") Integer doctor, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
 

@@ -24,7 +24,6 @@ public class ChatController {
     @PostMapping("/saveChat")
     public BasicResponse saveChat(@RequestBody @Valid SaveChatRequest request)
     {
-
         return chatService.saveChat(request);
     }
 
@@ -35,13 +34,13 @@ public class ChatController {
     }
 
     @GetMapping("/getChat/{docId}/{patId}")
-    public List<ChatResponse> updateChat(@PathVariable(name = "docId") Integer docId, @PathVariable(name = "patId") Integer patId)
+    public List<ChatResponse> getChat(@PathVariable(name = "docId") Integer docId, @PathVariable(name = "patId") Integer patId)
     {
         return chatService.getchat(docId, patId);
     }
 
     @GetMapping("/getChatHistory/{uId}")
-    public List<ChatHistoryResponse> updateChat(@PathVariable(name = "uId") Integer uId)
+    public List<ChatHistoryResponse> getChatHistory(@PathVariable(name = "uId") Integer uId)
     {
         return chatService.getChatHistory(uId);
     }
