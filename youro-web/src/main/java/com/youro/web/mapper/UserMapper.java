@@ -3,12 +3,19 @@ package com.youro.web.mapper;
 import com.youro.web.entity.*;
 import com.youro.web.pojo.Request.RegistrationRequest;
 import com.youro.web.pojo.Request.UpdateUserRequest;
+import com.youro.web.pojo.Response.GetNotificationsResponse;
+import com.youro.web.pojo.Response.UserDetailsResponse;
+import com.youro.web.service.AmazonS3Service;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 @Component
 public class UserMapper {
@@ -214,5 +221,35 @@ public class UserMapper {
         return userDetails;
 
     }
+
+
+	public static List<UserDetailsResponse> getUserDetails(List<User> users, AmazonS3Service s3Service) throws IOException {
+        List<UserDetailsResponse> userDetails = new ArrayList<>();
+        for(User user: users) {
+        	UserDetailsResponse userDetailsResponse = new UserDetailsResponse();
+        	userDetailsResponse.setAddress(user.getAddress());
+        	userDetailsResponse.setCity(user.getCity());
+        	userDetailsResponse.setDateOfBirth(user.getDateOfBirth());
+        	userDetailsResponse.setEmail(user.getEmail());
+        	userDetailsResponse.setFirstName(user.getFirstName());
+        	userDetailsResponse.setGender(user.getGender());
+        	userDetailsResponse.setHasInsurance(user.getHasInsurance());
+        	userDetailsResponse.setLastName(user.getLastName());
+        	userDetailsResponse.setLicense(user.getLicense());
+        	userDetailsResponse.setPhone1(user.getPhone1());
+        	userDetailsResponse.setRelation(user.getRelation());
+        	userDetailsResponse.setRelationEmail(user.getRelationEmail());
+        	userDetailsResponse.setSpecialization(user.getSpecialization());
+        	userDetailsResponse.setState(user.getState());
+        	userDetailsResponse.setStatus(user.getStatus());
+        	userDetailsResponse.setSubscriptionStatus(user.getSubscriptionStatus());
+        	userDetailsResponse.setUserId(user.getUserId());
+        	userDetailsResponse.setVerified(user.getVerified());
+        	userDetailsResponse.setZipCode(user.getZipCode());
+        	userDetailsResponse.setProfilePicture(s3Service.getImage(user.getUserId()));
+        	userDetails.add(userDetailsResponse);
+        }
+		return userDetails;
+	}
 
 }
