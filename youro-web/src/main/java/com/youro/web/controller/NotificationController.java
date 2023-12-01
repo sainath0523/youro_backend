@@ -16,9 +16,9 @@ public class NotificationController {
     NotificationService notificationService;
 
     @GetMapping("/getNotifications/{uId}")
-    public List<GetNotificationsResponse> getNotifications(@PathVariable(name = "uId") Integer uId)
+    public List<GetNotificationsResponse> getNotifications(@PathVariable(name = "uId") Integer uId, @RequestParam(required = false, name="timeZone") String timeZone)
     {
-         return notificationService.getNotifications(uId);
+         return notificationService.getNotifications(uId, timeZone);
     }
 
     @DeleteMapping("/deleteNotifications/{notId}")

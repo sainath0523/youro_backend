@@ -46,7 +46,7 @@ public class CarePlanService {
 	@Autowired
 	CarePlanDetailsRepository carePlanDetailsRepository;
     
-    public GetCarePlaneDetails getPrescriptionByDiagId(int diagId)
+    /*public GetCarePlaneDetails getPrescriptionByDiagId(int diagId)
     {
 
         Diagnosis diag = HelpUtils.getDiagnosis(diagId);
@@ -82,10 +82,10 @@ public class CarePlanService {
         else if (diagID == null)
         {
             return getCarePlanByApptId(apptId);
-        }/*
+        }*//*
         else {
             return CarePlanMapper.getCarePlaneDetails(getPrescriptionByDiagId(diagID), getCarePlanByApptId(apptId));
-        }*/
+        }*//*
 		return  new GetCarePlaneDetails();
     }
 
@@ -106,7 +106,7 @@ public class CarePlanService {
         }
         responses.sort(Comparator.comparing(GetCarePlanByPatientResponse :: getApptDate, Comparator.reverseOrder()));
         return responses;
-    }
+    }*/
 
 	public List<GetCarePlanVersions> getCarePlanVersions(int apptId)
 	{
@@ -129,7 +129,6 @@ public class CarePlanService {
 
 	public GetCarePlanResponse getCarePlanByPatient(Integer uId, Integer apptId)
 	{
-
 		if ((uId != null && apptId == null) || (apptId != null && uId == null)) {
 			List<CarePlan> carePlanList = new ArrayList<>();
 			if (apptId != null) {

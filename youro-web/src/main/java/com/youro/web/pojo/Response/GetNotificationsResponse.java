@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 public class GetNotificationsResponse {
     public int notId;
+    public String date;
     public int uId;
     public String message;
 }

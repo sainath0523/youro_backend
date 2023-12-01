@@ -15,6 +15,7 @@ import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.ResultsResponse;
 import com.youro.web.repository.ResultsRepository;
 import com.youro.web.repository.UserRepository;
+import com.youro.web.utils.CacheUtils;
 import com.youro.web.utils.HelpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ import java.util.*;
 public class AmazonS3Service {
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	CacheUtils cacheUtils;
 	
 	@Autowired
 	ResultsRepository resultsRepository;
@@ -174,7 +178,7 @@ public class AmazonS3Service {
 			User user = temp.get();
 			user.setProfileUrl(profile_url);
 			userRepository.save(user);
-			
+			cacheUtils.evictCache(userId);
 			return new BasicResponse("Uploaded profile picture to s3 successfully");
 		}
 		else {

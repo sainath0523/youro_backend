@@ -4,6 +4,7 @@ import com.youro.web.entity.Notes;
 import com.youro.web.pojo.Request.SaveNotesRequest;
 import com.youro.web.pojo.Response.GetNotesResponse;
 import com.youro.web.utils.HelpUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Comparator;

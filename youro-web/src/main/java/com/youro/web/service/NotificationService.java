@@ -5,6 +5,7 @@ import com.youro.web.exception.CustomException;
 import com.youro.web.mapper.NotificationMapper;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.GetNotificationsResponse;
+import com.youro.web.repository.AppointmentsRepository;
 import com.youro.web.repository.DiagnosisRepository;
 import com.youro.web.repository.NotificationRepository;
 import com.youro.web.repository.UserRepository;
@@ -23,13 +24,16 @@ public class NotificationService {
     NotificationRepository notificationRepository;
 
     @Autowired
+    AppointmentsRepository appointmentsRepository;
+
+    @Autowired
     UserRepository userRepository;
 
     @Autowired
     DiagnosisRepository diagnosisRepository;
-    public List<GetNotificationsResponse> getNotifications(int uId)
+    public List<GetNotificationsResponse> getNotifications(int uId, String timeZone)
     {
-        return NotificationMapper.EntityToResponseMapper(notificationRepository.getByUser(uId));
+        return NotificationMapper.EntityToResponseMapper(notificationRepository.getByUser(uId), timeZone);
     }
 
     @Transactional
@@ -58,6 +62,7 @@ public class NotificationService {
     public void saveCarePlanNotification(Appointments appt, CarePlan carePlan, String type)
     {
         Notification notification = new Notification();
+        appt = appointmentsRepository.findById(appt.getApptId()).get();
         notification.setUserId(appt.getPatientId());
         User doctor = userRepository.findById(appt.getDoctorId().getUserId()).get();
         Diagnosis diagnosis = diagnosisRepository.findById(appt.getDiagnosis().getDiagId()).get();
@@ -83,7 +88,7 @@ public class NotificationService {
         {
             notUser = userRepository.findById(appt.getDoctorId().getUserId()).get();
             printUser = userRepository.findById(appt.getPatientId().getUserId()).get();
-            message = "New Booking Alert - " + printUser.getFirstName() + "  on " + appt.getApptDate() + " for " + diagnosis.getName();
+            message = "New Booking Alert - " + printUser.getFirstName() + "  on &&" + appt.getApptStartTime() + "&& for " + diagnosis.getName();
         }else
         {
 
@@ -95,7 +100,7 @@ public class NotificationService {
                 printUser = userRepository.findById(appt.getDoctorId().getUserId()).get();
                 notUser = userRepository.findById(appt.getPatientId().getUserId()).get();
             }
-            message = "New Cancellation Alert - " + printUser.getFirstName() + "  on " + appt.getApptDate();
+            message = "New Cancellation Alert - " + printUser.getFirstName() + "  on &&" + appt.getApptDate() + "&&";
         }
         Notification notification = new Notification();
         notification.setMessage(message);

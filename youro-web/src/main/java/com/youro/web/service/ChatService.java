@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ChatService {
@@ -59,10 +56,10 @@ public class ChatService {
         }
         return new BasicResponse("Chat Updated Successfully");
     }
-    public List<ChatResponse> getchat(Integer docId, Integer patId)
+    public List<ChatResponse> getchat(Integer docId, Integer patId, String timeZone)
     {
         try {
-
+            inputFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
             List<ChatResponse> response = new ArrayList<>();
             List<Chat> chat  = chatRepository.getChatsByUserId(docId, patId);
             for(Chat chat2 : chat)

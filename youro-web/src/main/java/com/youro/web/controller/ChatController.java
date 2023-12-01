@@ -34,9 +34,9 @@ public class ChatController {
     }
 
     @GetMapping("/getChat/{docId}/{patId}")
-    public List<ChatResponse> getChat(@PathVariable(name = "docId") Integer docId, @PathVariable(name = "patId") Integer patId)
+    public List<ChatResponse> getChat(@PathVariable(name = "docId") Integer docId, @PathVariable(name = "patId") Integer patId, @RequestParam(required = false, name="timeZone") String timeZone)
     {
-        return chatService.getchat(docId, patId);
+        return chatService.getchat(docId, patId, timeZone);
     }
 
     @GetMapping("/getChatHistory/{uId}")
