@@ -4,16 +4,19 @@ import com.youro.web.entity.*;
 import com.youro.web.exception.CustomException;
 import com.youro.web.mapper.PrescriptionMapper;
 import com.youro.web.mapper.QuestionnairesMapper;
+import com.youro.web.mapper.UserMapper;
 import com.youro.web.pojo.Request.AddDiagnosisRequest;
 import com.youro.web.pojo.Request.AddPrescriptionRequest;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.PrescriptionDetails;
 import com.youro.web.pojo.Response.QuestionnairesResponse;
+import com.youro.web.pojo.Response.UserDetailsResponse;
 import com.youro.web.repository.*;
 import com.youro.web.utils.HelpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -33,9 +36,13 @@ public class AdminService {
 
     @Autowired
     OptionsRepository optionsRepository;
+    
+    @Autowired
+    AmazonS3Service s3Service;
 
-    public List<User> getUsersByType(UserType uType) {
-        return userRepository.findByUserType(uType);
+    public List<UserDetailsResponse> getUsersByType(UserType uType) throws IOException {
+    	List<User> users = userRepository.findByUserType(uType);
+    		return UserMapper.getUserDetails(users, s3Service);
     }
 
     public BasicResponse addDiagnosis(AddDiagnosisRequest request)
