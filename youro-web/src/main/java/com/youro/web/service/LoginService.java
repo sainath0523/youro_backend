@@ -1,5 +1,6 @@
 package com.youro.web.service;
 
+import com.youro.web.pojo.Response.DoctorStatusResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +39,23 @@ public class LoginService {
 
         return userRepository.findByEmail(loginRequest.getUsername())
                 .orElseThrow();
+    }
+
+    public DoctorStatusResponse getDoctorStatus(int uId)
+    {
+        DoctorStatusResponse resp = new DoctorStatusResponse();
+        Optional<User> user= userRepository.findById(uId);
+        if(user.isEmpty())
+        {
+            throw new CustomException("User not found");
+        }
+        else {
+            User doctor = user.get();
+            resp.status = doctor.status;
+            resp.uId = doctor.getUserId();
+        }
+        return resp;
+
     }
 
     public User getDetailsById(String emailId) throws CustomException {

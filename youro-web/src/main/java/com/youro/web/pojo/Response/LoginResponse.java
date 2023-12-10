@@ -36,7 +36,6 @@ public class LoginResponse {
 		this.userId = userId;
 	}
 
-
 	public String getuType() {
 		return uType;
 	}

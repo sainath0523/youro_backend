@@ -4,6 +4,5 @@ public class GetCarePlanVersions {
 
     public int cId;
     public String version;
-
     public Boolean edit;
 }
