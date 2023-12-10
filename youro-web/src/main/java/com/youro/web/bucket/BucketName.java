@@ -1,7 +1,7 @@
 package com.youro.web.bucket;
 
 public enum BucketName {
-	PROFILE_IMAGE("youro-files");
+	PROFILE_IMAGE("youro-files-pat");
 	
 	private final String bucketName;
 

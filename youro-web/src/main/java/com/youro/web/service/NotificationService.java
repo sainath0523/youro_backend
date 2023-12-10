@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +32,9 @@ public class NotificationService {
 
     @Autowired
     DiagnosisRepository diagnosisRepository;
+    
+    static SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+
     public List<GetNotificationsResponse> getNotifications(int uId, String timeZone)
     {
         return NotificationMapper.EntityToResponseMapper(notificationRepository.getByUser(uId), timeZone);
@@ -99,7 +103,7 @@ public class NotificationService {
                 printUser = userRepository.findById(appt.getDoctorId().getUserId()).get();
                 notUser = userRepository.findById(appt.getPatientId().getUserId()).get();
             }
-            message = "New Cancellation Alert - " + printUser.getFirstName() + "  on &&" + appt.getApptStartTime() + "&&";
+            message = "New Cancellation Alert - " + printUser.getFirstName() + "  on &&" + inputFormat.format(appt.getApptStartTime()) + "&&";
         }
         Notification notification = new Notification();
         notification.setMessage(message);
