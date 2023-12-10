@@ -26,7 +26,7 @@ public class Notes {
     public User patientId;
 
     @ManyToOne
-    @JoinColumn(name = "apptId", nullable = true)
+    @JoinColumn(name = "apptId")
     public Appointments appointments;
 
     @Lob

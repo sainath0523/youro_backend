@@ -91,6 +91,7 @@ public class NotificationService {
             message = "New Booking Alert - " + printUser.getFirstName() + "  on &&" + appt.getApptStartTime() + "&& for " + diagnosis.getName();
         }else
         {
+
             if(user.userType == UserType.PATIENT)
             {
                 notUser = userRepository.findById(appt.getDoctorId().getUserId()).get();
@@ -99,7 +100,7 @@ public class NotificationService {
                 printUser = userRepository.findById(appt.getDoctorId().getUserId()).get();
                 notUser = userRepository.findById(appt.getPatientId().getUserId()).get();
             }
-            message = "New Cancellation Alert - " + printUser.getFirstName() + "  on &&" + appt.getApptStartTime() + "&&";
+            message = "New Cancellation Alert - " + printUser.getFirstName() + "  on &&" + appt.getApptDate() + "&&";
         }
         Notification notification = new Notification();
         notification.setMessage(message);

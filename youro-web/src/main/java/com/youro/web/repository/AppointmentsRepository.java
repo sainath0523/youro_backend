@@ -1,7 +1,6 @@
 package com.youro.web.repository;
 
 import com.youro.web.entity.Appointments;
-import com.youro.web.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,12 +13,9 @@ public interface AppointmentsRepository extends JpaRepository<Appointments, Inte
     @Query(value = "select * from appointment as appt where appt.patient_id = ?1 or appt.doctor_id = ?1", nativeQuery = true)
     List<Appointments> findByUId(int uId);
 
-    List<Appointments> findByPatientIdOrDoctorId(User patientId, User doctorId);
-
     @Query(value = "select * from appointment as appt where appt.doctor_id = :uId AND appt.appt_start_time >= :dateTime AND appt.appt_end_time <= :endTime", nativeQuery = true)
     List<Appointments> getDeleteAppointments(@Param("uId") Integer uId, @Param("dateTime") Date startTime, @Param("endTime") Date endTime);
 
-    List<Appointments> findByDoctorIdAndApptStartTimeGreaterThanEqualAndApptEndTimeLessThanEqual(User doctorId, Date startTime, Date endTime);
     @Query(value = "select * from appointment as appt where (appt.patient_id = ?1 or appt.doctor_id = ?1) and appt.status = ?2", nativeQuery = true)
     List<Appointments> findAppointments(int uId, int status);
 

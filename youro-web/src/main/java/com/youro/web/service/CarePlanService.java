@@ -172,11 +172,8 @@ public class CarePlanService {
     public BasicResponse saveNotes(SaveNotesRequest request)
     {
         notesRepository.save(NotesMapper.requestToEntityMapper(request));
-		if(request.apptId != 0)
-		{
-			Appointments appt = HelpUtils.getAppointments(request.apptId);
-			saveCheckList(appt, "NOTES");
-		}
+		Appointments appt = HelpUtils.getAppointments(request.apptId);
+		saveCheckList(appt, "NOTES");
         return new BasicResponse("Notes Saved Successfully");
     }
 
