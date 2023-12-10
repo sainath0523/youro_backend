@@ -118,8 +118,10 @@ public class PatientService {
         double score = ((double) actualScore / (double) totalScore) * 100;
         double powerOfTen = Math.pow(10, 2);
         score=  Math.round(score * powerOfTen) / powerOfTen;
-        SymptomScore sC = SymptomScoreMapper.convertReqBodyToEntity(req, score);
-        symptomScoreRepo.save(sC);
+        if(!req.isFromLanding()) {
+	        SymptomScore sC = SymptomScoreMapper.convertReqBodyToEntity(req, score);
+	        symptomScoreRepo.save(sC);
+        }
         response.score = score;
         diagnosisRepository.findById(req.getDiagnosisId()).ifPresent(a -> response.diagName = a.getName());
         return response;

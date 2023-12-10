@@ -18,6 +18,9 @@ public class SymptomScoreRequest {
 
     @NotNull(message = "is required")
     private List<questionData> questionData;
+    
+    @NotNull(message = "is required")
+    private boolean fromLanding;
 
     @Getter
     public static class questionData {
