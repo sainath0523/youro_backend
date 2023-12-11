@@ -2,6 +2,7 @@ package com.youro.web.mapper;
 
 import com.youro.web.entity.CheckList;
 import com.youro.web.pojo.Response.GetCheckListResponse;
+import com.youro.web.repository.AppointmentsRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class CheckListMapper {
 
-	public static List<GetCheckListResponse> entityToResponseMapping(List<CheckList> checklists) {
+	public static List<GetCheckListResponse> entityToResponseMapping(List<CheckList> checklists, AppointmentsRepository appointmentsRepository) {
 		
 		List<GetCheckListResponse> resp = new ArrayList<>();
         
@@ -18,7 +19,7 @@ public class CheckListMapper {
         {
             if(!checklist.notes || !checklist.orders) {
                 GetCheckListResponse res = new GetCheckListResponse();
-                res.apptDate = checklist.getApptDate();
+                res.apptDate = appointmentsRepository.findById(checklist.appointments.getApptId()).get().getApptDate();
                 res.patientName = checklist.getPatientId().getFirstName() + " " + checklist.getPatientId().getLastName();
                 res.notes = checklist.getNotes();
                 res.orders = checklist.getOrders();

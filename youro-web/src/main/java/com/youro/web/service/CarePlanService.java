@@ -234,7 +234,7 @@ public class CarePlanService {
 
 	public List<GetCheckListResponse> getCheckList(int doctorId) {
         List<CheckList> checklists = checkListRepository.findByDoctorId(HelpUtils.getUser(doctorId));
-		return CheckListMapper.entityToResponseMapping(checklists);
+		return CheckListMapper.entityToResponseMapping(checklists, appointmentsRepository);
 	}
 
 }

@@ -84,6 +84,10 @@ public class AppointmentMapper {
                 {
                     canceledUpComing.add(res);
                 }
+                else if(app.status.equals(AppointmentStatus.COMPLETED))
+                {
+                    previous.add(res);
+                }
                 else
                 {
                     upComing.add(res);
@@ -94,7 +98,6 @@ public class AppointmentMapper {
         resp.previousAppointments.addAll(canceledPrevious);
         resp.upComingAppointments.addAll(upComing);
         resp.upComingAppointments.addAll(canceledUpComing);
-
         return resp;
     }
 

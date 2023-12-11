@@ -19,11 +19,6 @@ public class CarePlanController {
 	@Autowired
     CarePlanService carePlanService;
 
-   /* @PostMapping("/saveCheckList")
-    public BasicResponse saveCheckList(@RequestBody @Valid SaveCheckListRequest requestBody) {
-        return new BasicResponse();
-    }*/
-
     @GetMapping("/getCheckList/{doctorId}")
     public List<GetCheckListResponse> getCheckList(@PathVariable("doctorId") int doctorId) {   	
         return carePlanService.getCheckList(doctorId);
