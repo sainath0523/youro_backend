@@ -2,6 +2,7 @@ package com.youro.web.service;
 
 import com.youro.web.entity.Appointments;
 import com.youro.web.entity.Chat;
+import com.youro.web.entity.Message;
 import com.youro.web.entity.User;
 import com.youro.web.entity.UserType;
 import com.youro.web.exception.CustomException;
@@ -142,6 +143,25 @@ public class ChatService {
             }    
 		}
 		return chatUsers;
+	}
+	public BasicResponse saveWebChat(Message message) {
+		// TODO Auto-generated method stub
+		
+		try {
+            Chat chat = new Chat();
+            chat.setSeen(false);
+            chat.setFromId(HelpUtils.getUser(Integer.parseInt(message.getSenderName())));
+            chat.setToId(HelpUtils.getUser(Integer.parseInt(message.getReceiverName())));
+            chat.setMessage(message.getMessage());
+            chat.setDateTime(new Date());
+            chatRepository.save(chat);
+            return new BasicResponse("Chat Saved Successfully");
+            
+        }catch (Exception e)
+        {
+            throw new CustomException(e.getLocalizedMessage());
+        }
+		
 	}
 
 
