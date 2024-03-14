@@ -83,6 +83,8 @@ public class AdminService {
             newPres.setName(request.name);
             newPres.setPresType(request.type);
             newPres.setDiagnosis(diag);
+            newPres.setShortInfo(request.shortInfo);
+            newPres.setOverview(request.overview);
             prescriptionRepository.save(newPres);
         }
 
@@ -119,7 +121,10 @@ public class AdminService {
     }
 
     public List<Prescription> getAllPrescriptions(){
-        return prescriptionRepository.findAll();
+        List<Prescription> res = prescriptionRepository.findAll();
+        System.out.println(res);
+
+        return res;
     }
 
     public List<Category> getAllCategories(){

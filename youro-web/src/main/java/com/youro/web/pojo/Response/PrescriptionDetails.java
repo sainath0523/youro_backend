@@ -14,4 +14,6 @@ public class PrescriptionDetails {
     public String dosage;
     public Boolean indicator = false;
     public PrescriptionType type;
+    public String shortInfo;
+    public String overview;
 }

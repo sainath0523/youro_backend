@@ -11,7 +11,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Prescription {
 
     @Id
@@ -29,4 +29,9 @@ public class Prescription {
     @ManyToOne
     @JoinColumn(name = "catId")
     private Category category;
+
+    public String shortInfo;
+
+    @Lob
+    public String overview;
 }

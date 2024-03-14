@@ -19,6 +19,8 @@ public class PrescriptionMapper {
             res.setPresName(prescription.getName());
             res.setType(prescription.getPresType());
             res.setPresId(prescription.getPresId());
+            res.setShortInfo(prescription.getShortInfo());
+            res.setOverview(prescription.getOverview());
             resp.add(res);
         }
         return resp;
