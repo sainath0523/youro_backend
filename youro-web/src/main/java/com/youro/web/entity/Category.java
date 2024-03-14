@@ -5,28 +5,20 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "prescription")
+@Table(name = "category")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Prescription {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int presId;
+    public int categoryId;
 
     public String name;
 
-    public PrescriptionType presType;
-
-    @ManyToOne
-    @JoinColumn(name = "diagnosisId")
-    private Diagnosis diagnosis;
-
-    @ManyToOne
-    @JoinColumn(name = "catId")
-    private Category category;
+    //public PrescriptionType presType;
 }

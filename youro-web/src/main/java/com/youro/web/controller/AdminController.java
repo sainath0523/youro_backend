@@ -3,6 +3,8 @@ package com.youro.web.controller;
 import com.youro.web.entity.*;
 import com.youro.web.pojo.Request.AddDiagnosisRequest;
 import com.youro.web.pojo.Request.AddPrescriptionRequest;
+import com.youro.web.pojo.Request.AddCategoryRequest;
+import com.youro.web.pojo.Request.EditCategoryRequest;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.GetCarePlaneDetails;
 import com.youro.web.pojo.Response.PrescriptionDetails;
@@ -44,6 +46,23 @@ public class AdminController {
         return adminService.addPrescription(requestBody);
     }
 
+    @PostMapping("/addCategory")
+    public BasicResponse addCategory(@RequestBody @Valid AddCategoryRequest requestBody) {
+        return adminService.addCategory(requestBody);
+    }
+
+    @PutMapping("/editCategory/{catId}")
+    public BasicResponse editCategory(@PathVariable("catId") int catId, @RequestBody @Valid EditCategoryRequest requestBody) {
+        return adminService.editCategory(catId, requestBody);
+    }
+
+    @GetMapping("/getAllCategories")
+    public List<Category> getCategories() {
+        return adminService.getAllCategories();
+    }
+
+
+
     @PostMapping("/addDiagnosis")
     public BasicResponse addDiagnosis(@RequestBody @Valid AddDiagnosisRequest requestBody) {
         return adminService.addDiagnosis(requestBody);
@@ -53,8 +72,14 @@ public class AdminController {
     public BasicResponse deletePrescription(@PathVariable("presId") int presId) {
         return adminService.deletePrescription(presId);
     }
-    
-//    @PreAuthorize("hasRole('ADMIN')")
+
+    @DeleteMapping("/deleteCategory/{catId}")
+    public BasicResponse deleteCategory(@PathVariable("catId") int catId) {
+        return adminService.deleteCategory(catId);
+    }
+
+
+    //    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllUsers/{type}")
     public List<UserDetailsResponse> getUsersByType(@PathVariable("type") UserType uType, @RequestParam(name = "subscription", required = false) SubscriptionStatus status, @RequestParam(name = "drStatus", required = false) DoctorStatus drStatus) throws IOException {
         return adminService.getUsersByType(uType);
