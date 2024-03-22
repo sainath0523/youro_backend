@@ -13,6 +13,8 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Inte
 
     List<Prescription> findByPresTypeInAndDiagnosis(List<PrescriptionType> type, Diagnosis diag);
 
+    // check for enum :
+
     List<Prescription> findByDiagnosis(Diagnosis diag);
     List<Prescription> findByPresType(PrescriptionType type);
 }

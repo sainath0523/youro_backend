@@ -2,7 +2,7 @@ package com.youro.web.pojo.Request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class EditCategoryRequest {
+public class EditPresTypeRequest {
     @NotBlank(message = "Category name cannot be blank")
     public String name;
 
