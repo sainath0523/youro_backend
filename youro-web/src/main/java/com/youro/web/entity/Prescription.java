@@ -33,5 +33,6 @@ public class Prescription {
     public String shortInfo;
 
     @Lob
+    @Column(columnDefinition = "MEDIUMTEXT")
     public String overview;
 }

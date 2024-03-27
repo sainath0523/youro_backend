@@ -8,9 +8,11 @@ import com.youro.web.pojo.Response.GetCarePlaneDetails;
 import com.youro.web.pojo.Response.PrescriptionDetails;
 import com.youro.web.utils.HelpUtils;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CarePlanMapper {
@@ -162,6 +164,7 @@ public class CarePlanMapper {
         GetCarePlanResponse res = new GetCarePlanResponse();
         GetCarePlaneDetails carePlaneDetails = new GetCarePlaneDetails();
         res.diagName = carePlan.getDiagnosis().getName();
+        res.diagInfo = carePlan.getDiagnosis().getInfo();
         res.lastModified = carePlan.getLastUpdated();
         res.notes = carePlan.getNotes();
         if(carePlan.getFollowUp() != null)
@@ -173,8 +176,16 @@ public class CarePlanMapper {
             PrescriptionDetails details = new PrescriptionDetails();
             details.setPresId(detail.getPrescription().getPresId());
             details.setType(detail.getPrescription().getPresType());
+            details.setShortInfo(detail.getPrescription().getShortInfo());
+            details.setOverview(detail.getPrescription().getOverview());
             details.setDosage(detail.getDosage());
             details.setPresName(detail.getPrescription().getName());
+
+            Category category = detail.getPrescription().getCategory();
+
+            if (category != null) {
+                details.setCategoryName(category.getName());
+            }
             details.setIndicator(true);
             if(details.getType()== PrescriptionType.VITAMINS)
             {
@@ -214,6 +225,8 @@ public class CarePlanMapper {
             details.setPresId(prescription.getPresId());
             details.setType(prescription.getPresType());
             details.setPresName(prescription.getName());
+            details.setShortInfo(prescription.getShortInfo());
+            details.setOverview(prescription.getOverview());
             details.setIndicator(false);
             if(details.getType()== PrescriptionType.VITAMINS)
             {

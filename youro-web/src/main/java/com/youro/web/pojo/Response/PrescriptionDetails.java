@@ -16,4 +16,5 @@ public class PrescriptionDetails {
     public PrescriptionType type;
     public String shortInfo;
     public String overview;
+    public String categoryName;
 }

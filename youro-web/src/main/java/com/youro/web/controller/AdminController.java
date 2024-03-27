@@ -5,6 +5,7 @@ import com.youro.web.pojo.Request.AddDiagnosisRequest;
 import com.youro.web.pojo.Request.AddPrescriptionRequest;
 import com.youro.web.pojo.Request.AddCategoryRequest;
 import com.youro.web.pojo.Request.EditCategoryRequest;
+import com.youro.web.pojo.Request.UpdatePrescriptionRequest;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.GetCarePlaneDetails;
 import com.youro.web.pojo.Response.PrescriptionDetails;
@@ -44,6 +45,11 @@ public class AdminController {
     @PostMapping("/addPrescription")
     public BasicResponse addPrescription(@RequestBody @Valid AddPrescriptionRequest requestBody) {
         return adminService.addPrescription(requestBody);
+    }
+
+    @PutMapping("/updatePrescription/{presId}")
+    public BasicResponse updatePrescription(@PathVariable("presId") int presId, @RequestBody @Valid UpdatePrescriptionRequest requestBody) {
+        return adminService.updatePrescription(presId, requestBody);
     }
 
     @PostMapping("/addCategory")

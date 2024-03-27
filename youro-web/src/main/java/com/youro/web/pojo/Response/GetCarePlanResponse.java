@@ -11,6 +11,7 @@ public class GetCarePlanResponse {
 
 
     public String diagName;
+    public String diagInfo;
 
     public String notes;
     public String followUp;
