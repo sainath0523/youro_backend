@@ -7,6 +7,7 @@ import com.youro.web.mapper.QuestionnairesMapper;
 import com.youro.web.mapper.UserMapper;
 import com.youro.web.pojo.Request.AddDiagnosisRequest;
 import com.youro.web.pojo.Request.AddPrescriptionRequest;
+import com.youro.web.pojo.Request.UpdatePrescriptionRequest;
 import com.youro.web.pojo.Request.AddCategoryRequest;
 import com.youro.web.pojo.Request.AddPresTypeRequest;
 import com.youro.web.pojo.Request.EditCategoryRequest;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,9 @@ public class AdminService {
 
     @Autowired
     PrescriptionRepository prescriptionRepository;
+
+    @Autowired
+    CarePlanDetailsRepository carePlanDetailsRepository;
 
     @Autowired
     CategoryRepository categoryRepository;
@@ -103,7 +108,46 @@ public class AdminService {
 
         return new BasicResponse("Added Successfully");
     }
+    public BasicResponse updatePrescription(int presId, UpdatePrescriptionRequest request)
+    {
+        Optional<Prescription> res = prescriptionRepository.findById(presId);
+        if (res.isEmpty()) {
+            throw new CustomException("Prescription not found");
+        }
+        boolean prescribed = !carePlanDetailsRepository.findByPrescription(HelpUtils.getPrescription(presId)).isEmpty();
 
+        Prescription prescription = res.get();
+
+        System.out.println(prescription.name);
+        System.out.println(prescription.getDiagnosis().diagId);
+        if (!prescription.name.equals(request.name)) {
+            Diagnosis diag = HelpUtils.getDiagnosis(request.diagnosisId);
+            List<Prescription> list = prescriptionRepository.findByPresTypeAndDiagnosis(request.type, diag);
+            List<String> names = list.stream().map(Prescription::getName).toList();
+            if (names.contains(request.name)) {
+                throw new CustomException("Already exists in the records");
+            }
+            prescription.setName(request.name);
+        }
+        if (prescription.getDiagnosis().diagId != request.diagnosisId) {
+            if (prescribed) {
+                throw new CustomException("Already prescribed. Can't change diagnosis.");
+            }
+            Diagnosis diag = HelpUtils.getDiagnosis(request.diagnosisId);
+            prescription.setDiagnosis(diag);
+        }
+//        if (prescription.getDiagnosis().diagId != request.diagnosisId) {
+//            if (prescribed) {
+//                throw new CustomException("Already prescribed. Can't change diagnosis.");
+//            }
+//        }
+
+        prescription.setShortInfo(request.shortInfo);
+        prescription.setOverview(request.overview);
+        prescriptionRepository.save(prescription);
+
+        return new BasicResponse("Updated Successfully");
+    }
     public BasicResponse addCategory(AddCategoryRequest request)
     {
         List<Category> list = categoryRepository.findAll();
@@ -162,10 +206,7 @@ public class AdminService {
     }
 
     public List<Prescription> getAllPrescriptions(){
-        List<Prescription> res = prescriptionRepository.findAll();
-        System.out.println(res);
-
-        return res;
+        return prescriptionRepository.findAll();
     }
 
     public List<Category> getAllCategories(){
@@ -184,10 +225,18 @@ public class AdminService {
 
     public BasicResponse deletePrescription(int id)
     {
-        prescriptionRepository.deleteById(id);
-        BasicResponse resp = new BasicResponse();
-        resp.message = "Deleted Successfully";
-        return resp;
+        try {
+            prescriptionRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            // This exception is thrown when the prescription cannot be deleted due to database constraints (e.g., foreign key constraints)
+            logger.error("Failed to delete prescription due to database constraints: {}", id, e);
+            throw new CustomException("Failed to delete prescription, as it is referenced elsewhere.");
+        } catch (Exception e) {
+            // Handle other unexpected exceptions
+            logger.error("Unexpected error occurred when attempting to delete category: {}", id, e);
+            throw new CustomException("An unexpected error occurred.");
+        }
+        return new BasicResponse("Deleted Successfully");
     }
 
 //    public BasicResponse deleteCategory(int id)

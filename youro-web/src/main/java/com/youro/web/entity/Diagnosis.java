@@ -19,6 +19,8 @@ public class Diagnosis {
     public int diagId;
 
     public String name;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
     @Lob
     public String info;
 }

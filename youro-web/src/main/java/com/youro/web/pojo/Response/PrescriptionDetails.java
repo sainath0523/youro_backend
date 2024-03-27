@@ -18,4 +18,5 @@ public class PrescriptionDetails {
     public Category category;
     public String shortInfo;
     public String overview;
+    public String categoryName;
 }
