@@ -4,8 +4,10 @@ import com.youro.web.entity.*;
 import com.youro.web.pojo.Request.AddDiagnosisRequest;
 import com.youro.web.pojo.Request.AddPrescriptionRequest;
 import com.youro.web.pojo.Request.AddCategoryRequest;
+import com.youro.web.pojo.Request.AddPresTypeRequest;
 import com.youro.web.pojo.Request.EditCategoryRequest;
 import com.youro.web.pojo.Request.UpdatePrescriptionRequest;
+import com.youro.web.pojo.Request.EditPresTypeRequest;
 import com.youro.web.pojo.Response.BasicResponse;
 import com.youro.web.pojo.Response.GetCarePlaneDetails;
 import com.youro.web.pojo.Response.PrescriptionDetails;
@@ -57,14 +59,29 @@ public class AdminController {
         return adminService.addCategory(requestBody);
     }
 
+    @PostMapping("/addPresType")
+    public BasicResponse addPresType(@RequestBody @Valid AddPresTypeRequest requestBody) {
+        return adminService.addPresType(requestBody);
+    }
+
     @PutMapping("/editCategory/{catId}")
     public BasicResponse editCategory(@PathVariable("catId") int catId, @RequestBody @Valid EditCategoryRequest requestBody) {
         return adminService.editCategory(catId, requestBody);
     }
 
+    @PutMapping("/editPresType/{presTypeId}")
+    public BasicResponse editPresType(@PathVariable("presTypeId") int presTypeId, @RequestBody @Valid EditPresTypeRequest requestBody) {
+        return adminService.editPresType(presTypeId, requestBody);
+    }
+
     @GetMapping("/getAllCategories")
     public List<Category> getCategories() {
         return adminService.getAllCategories();
+    }
+
+    @GetMapping("/getAllPreTypes")
+    public List<PreType> getPreTypes() {
+        return adminService.getAllPreTypes();
     }
 
 
@@ -82,6 +99,11 @@ public class AdminController {
     @DeleteMapping("/deleteCategory/{catId}")
     public BasicResponse deleteCategory(@PathVariable("catId") int catId) {
         return adminService.deleteCategory(catId);
+    }
+
+    @DeleteMapping("/deletePresType/{presTypeId}")
+    public BasicResponse deletePresType(@PathVariable("presTypeId") int presTypeId) {
+        return adminService.deletePresType(presTypeId);
     }
 
 

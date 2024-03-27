@@ -30,6 +30,11 @@ public class Prescription {
     @JoinColumn(name = "catId")
     private Category category;
 
+//    @ManyToOne
+//    @JoinColumn(name = "presType")
+//    private PreType preType;
+
+
     public String shortInfo;
 
     @Lob
