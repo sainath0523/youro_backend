@@ -8,6 +8,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
+
 @ComponentScan
 public class HelpUtils {
 
@@ -126,6 +128,21 @@ public class HelpUtils {
         diagnosis.setDiagId(dID);
         return diagnosis;
     }
+    public static PrescriptionType getPrescriptionType(int pID )
+    {
+        PrescriptionType pt = new PrescriptionType();
+        pt.setPresTypeId(pID);
+        return pt;
+    }
+
+    public static Category getCategory(int cID )
+    {
+        Category cat = new Category();
+        cat.setCategoryId(cID);
+        return cat;
+    }
+
+
     public static Prescription getPrescription(int pID)
     {
         Prescription prescription = new Prescription();

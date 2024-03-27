@@ -11,21 +11,64 @@ import com.youro.web.utils.HelpUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class CarePlanMapper {
 
+    public static GetCarePlaneDetails mergeMaps(
+            GetCarePlaneDetails map1, GetCarePlaneDetails map2) {
+        GetCarePlaneDetails mergedMap = new GetCarePlaneDetails();
+
+        // Combine keys from both maps
+        List<Integer> allKeys = new ArrayList<>();
+        allKeys.addAll(map1.getPresTypes().keySet());
+        allKeys.addAll(map2.getPresTypes().keySet());
+
+        // Iterate over combined keys
+        for (Integer key : allKeys) {
+            List<PrescriptionDetails> combinedList = new ArrayList<>();
+            if (map1.getPresTypes().containsKey(key)) {
+                combinedList.addAll(map1.getPrescriptionDetails(key));
+            }
+            if (map2.getPresTypes().containsKey(key)) {
+                combinedList.addAll(map2.getPrescriptionDetails(key));
+            }
+            // Resolve duplicates based on indicator
+            List<PrescriptionDetails> resolvedList = combinedList.stream()
+                    .collect(Collectors.toMap(
+                            PrescriptionDetails::getPresId, // Key by id
+                            // Value resolver: Keep the object if indicator is true or if it's the only occurrence for that id
+                            item -> item,
+                            (existing, replacement) -> {
+                                if (replacement.indicator) {
+                                    return replacement;
+                                }
+                                return existing;
+                            }
+                    ))
+                    .values()
+                    .stream()
+                    .toList();
+            for(PrescriptionDetails pd: resolvedList) {
+                mergedMap.addPrescriptionDetails(key, pd);
+            }
+        }
+        return mergedMap;
+    }
 
     public static GetCarePlaneDetails getCarePlaneDetails(GetCarePlaneDetails carePlaneDetails, List<Prescription> prescriptionList)
     {
         GetCarePlaneDetails getCarePlaneDetails = new GetCarePlaneDetails();
         GetCarePlaneDetails prescriptionDetails = getCarePlaneByPrescription(prescriptionList);
-        getCarePlaneDetails.vitamins = combineLists(carePlaneDetails.vitamins, prescriptionDetails.vitamins);
-        getCarePlaneDetails.imaging = combineLists(carePlaneDetails.imaging, prescriptionDetails.imaging);
-        getCarePlaneDetails.labs = combineLists(carePlaneDetails.labs, prescriptionDetails.labs);
-        getCarePlaneDetails.medicines = combineLists(carePlaneDetails.medicines, prescriptionDetails.medicines);
-        getCarePlaneDetails.lifeStyle = combineLists(carePlaneDetails.lifeStyle, prescriptionDetails.lifeStyle);
-        return getCarePlaneDetails;
+
+//        getCarePlaneDetails.vitamins = combineLists(carePlaneDetails.vitamins, prescriptionDetails.vitamins);
+//        getCarePlaneDetails.imaging = combineLists(carePlaneDetails.imaging, prescriptionDetails.imaging);
+//        getCarePlaneDetails.labs = combineLists(carePlaneDetails.labs, prescriptionDetails.labs);
+//        getCarePlaneDetails.medicines = combineLists(carePlaneDetails.medicines, prescriptionDetails.medicines);
+//        getCarePlaneDetails.lifeStyle = combineLists(carePlaneDetails.lifeStyle, prescriptionDetails.lifeStyle);
+        return  mergeMaps(getCarePlaneDetails,prescriptionDetails);
     }
     public static List<PrescriptionDetails> combineLists(List<PrescriptionDetails> details, List<PrescriptionDetails> detailsList)
     {
@@ -59,27 +102,31 @@ public class CarePlanMapper {
             PrescriptionDetails presDetails = new PrescriptionDetails();
             presDetails.setPresId(pres.getPresId());
             presDetails.setType(pres.getPresType());
+            Integer presType = pres.getPresType().getPresTypeId();
+            getCarePlaneDetails.addPrescriptionDetails(presType,presDetails);
+//            Integer presType = details.getType().getPresTypeId();
+//            carePlaneDetails.presTypes.get(presType).add(details);
             //presDetails.setName(pres.getName());
-            if(pres.getPresType() == PrescriptionType.VITAMINS)
-            {
-                getCarePlaneDetails.vitamins.add(presDetails);
-            }
-            else if(pres.getPresType() == PrescriptionType.MEDICINES)
-            {
-                getCarePlaneDetails.medicines.add(presDetails);
-            }
-            else if(pres.getPresType() == PrescriptionType.LAB)
-            {
-                getCarePlaneDetails.labs.add(presDetails);
-            }
-            else if(pres.getPresType() == PrescriptionType.LIFESTYLE)
-            {
-                getCarePlaneDetails.lifeStyle.add(presDetails);
-            }
-            else if(pres.getPresType() == PrescriptionType.IMAGING)
-            {
-                getCarePlaneDetails.imaging.add(presDetails);
-            }
+//            if(pres.getPresType() == PrescriptionType.VITAMINS)
+//            {
+//                getCarePlaneDetails.vitamins.add(presDetails);
+//            }
+//            else if(pres.getPresType() == PrescriptionType.MEDICINES)
+//            {
+//                getCarePlaneDetails.medicines.add(presDetails);
+//            }
+//            else if(pres.getPresType() == PrescriptionType.LAB)
+//            {
+//                getCarePlaneDetails.labs.add(presDetails);
+//            }
+//            else if(pres.getPresType() == PrescriptionType.LIFESTYLE)
+//            {
+//                getCarePlaneDetails.lifeStyle.add(presDetails);
+//            }
+//            else if(pres.getPresType() == PrescriptionType.IMAGING)
+//            {
+//                getCarePlaneDetails.imaging.add(presDetails);
+//            }
         }
 
         return getCarePlaneDetails;
@@ -89,11 +136,11 @@ public class CarePlanMapper {
     {
         List<CarePlanDetails> carePlanDetails = new ArrayList<>();
         if(carePlaneDetails!=null) {
-            carePlanDetails.addAll(getCarePlan(carePlaneDetails.imaging,carePlan ));
-            carePlanDetails.addAll(getCarePlan(carePlaneDetails.labs,carePlan ));
-            carePlanDetails.addAll(getCarePlan(carePlaneDetails.vitamins,carePlan ));
-            carePlanDetails.addAll(getCarePlan(carePlaneDetails.medicines,carePlan ));
-            carePlanDetails.addAll(getCarePlan(carePlaneDetails.lifeStyle,carePlan ));
+            for (Map.Entry<Integer, List<PrescriptionDetails>> entry : carePlaneDetails.getPresTypes().entrySet()) {
+                Integer key = entry.getKey();
+                List<PrescriptionDetails> prescriptionDetailsList = entry.getValue();
+                carePlanDetails.addAll(getCarePlan(prescriptionDetailsList,carePlan));
+            }
         }
         return  carePlanDetails;
     }
@@ -176,26 +223,29 @@ public class CarePlanMapper {
             details.setDosage(detail.getDosage());
             details.setPresName(detail.getPrescription().getName());
             details.setIndicator(true);
-            if(details.getType()== PrescriptionType.VITAMINS)
-            {
-                carePlaneDetails.vitamins.add(details);
-            }
-            else if(details.getType() == PrescriptionType.MEDICINES)
-            {
-                carePlaneDetails.medicines.add(details);
-            }
-            else if(details.getType() == PrescriptionType.LAB)
-            {
-                carePlaneDetails.labs.add(details);
-            }
-            else if(details.getType() == PrescriptionType.LIFESTYLE)
-            {
-                carePlaneDetails.lifeStyle.add(details);
-            }
-            else if(details.getType() == PrescriptionType.IMAGING)
-            {
-                carePlaneDetails.imaging.add(details);
-            }
+            Integer presType = details.getType().getPresTypeId();
+            carePlaneDetails.addPrescriptionDetails(presType,details);
+
+//            if(details.getType()== PrescriptionType.VITAMINS)
+//            {
+//                carePlaneDetails.vitamins.add(details);
+//            }
+//            else if(details.getType() == PrescriptionType.MEDICINES)
+//            {
+//                carePlaneDetails.medicines.add(details);
+//            }
+//            else if(details.getType() == PrescriptionType.LAB)
+//            {
+//                carePlaneDetails.labs.add(details);
+//            }
+//            else if(details.getType() == PrescriptionType.LIFESTYLE)
+//            {
+//                carePlaneDetails.lifeStyle.add(details);
+//            }
+//            else if(details.getType() == PrescriptionType.IMAGING)
+//            {
+//                carePlaneDetails.imaging.add(details);
+//            }
         }
         if(!prescriptionList.isEmpty())
         {
@@ -214,27 +264,37 @@ public class CarePlanMapper {
             details.setPresId(prescription.getPresId());
             details.setType(prescription.getPresType());
             details.setPresName(prescription.getName());
+            details.setCategory(prescription.getCategory());
             details.setIndicator(false);
-            if(details.getType()== PrescriptionType.VITAMINS)
-            {
-                carePlaneDetails.vitamins.add(details);
-            }
-            else if(details.getType() == PrescriptionType.MEDICINES)
-            {
-                carePlaneDetails.medicines.add(details);
-            }
-            else if(details.getType() == PrescriptionType.LAB)
-            {
-                carePlaneDetails.labs.add(details);
-            }
-            else if(details.getType() == PrescriptionType.LIFESTYLE)
-            {
-                carePlaneDetails.lifeStyle.add(details);
-            }
-            else if(details.getType() == PrescriptionType.IMAGING)
-            {
-                carePlaneDetails.imaging.add(details);
-            }
+            Integer presType = details.getType().getPresTypeId();
+            carePlaneDetails.addPrescriptionDetails(presType,details);
+
+//            switch (details.getType()){
+//                case 0:
+//                    carePlaneDetails.labs.add(details);
+//                    break;
+//
+//            }
+//            if(details.getType()== PrescriptionType.VITAMINS)
+//            {
+//                carePlaneDetails.vitamins.add(details);
+//            }
+//            else if(details.getType() == PrescriptionType.MEDICINES)
+//            {
+//                carePlaneDetails.medicines.add(details);
+//            }
+//            else if(details.getType() == PrescriptionType.LAB)
+//            {
+//                carePlaneDetails.labs.add(details);
+//            }
+//            else if(details.getType() == PrescriptionType.LIFESTYLE)
+//            {
+//                carePlaneDetails.lifeStyle.add(details);
+//            }
+//            else if(details.getType() == PrescriptionType.IMAGING)
+//            {
+//                carePlaneDetails.imaging.add(details);
+//            }
         }
 
         return carePlaneDetails;

@@ -20,6 +20,8 @@ public class Prescription {
 
     public String name;
 
+    @ManyToOne
+    @JoinColumn(name = "presType")
     public PrescriptionType presType;
 
     @ManyToOne
@@ -30,9 +32,8 @@ public class Prescription {
     @JoinColumn(name = "catId")
     private Category category;
 
-//    @ManyToOne
-//    @JoinColumn(name = "presType")
-//    private PreType preType;
+
+   // private PreType preType;
 
 
     public String shortInfo;

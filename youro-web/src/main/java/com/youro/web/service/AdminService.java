@@ -84,14 +84,17 @@ public class AdminService {
     {
         for(int diagId : request.diagnosisId) {
             Diagnosis diag = HelpUtils.getDiagnosis(diagId);
-            List<Prescription> list = prescriptionRepository.findByPresTypeAndDiagnosis(request.type, diag);
+            PrescriptionType pt = HelpUtils.getPrescriptionType(request.type);
+            Category cat = HelpUtils.getCategory(request.categoryId);
+            List<Prescription> list = prescriptionRepository.findByPresTypeAndDiagnosis(pt, diag);
             List<String> names = list.stream().map(Prescription::getName).toList();
             if (names.contains(request.name)) {
                 throw new CustomException("Already exists in the records");
             }
             Prescription newPres = new Prescription();
             newPres.setName(request.name);
-            newPres.setPresType(request.type);
+            newPres.setPresType(pt);
+            newPres.setCategory(cat);
             newPres.setDiagnosis(diag);
             newPres.setShortInfo(request.shortInfo);
             newPres.setOverview(request.overview);
@@ -118,12 +121,12 @@ public class AdminService {
 
     public BasicResponse addPresType(AddPresTypeRequest request)
     {
-        List<PreType> list = preTypeRepository.findAll();
-        List<String> names = list.stream().map(PreType::getName).toList();
+        List<PrescriptionType> list = preTypeRepository.findAll();
+        List<String> names = list.stream().map(PrescriptionType::getName).toList();
         if (names.contains(request.name)) {
             throw new CustomException("Already exists in the records");
         }
-        PreType newPreType = new PreType();
+        PrescriptionType newPreType = new PrescriptionType();
         newPreType.setName(request.name);
         preTypeRepository.save(newPreType);
 
@@ -146,7 +149,7 @@ public class AdminService {
     }
 
     public BasicResponse editPresType(int presTypeId, EditPresTypeRequest request) {
-        PreType preType = preTypeRepository.findById(presTypeId)
+        PrescriptionType preType = preTypeRepository.findById(presTypeId)
                 .orElseThrow(() -> new CustomException("presType not found"));
         //console.log("Inside the Update Category Backend", category);
         //System.out.println("Inside the Update Category Backend", category);
@@ -169,7 +172,7 @@ public class AdminService {
         return categoryRepository.findAll();
     }
 
-    public List<PreType> getAllPreTypes(){
+    public List<PrescriptionType> getAllPreTypes(){
         return preTypeRepository.findAll();
     }
 

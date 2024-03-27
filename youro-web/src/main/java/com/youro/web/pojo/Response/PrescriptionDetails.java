@@ -1,6 +1,7 @@
 package com.youro.web.pojo.Response;
 
 import com.youro.web.entity.PrescriptionType;
+import com.youro.web.entity.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ public class PrescriptionDetails {
     public String dosage;
     public Boolean indicator = false;
     public PrescriptionType type;
+    public Category category;
     public String shortInfo;
     public String overview;
 }

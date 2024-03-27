@@ -74,7 +74,7 @@ public class AdminController {
     }
 
     @GetMapping("/getAllPreTypes")
-    public List<PreType> getPreTypes() {
+    public List<PrescriptionType> getPreTypes() {
         return adminService.getAllPreTypes();
     }
 
