@@ -238,7 +238,7 @@ public class CarePlanMapper {
             }
             details.setIndicator(true);
             Integer presType = details.getType().getPresTypeId();
-            carePlaneDetails.addPrescriptionDetails(presType,details);
+            carePlaneDetails.addPrescriptionDetails(presType, details);
 
 //            if(details.getType()== PrescriptionType.VITAMINS)
 //            {

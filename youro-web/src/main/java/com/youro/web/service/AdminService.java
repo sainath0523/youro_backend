@@ -114,6 +114,11 @@ public class AdminService {
         if (res.isEmpty()) {
             throw new CustomException("Prescription not found");
         }
+
+        Diagnosis diag = HelpUtils.getDiagnosis(request.diagnosisId);
+        PrescriptionType pt = HelpUtils.getPrescriptionType(request.type);
+        Category cat = HelpUtils.getCategory(request.categoryId);
+
         boolean prescribed = !carePlanDetailsRepository.findByPrescription(HelpUtils.getPrescription(presId)).isEmpty();
 
         Prescription prescription = res.get();
@@ -121,8 +126,7 @@ public class AdminService {
         System.out.println(prescription.name);
         System.out.println(prescription.getDiagnosis().diagId);
         if (!prescription.name.equals(request.name)) {
-            Diagnosis diag = HelpUtils.getDiagnosis(request.diagnosisId);
-            List<Prescription> list = prescriptionRepository.findByPresTypeAndDiagnosis(request.type, diag);
+            List<Prescription> list = prescriptionRepository.findByPresTypeAndDiagnosis(pt, diag);
             List<String> names = list.stream().map(Prescription::getName).toList();
             if (names.contains(request.name)) {
                 throw new CustomException("Already exists in the records");
@@ -133,7 +137,6 @@ public class AdminService {
             if (prescribed) {
                 throw new CustomException("Already prescribed. Can't change diagnosis.");
             }
-            Diagnosis diag = HelpUtils.getDiagnosis(request.diagnosisId);
             prescription.setDiagnosis(diag);
         }
 //        if (prescription.getDiagnosis().diagId != request.diagnosisId) {
@@ -141,7 +144,8 @@ public class AdminService {
 //                throw new CustomException("Already prescribed. Can't change diagnosis.");
 //            }
 //        }
-
+        prescription.setPresType(pt);
+        prescription.setCategory(cat);
         prescription.setShortInfo(request.shortInfo);
         prescription.setOverview(request.overview);
         prescriptionRepository.save(prescription);

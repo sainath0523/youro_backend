@@ -3,7 +3,7 @@ import com.youro.web.entity.PrescriptionType;
 
 public class UpdatePrescriptionRequest {
     public String name;
-    public PrescriptionType type;
+    public int type;
     public int diagnosisId;
     public int categoryId;
     public String shortInfo;
